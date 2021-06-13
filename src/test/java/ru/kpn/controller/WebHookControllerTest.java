@@ -50,8 +50,9 @@ public class WebHookControllerTest {
         private final List<Update> messages = new ArrayList<>();
 
         @Override
-        public void append(Update update) {
+        public boolean append(Update update) {
             messages.add(update);
+            return false;
         }
 
         public int getMessageSize(){
