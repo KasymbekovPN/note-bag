@@ -2,3 +2,4 @@ telegram:
   tube:
     default-queue-size: 1000
     subscriber-thread-limit: 2
+    runner-init-value: false
