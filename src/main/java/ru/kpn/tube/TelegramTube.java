@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.concurrent.*;
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 class TelegramTube implements Tube<Update> {
 
-    private final AtomicBoolean run = new AtomicBoolean(false);
+    private final TubeRunner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService subscriberES;
     private final ExecutorService tubeES = Executors.newSingleThreadExecutor(
@@ -29,7 +30,8 @@ class TelegramTube implements Tube<Update> {
 
     private TubeSubscriber<Update> rootSubscriber;
 
-    public TelegramTube(@Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
+    public TelegramTube(TubeRunner runner,
+                        @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
                         @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit) {
         this.queue = new ArrayBlockingQueue<>(defaultQueueSize);
         this.subscriberES = Executors.newFixedThreadPool(
@@ -44,33 +46,25 @@ class TelegramTube implements Tube<Update> {
                     }
                 }
         );
+        this.runner = runner;
+        this.runner.setStartProcess(this::startProcess);
+        this.runner.setStopProcess(this::stopProcess);
+
     }
 
     @Override
-    public AtomicBoolean isRun() {
-        return run;
-    }
-
-    @Override
-    public void stop() {
-        run.set(false);
-    }
-
-    @Override
-    public void start() {
-        run.set(true);
-        tubeES.submit(this::doTubeRoutine);
+    public TubeRunner getRunner() {
+        return runner;
     }
 
     @Override
     public synchronized void subscribe(TubeSubscriber<Update> subscriber) {
-        start();
         rootSubscriber = subscriber.hookUp(rootSubscriber);
     }
 
     @Override
     public synchronized boolean append(Update update) {
-        if (run.get()){
+        if (runner.isRun().get()){
             return queue.offer(update);
         } else {
             log.warn("Tube is stopped... reject : {}", update);
@@ -79,7 +73,7 @@ class TelegramTube implements Tube<Update> {
     }
 
     private void doTubeRoutine() {
-        while (run.get()){
+        while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
                 subscriberES.submit(() -> rootSubscriber.calculate(datum));
@@ -90,5 +84,13 @@ class TelegramTube implements Tube<Update> {
                 log.error(e.getMessage(), e);
             }
         }
+    }
+    
+    private void startProcess(){
+        tubeES.submit(this::doTubeRoutine);
+    }
+    
+    private void stopProcess(){
+        tubeES.shutdownNow();
     }
 }

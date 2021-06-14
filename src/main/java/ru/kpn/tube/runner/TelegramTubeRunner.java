@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TelegramTubeRunner implements TubeRunner {
 
     private final AtomicBoolean run;
+
     private Runnable stopProcess;
     private Runnable startProcess;
 
@@ -25,14 +26,12 @@ public class TelegramTubeRunner implements TubeRunner {
 
     @Override
     public void stop() {
-        this.run.set(false);
-        runProcess(stopProcess);
+        changeState(false, stopProcess);
     }
 
     @Override
     public void start() {
-        this.run.set(true);
-        runProcess(startProcess);
+        changeState(true, startProcess);
     }
 
     @Override
@@ -43,6 +42,13 @@ public class TelegramTubeRunner implements TubeRunner {
     @Override
     public void setStartProcess(Runnable startProcess) {
         this.startProcess = startProcess;
+    }
+
+    private void changeState(boolean newState, Runnable process){
+        if (run.get() != newState){
+            run.set(newState);
+            runProcess(process);
+        }
     }
 
     private void runProcess(Runnable process) {
