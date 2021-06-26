@@ -18,8 +18,8 @@ public class TagTest {
 
     private final static String NAME = "Tag name";
     private final static String WRONG_NAME = "Wrong tag name";
-    private final static Set<Note> NOTES = new HashSet<>(){{add(new Note(0, "0", "0"));}};
-    private final static Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1"));}};
+    private final static Set<Note> NOTES = new HashSet<>(){{add(new Note(0, "0", "0", null, null));}};
+    private final static Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1", null, null));}};
 
     private static Object[][] getInitData(){
         return new Object[][]{

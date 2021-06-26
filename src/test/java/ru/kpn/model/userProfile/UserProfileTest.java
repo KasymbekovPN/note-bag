@@ -42,8 +42,8 @@ public class UserProfileTest {
     private static final int STATE = 0;
     private static final int WRONG_STATE = 1;
 
-    private static final Set<Note> NOTES = new HashSet<>(){{add(new Note(0, "0", "0"));}};
-    private static final Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1"));}};
+    private static final Set<Note> NOTES = new HashSet<>(){{add(new Note(0, "0", "0", null, null));}};
+    private static final Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1", null, null));}};
 
     private static final int SIZE = 1024;
 

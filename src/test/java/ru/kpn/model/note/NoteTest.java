@@ -5,6 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.kpn.model.tag.Tag;
+import ru.kpn.model.userProfile.UserProfile;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,21 +18,53 @@ public class NoteTest {
 
     private static final int TYPE = 1;
     private static final int WRONG_TYPE = 2;
+
     private static final String NAME = "Note name";
     private static final String WRONG_NAME = "Wrong note name";
+
     private static final String CONTENT = "Note content";
     private static final String WRONG_CONTENT = "Wrong note content";
 
+    private static final UserProfile USER_PROFILE = UserProfile.builder().firstName("name").build();
+    private static final UserProfile WRONG_USER_PROFILE = UserProfile.builder().firstName("wrong name").build();
+
+    private static final Set<Tag> TAGS = new HashSet<>(){{add(Tag.builder().name("name").build());}};
+    private static final Set<Tag> WRONG_TAGS = new HashSet<>(){{add(Tag.builder().name("wrong name").build());}};
+
     private static Object[][] getInitData(){
         return new Object[][]{
-                {TYPE, NAME, CONTENT, true},
-                {TYPE, NAME, WRONG_CONTENT, false},
-                {TYPE, WRONG_NAME, CONTENT, false},
-                {TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {WRONG_TYPE, NAME, CONTENT, false},
-                {WRONG_TYPE, NAME, WRONG_CONTENT, false},
-                {WRONG_TYPE, WRONG_NAME, CONTENT, false},
-                {WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false}
+                {TAGS,USER_PROFILE, TYPE, NAME, CONTENT, true},
+                {TAGS,USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
+                {TAGS,USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
+                {TAGS,USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {TAGS,USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
+                {TAGS,USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
+                {TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
+                {TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, TYPE, NAME, CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
+                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, TYPE, NAME, CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
+                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, NAME, CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
+                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
         };
     }
 
@@ -40,8 +77,10 @@ public class NoteTest {
                 .type(TYPE)
                 .name(NAME)
                 .content(CONTENT)
+                .userProfile(USER_PROFILE)
+                .tags(TAGS)
                 .build();
-        this.cNote = new Note(TYPE, NAME, CONTENT);
+        this.cNote = new Note(TYPE, NAME, CONTENT, USER_PROFILE, TAGS);
     }
 
     @Test
@@ -51,18 +90,20 @@ public class NoteTest {
 
     @ParameterizedTest
     @MethodSource("getInitData")
-    void shouldCompareCNoteAndCNote(int type, String name, String content, boolean expectedResult) {
-        Note note = new Note(type, name, content);
+    void shouldCompareCNoteAndCNote(Set<Tag> tags, UserProfile userProfile, int type, String name, String content, boolean expectedResult) {
+        Note note = new Note(type, name, content, userProfile, tags);
         assertThat(cNote.equals(note)).isEqualTo(expectedResult);
     }
 
     @ParameterizedTest
     @MethodSource("getInitData")
-    void shouldCompareBNoteAndBNote(int type, String name, String content, boolean expectedResult) {
+    void shouldCompareBNoteAndBNote(Set<Tag> tags, UserProfile userProfile, int type, String name, String content, boolean expectedResult) {
         Note note = Note.builder()
                 .type(type)
                 .name(name)
                 .content(content)
+                .userProfile(userProfile)
+                .tags(tags)
                 .build();
         assertThat(bNote.equals(note)).isEqualTo(expectedResult);
     }
@@ -105,4 +146,31 @@ public class NoteTest {
         note.setContent(CONTENT);
         assertThat(note.getContent()).isEqualTo(CONTENT);
     }
+
+    @Test
+    void shouldCheckUserGetting() {
+        Note note = Note.builder().userProfile(USER_PROFILE).build();
+        assertThat(note.getUserProfile()).isEqualTo(USER_PROFILE);
+    }
+
+    @Test
+    void shouldCheckUserSetting() {
+        Note note = Note.builder().build();
+        note.setUserProfile(USER_PROFILE);
+        assertThat(note.getUserProfile()).isEqualTo(USER_PROFILE);
+    }
+
+    @Test
+    void shouldCheckTagsGetting() {
+        Note note = Note.builder().tags(TAGS).build();
+        assertThat(note.getTags()).isEqualTo(TAGS);
+    }
+
+    @Test
+    void shouldCheckTagsSetting() {
+        Note note = Note.builder().build();
+        note.setTags(TAGS);
+        assertThat(note.getTags()).isEqualTo(TAGS);
+    }
+
 }
