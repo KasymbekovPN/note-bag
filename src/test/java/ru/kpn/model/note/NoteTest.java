@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kpn.model.tag.Tag;
 import ru.kpn.model.userProfile.UserProfile;
+import utils.TestDataFormer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,40 +33,13 @@ public class NoteTest {
     private static final Set<Tag> WRONG_TAGS = new HashSet<>(){{add(Tag.builder().name("wrong name").build());}};
 
     private static Object[][] getInitData(){
-        return new Object[][]{
-                {TAGS,USER_PROFILE, TYPE, NAME, CONTENT, true},
-                {TAGS,USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
-                {TAGS,USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
-                {TAGS,USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {TAGS,USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
-                {TAGS,USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
-                {TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
-                {TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, TYPE, NAME, CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
-                {TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, TYPE, NAME, CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
-                {WRONG_TAGS,USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, NAME, CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, TYPE, WRONG_NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, NAME, WRONG_CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, CONTENT, false},
-                {WRONG_TAGS,WRONG_USER_PROFILE, WRONG_TYPE, WRONG_NAME, WRONG_CONTENT, false},
-        };
+        return new TestDataFormer()
+                .append(TAGS, WRONG_TAGS)
+                .append(USER_PROFILE, WRONG_USER_PROFILE)
+                .append(TYPE, WRONG_TYPE)
+                .append(NAME, WRONG_NAME)
+                .append(CONTENT, WRONG_CONTENT)
+                .form();
     }
 
     private Note bNote;

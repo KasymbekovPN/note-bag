@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kpn.model.note.Note;
+import utils.TestDataFormer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,8 +37,8 @@ public class UserProfileTest {
     private static final Boolean CAN_READ_ALL_GROUP_MESSAGES = true;
     private static final Boolean WRONG_CAN_READ_ALL_GROUP_MESSAGES = false;
 
-    private static final Boolean SUPPORTS_Inline_QUERIES = true;
-    private static final Boolean WRONG_SUPPORTS_Inline_QUERIES = false;
+    private static final Boolean SUPPORTS_INLINE_QUERIES = true;
+    private static final Boolean WRONG_SUPPORTS_INLINE_QUERIES = false;
 
     private static final int STATE = 0;
     private static final int WRONG_STATE = 1;
@@ -45,24 +46,19 @@ public class UserProfileTest {
     private static final Set<Note> NOTES = new HashSet<>(){{add(new Note(0, "0", "0", null, null));}};
     private static final Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1", null, null));}};
 
-    private static final int SIZE = 1024;
-
     private static Object[][] getInitData(){
-        Object[][] objects = new Object[SIZE][11];
-        for (int i = 0; i < SIZE; i++) {
-            objects[i][0] = i % 2  == 0 ? FIRST_NAME : WRONG_FIRST_NAME;
-            objects[i][1] = i % 4  == 0 ? LAST_NAME : WRONG_LAST_NAME;
-            objects[i][2] = i % 8  == 0 ? USER_NAME : WRONG_USER_NAME;
-            objects[i][3] = i % 16 == 0 ? LANGUAGE_CODE : WRONG_LANGUAGE_CODE;
-            objects[i][4] = i % 32 == 0 ? IS_BOT : WRONG_IS_BOT;
-            objects[i][5] = i % 64 == 0 ? CAN_JOIN_GROUPS : WRONG_CAN_JOIN_GROUPS;
-            objects[i][6] = i % 128 == 0 ? CAN_READ_ALL_GROUP_MESSAGES : WRONG_CAN_READ_ALL_GROUP_MESSAGES;
-            objects[i][7] = i % 256 == 0 ? SUPPORTS_Inline_QUERIES : WRONG_SUPPORTS_Inline_QUERIES;
-            objects[i][8] = i % 512 == 0 ? STATE : WRONG_STATE;
-            objects[i][9] = i % 1024 == 0 ? NOTES : WRONG_NOTES;
-            objects[i][10] = i == 0;
-        }
-        return objects;
+        return new TestDataFormer()
+                .append(FIRST_NAME, WRONG_FIRST_NAME)
+                .append(LAST_NAME, WRONG_LAST_NAME)
+                .append(USER_NAME, WRONG_USER_NAME)
+                .append(LANGUAGE_CODE, WRONG_LANGUAGE_CODE)
+                .append(IS_BOT, WRONG_IS_BOT)
+                .append(CAN_JOIN_GROUPS, WRONG_CAN_JOIN_GROUPS)
+                .append(CAN_READ_ALL_GROUP_MESSAGES, WRONG_CAN_READ_ALL_GROUP_MESSAGES)
+                .append(SUPPORTS_INLINE_QUERIES, WRONG_SUPPORTS_INLINE_QUERIES)
+                .append(STATE, WRONG_STATE)
+                .append(NOTES, WRONG_NOTES)
+                .form();
     }
 
     private UserProfile cUserProfile;
@@ -78,7 +74,7 @@ public class UserProfileTest {
                 IS_BOT,
                 CAN_JOIN_GROUPS,
                 CAN_READ_ALL_GROUP_MESSAGES,
-                SUPPORTS_Inline_QUERIES,
+                SUPPORTS_INLINE_QUERIES,
                 STATE,
                 NOTES
         );
@@ -90,7 +86,7 @@ public class UserProfileTest {
                 .isBot(IS_BOT)
                 .canJoinGroups(CAN_JOIN_GROUPS)
                 .canReadAllGroupMessages(CAN_READ_ALL_GROUP_MESSAGES)
-                .supportsInlineQueries(SUPPORTS_Inline_QUERIES)
+                .supportsInlineQueries(SUPPORTS_INLINE_QUERIES)
                 .state(STATE)
                 .notes(NOTES)
                 .build();
@@ -250,15 +246,15 @@ public class UserProfileTest {
 
     @Test
     void shouldCheckSuppGetting() {
-        UserProfile up = UserProfile.builder().supportsInlineQueries(SUPPORTS_Inline_QUERIES).build();
-        assertThat(up.getSupportsInlineQueries()).isEqualTo(SUPPORTS_Inline_QUERIES);
+        UserProfile up = UserProfile.builder().supportsInlineQueries(SUPPORTS_INLINE_QUERIES).build();
+        assertThat(up.getSupportsInlineQueries()).isEqualTo(SUPPORTS_INLINE_QUERIES);
     }
 
     @Test
     void shouldCheckSuppSetting() {
         UserProfile up = UserProfile.builder().build();
-        up.setSupportsInlineQueries(SUPPORTS_Inline_QUERIES);
-        assertThat(up.getSupportsInlineQueries()).isEqualTo(SUPPORTS_Inline_QUERIES);
+        up.setSupportsInlineQueries(SUPPORTS_INLINE_QUERIES);
+        assertThat(up.getSupportsInlineQueries()).isEqualTo(SUPPORTS_INLINE_QUERIES);
     }
 
     @Test

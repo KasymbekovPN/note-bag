@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kpn.model.note.Note;
+import utils.TestDataFormer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,12 +23,10 @@ public class TagTest {
     private final static Set<Note> WRONG_NOTES = new HashSet<>(){{add(new Note(1, "1", "1", null, null));}};
 
     private static Object[][] getInitData(){
-        return new Object[][]{
-                {NAME, NOTES, true},
-                {NAME, WRONG_NOTES, false},
-                {WRONG_NAME, NOTES, false},
-                {WRONG_NAME, WRONG_NOTES, false}
-        };
+        return new TestDataFormer()
+                .append(NAME, WRONG_NAME)
+                .append(NOTES, WRONG_NOTES)
+                .form();
     }
 
     private Tag bTag;
