@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import utils.TestDataFormer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,22 +34,15 @@ public class NoteEntityTest {
     private static final Set<ObjectId> TAGS = new HashSet<>(){{add(new ObjectId());}};
     private static final Set<ObjectId> WRONG_TAGS = new HashSet<>(){{add(new ObjectId());}};
 
-    private static final int SIZE = 64;
-
     private static Object[][] getInitData(){
-        Object[][] objects = new Object[SIZE][7];
-
-        for (int i = 0; i < SIZE; i++) {
-            objects[i][0] = i % 2 == 0  ? ID : WRONG_ID;
-            objects[i][1] = i % 4 == 0  ? TYPE : WRONG_TYPE;
-            objects[i][2] = i % 8 == 0  ? USER_ID : WRONG_USER_ID;
-            objects[i][3] = i % 16 == 0 ? NAME : WRONG_NAME;
-            objects[i][4] = i % 32 == 0 ? CONTENT : WRONG_CONTENT;
-            objects[i][5] = i % 64 == 0 ? TAGS : WRONG_TAGS;
-            objects[i][6] = i == 0;
-        }
-
-        return objects;
+        return new TestDataFormer()
+                .append(ID, WRONG_ID)
+                .append(TYPE, WRONG_TYPE)
+                .append(USER_ID, WRONG_USER_ID)
+                .append(NAME, WRONG_NAME)
+                .append(CONTENT, WRONG_CONTENT)
+                .append(TAGS, WRONG_TAGS)
+                .form();
     }
 
     private NoteEntity bNoteEntity;
