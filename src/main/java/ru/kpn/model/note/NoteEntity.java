@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.Set;
 
-// TODO: 28.06.2021 use SpEL for collection name
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,7 +18,7 @@ public class NoteEntity implements Serializable {
     @Id
     private ObjectId id;
     private Integer type;
-    private ObjectId userId;
+    private Integer userId;
     private String name;
     private String content;
     private Set<ObjectId> tags;

@@ -22,8 +22,8 @@ public class NoteEntityTest {
     private static final Integer TYPE = 0;
     private static final Integer WRONG_TYPE = 1;
 
-    private static final ObjectId USER_ID = new ObjectId();
-    private static final ObjectId WRONG_USER_ID = new ObjectId();
+    private static final Integer USER_ID = 0;
+    private static final Integer WRONG_USER_ID = 1;
 
     private static final String NAME = "name";
     private static final String WRONG_NAME = "wrong name";
@@ -70,7 +70,7 @@ public class NoteEntityTest {
     @MethodSource("getInitData")
     void shouldCheckCAndC(ObjectId id,
                           Integer type,
-                          ObjectId userId,
+                          Integer userId,
                           String name,
                           String content,
                           Set<ObjectId> tags,
@@ -83,7 +83,7 @@ public class NoteEntityTest {
     @MethodSource("getInitData")
     void shouldCheckBAndB(ObjectId id,
                           Integer type,
-                          ObjectId userId,
+                          Integer userId,
                           String name,
                           String content,
                           Set<ObjectId> tags,
