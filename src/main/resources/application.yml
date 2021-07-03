@@ -3,3 +3,8 @@ telegram:
     default-queue-size: 1000
     subscriber-thread-limit: 2
     runner-init-value: false
+mongo:
+  collectionNames:
+    note: notes
+    tag: tags
+    user: users

@@ -14,7 +14,13 @@ import java.util.Set;
 @Data
 @Builder
 @AllArgsConstructor
-@Document("notes")
+//@Document("notes")
+//@Document("#{@collectionNamesConfig.getNoteCollectionName()}")
+@Document("#{collectionNamesConfig.getNoteCollectionName()}")
+//<
+//    @Document(collection = "#{@mySpecialProvider.getTargetCollectionName()}")
+//@Document("#{$mongo.collectionNames.note}")
+//@Document("${mongo.collectionNames.note}")
 public class NoteEntity implements Serializable {
     @Id
     private ObjectId id;
