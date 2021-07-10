@@ -1,6 +1,7 @@
 package ru.kpn.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataM
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.model.userProfile.UserProfileEntity;
 
+import java.io.ObjectInput;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureDataMongo
 public class UserProfileRepositoryTest {
 
-    private static final Integer ID = 123;
+    private static final ObjectId ID = new ObjectId();
+    private static final Integer USER_ID = 789;
     private static final String FIRST_NAME = "Some first name";
     private static final String LAST_NAME = "Some last name";
     private static final String USER_NAME = "Some user name";
@@ -39,6 +42,7 @@ public class UserProfileRepositoryTest {
     void setUp() {
         UserProfileEntity entity = UserProfileEntity.builder()
                 .id(ID)
+                .userId(USER_ID)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .userName(USER_NAME)
@@ -57,6 +61,13 @@ public class UserProfileRepositoryTest {
         Optional<UserProfileEntity> maybeEntity = repository.findById(ID);
         assertThat(maybeEntity).isPresent();
         assertThat(maybeEntity.get().getId()).isEqualTo(ID);
+    }
+
+    @Test
+    void shouldFindByUserId() {
+        List<UserProfileEntity> entities = repository.findByUserId(USER_ID);
+        assertThat(entities.size()).isEqualTo(1);
+        assertThat(entities.get(0).getUserId()).isEqualTo(USER_ID);
     }
 
     @Test
@@ -143,6 +154,12 @@ public class UserProfileRepositoryTest {
     @Test
     void shouldDeleteByUserName() {
         repository.deleteByUserName(USER_NAME);
+        assertThat(collectionIsEmpty()).isTrue();
+    }
+
+    @Test
+    void shouldDeleteByUserId() {
+        repository.deleteByUserId(USER_ID);
         assertThat(collectionIsEmpty()).isTrue();
     }
 

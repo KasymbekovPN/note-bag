@@ -16,7 +16,8 @@ import java.util.Set;
 @Document("users")
 public class UserProfileEntity implements Serializable {
     @Id
-    private Integer id;
+    private ObjectId id;
+    private Integer userId;
     private String firstName;
     private String lastName;
     private String userName;

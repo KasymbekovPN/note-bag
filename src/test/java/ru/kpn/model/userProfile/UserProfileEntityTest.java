@@ -16,8 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName(("Testing of UserProfileEntity"))
 public class UserProfileEntityTest {
 
-    private static final Integer ID = 0;
-    private static final Integer WRONG_ID = 1;
+    private static final ObjectId ID = new ObjectId();
+    private static final ObjectId WRONG_ID = new ObjectId();
+
+    private static final Integer USER_ID = 123;
+    private static final Integer WRONG_USER_ID = 123;
 
     private static final String FIRST_NAME = "First name";
     private static final String WRONG_FIRST_NAME = "Wrong first name";
@@ -52,6 +55,7 @@ public class UserProfileEntityTest {
     private static Object[][] getInitData(){
         return new TestDataFormer()
                 .append(ID, WRONG_ID)
+                .append(USER_ID, WRONG_USER_ID)
                 .append(FIRST_NAME, WRONG_FIRST_NAME)
                 .append(LAST_NAME, WRONG_LAST_NAME)
                 .append(USER_NAME, WRONG_USER_NAME)
@@ -72,6 +76,7 @@ public class UserProfileEntityTest {
     void setUp() {
         cUserProfileEntity = new UserProfileEntity(
                 ID,
+                USER_ID,
                 FIRST_NAME,
                 LAST_NAME,
                 USER_NAME,
@@ -85,6 +90,7 @@ public class UserProfileEntityTest {
         );
         bUserProfileEntity = UserProfileEntity.builder()
                 .id(ID)
+                .userId(USER_ID)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .userName(USER_NAME)
@@ -105,7 +111,8 @@ public class UserProfileEntityTest {
 
     @ParameterizedTest
     @MethodSource("getInitData")
-    void shouldCompareBAndB(Integer id,
+    void shouldCompareBAndB(ObjectId id,
+                            Integer userId,
                             String firstName,
                             String lastName,
                             String userName,
@@ -119,6 +126,7 @@ public class UserProfileEntityTest {
                             Boolean expectedResult){
         UserProfileEntity up = UserProfileEntity.builder()
                 .id(id)
+                .userId(userId)
                 .firstName(firstName)
                 .lastName(lastName)
                 .userName(userName)
@@ -135,7 +143,8 @@ public class UserProfileEntityTest {
 
     @ParameterizedTest
     @MethodSource("getInitData")
-    void shouldCompareCAndC(Integer id,
+    void shouldCompareCAndC(ObjectId id,
+                            Integer userId,
                             String firstName,
                             String lastName,
                             String userName,
@@ -149,6 +158,7 @@ public class UserProfileEntityTest {
                             Boolean expectedResult){
         UserProfileEntity up = new UserProfileEntity(
                 id,
+                userId,
                 firstName,
                 lastName,
                 userName,
@@ -174,6 +184,19 @@ public class UserProfileEntityTest {
         UserProfileEntity up = UserProfileEntity.builder().build();
         up.setId(ID);
         assertThat(up.getId()).isEqualTo(ID);
+    }
+
+    @Test
+    void shouldGetUserId() {
+        UserProfileEntity entity = UserProfileEntity.builder().userId(USER_ID).build();
+        assertThat(entity.getUserId()).isEqualTo(USER_ID);
+    }
+
+    @Test
+    void shouldSetUserId() {
+        UserProfileEntity entity = UserProfileEntity.builder().build();
+        entity.setUserId(USER_ID);
+        assertThat(entity.getUserId()).isEqualTo(USER_ID);
     }
 
     @Test
