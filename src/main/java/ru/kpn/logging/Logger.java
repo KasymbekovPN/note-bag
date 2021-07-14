@@ -1,7 +1,7 @@
 package ru.kpn.logging;
 
-public interface Logger {
-    Boolean isEnabledLevel(LogLevel logLevel);
-    void enableLevel(LogLevel logLevel);
-    void disableLevel(LogLevel logLevel);
+public interface Logger<L> {
+    Boolean isEnabled(L logLevel);
+    void enable(L logLevel);
+    void disable(L logLevel);
 }

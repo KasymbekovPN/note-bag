@@ -4,20 +4,18 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.kpn.exception.CustomizableLoggerBuildException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CustomizableLoggerTest {
 
-    private static Object[][] getLogLevelTestData(){
+    private static Object[][] getEnum(){
         return new Object[][]{
-                {LogLevel.TRACE},
-                {LogLevel.DEBUG},
-                {LogLevel.INFO},
-                {LogLevel.WARN},
-                {LogLevel.ERROR},
+                {CustomizableLogger.LogLevel.TRACE},
+                {CustomizableLogger.LogLevel.DEBUG},
+                {CustomizableLogger.LogLevel.INFO},
+                {CustomizableLogger.LogLevel.WARN},
+                {CustomizableLogger.LogLevel.ERROR},
         };
     }
 
@@ -28,50 +26,38 @@ public class CustomizableLoggerTest {
         assertThat(logger.getType()).isEqualTo(this.getClass());
     }
 
-    @Test
-    void shouldThrowException() {
-        assertThatThrownBy(() -> {
-            CustomizableLogger.builder().build();
-        })
-        .isInstanceOf(CustomizableLoggerBuildException.class);
+    @ParameterizedTest
+    @MethodSource("getEnum")
+    void shouldBuildWithDefaultLogLevel(CustomizableLogger.LogLevel logLevel) {
+        Logger<CustomizableLogger.LogLevel> logger = createMinBuilder().build();
+        assertThat(logger.isEnabled(logLevel)).isFalse();
     }
 
     @ParameterizedTest
-    @MethodSource("getLogLevelTestData")
-    @SneakyThrows
-    void shouldBuildWithDefaultLevel(LogLevel logLevel) {
-        Logger logger = createMinBuilder().build();
-        assertThat(logger.isEnabledLevel(logLevel)).isFalse();
+    @MethodSource("getEnum")
+    void shouldBuildWithEnableLogLevel(CustomizableLogger.LogLevel logLevel) {
+        Logger<CustomizableLogger.LogLevel> logger = createMinBuilder().enable(logLevel).build();
+        assertThat(logger.isEnabled(logLevel)).isTrue();
     }
 
     @ParameterizedTest
-    @MethodSource("getLogLevelTestData")
-    @SneakyThrows
-    void shouldBuildWithEnabledLevel(LogLevel logLevel) {
-        Logger logger = createMinBuilder().enableLevel(logLevel).build();
-        assertThat(logger.isEnabledLevel(logLevel)).isTrue();
+    @MethodSource("getEnum")
+    void shouldEnableLogLevel(CustomizableLogger.LogLevel logLevel) {
+        Logger<CustomizableLogger.LogLevel> logger = createMinBuilder().build();
+        logger.enable(logLevel);
+        assertThat(logger.isEnabled(logLevel)).isTrue();
     }
 
     @ParameterizedTest
-    @MethodSource("getLogLevelTestData")
-    @SneakyThrows
-    void shouldSetEnabledLevel(LogLevel logLevel) {
-        Logger logger = createMinBuilder().build();
-        logger.enableLevel(logLevel);
-        assertThat(logger.isEnabledLevel(logLevel)).isTrue();
-    }
-
-    @ParameterizedTest
-    @MethodSource("getLogLevelTestData")
-    @SneakyThrows
-    void shouldSetDisabledLevel(LogLevel logLevel) {
-        Logger logger = createMinBuilder().enableLevel(logLevel).build();
-        logger.disableLevel(logLevel);
-        assertThat(logger.isEnabledLevel(logLevel)).isFalse();
+    @MethodSource("getEnum")
+    void shouldDisableLogLevel(CustomizableLogger.LogLevel logLevel) {
+        Logger<CustomizableLogger.LogLevel> logger = createMinBuilder().enable(logLevel).build();
+        logger.disable(logLevel);
+        assertThat(logger.isEnabled(logLevel)).isFalse();
     }
 
     private CustomizableLogger.CustomizableLoggerBuilder createMinBuilder(){
-        return CustomizableLogger.builder().type(this.getClass());
+        return CustomizableLogger.builder(this.getClass());
     }
 
 
