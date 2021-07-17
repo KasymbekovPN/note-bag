@@ -4,6 +4,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.kpn.logging.CustomizableLogger;
+import ru.kpn.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,65 +61,4 @@ public class CustomizableLoggerTest {
     private CustomizableLogger.CustomizableLoggerBuilder createMinBuilder(){
         return CustomizableLogger.builder(this.getClass());
     }
-
-
-    //<
-    //    @Test
-//    void shouldBuildWithClass() throws IOException {
-////        CustomizableLogger.builder()
-////                .classType(this.getClass())
-////                .build();
-//
-//
-////        FileOutputStream fileOutputStream = new FileOutputStream("text.txt");
-////        FileChannel channel = fileOutputStream.getChannel();
-//
-//        FileOutputStream stdout = new FileOutputStream(FileDescriptor.out);
-//        FileChannel stdoutChannel = stdout.getChannel();
-//
-//        FileOutputStream stdout1 = new FileOutputStream(FileDescriptor.out);
-//        FileChannel stdoutChannel1 = stdout1.getChannel();
-//
-////        String s = "Hello Привет";
-////        ByteBuffer byteBuffer = ByteBuffer.wrap(s.getBytes(StandardCharsets.UTF_8));
-//
-////        String s1 = StandardCharsets.UTF_8.decode(byteBuffer).toString();
-////        System.out.println(s1);
-//
-//        List<String> strings = List.of("1", "2", "3");
-//
-//        for (String string : strings) {
-//            ByteBuffer byteBuffer = ByteBuffer.wrap(string.getBytes(StandardCharsets.UTF_8));
-////            byteBuffer.flip();
-//            stdoutChannel.write(byteBuffer);
-//            ByteBuffer byteBuffer1 = ByteBuffer.wrap(string.getBytes(StandardCharsets.UTF_8));
-//            stdoutChannel1.write(byteBuffer1);
-//        }
-//
-////        byteBuffer.flip();
-////        stdoutChannel.write(byteBuffer);
-////
-////        byteBuffer.flip();
-////        channel.write(byteBuffer);
-////
-////        byteBuffer.flip();
-////        stdoutChannel1.write(byteBuffer);
-//
-////        System.out.println(s1);
-//
-//
-//        //        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-//
-//
-////        String s = StandardCharsets.UTF_8.decode(byteBuffer).toString();
-//
-////        CharBuffer cb = CharBuffer.allocate(1024);
-////        cb.append("Hello");
-//
-////        stdoutChannel.write()
-//
-////        FileInputStream stdin = new FileInputStream(FileDescriptor.in);
-////        FileChannel stdinChannel = stdin.getChannel();
-//
-//    }
 }
