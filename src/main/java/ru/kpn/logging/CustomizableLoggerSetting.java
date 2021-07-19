@@ -1,8 +1,11 @@
 package ru.kpn.logging;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@EqualsAndHashCode
 public class CustomizableLoggerSetting implements LoggerSetting<CustomizableLogger.LogLevel> {
 
     private final Map<CustomizableLogger.LogLevel, Boolean> logStatus;

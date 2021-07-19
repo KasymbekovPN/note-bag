@@ -6,41 +6,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
+
     private final Class<?> type;
-    private final EnumMap<LogLevel, Boolean> levelStates;
     private final Set<Writer> writers;
     private final TemplateEngine engine;
     private final LoggerExtender<LogLevel> extender;
 
+    private LoggerSetting<LogLevel> setting;
+
     private CustomizableLogger(Class<?> type,
-                               EnumMap<LogLevel, Boolean> levelStates,
                                Set<Writer> writers,
                                TemplateEngine engine,
-                               LoggerExtender<LogLevel> extender) {
+                               LoggerExtender<LogLevel> extender,
+                               LoggerSetting<LogLevel> setting) {
         this.type = type;
-        this.levelStates = levelStates;
         this.writers = writers;
         this.engine = engine;
         this.extender = extender;
+        this.setting = setting;
     }
 
-    public static CustomizableLoggerBuilder builder(Class<?> type) {
-        return new CustomizableLoggerBuilder(type);
-    }
-
-    @Override
-    public synchronized Boolean isEnabled(LogLevel logLevel) {
-        return levelStates.get(logLevel);
+    public static CustomizableLoggerBuilder builder(Class<?> type, LoggerSetting<LogLevel> setting) {
+        return new CustomizableLoggerBuilder(type, setting);
     }
 
     @Override
-    public synchronized void enable(LogLevel logLevel) {
-        levelStates.put(logLevel, true);
+    public LoggerSetting<LogLevel> getSetting() {
+        return setting;
     }
 
     @Override
-    public synchronized void disable(LogLevel logLevel) {
-        levelStates.put(logLevel, false);
+    public void setSetting(LoggerSetting<LogLevel> setting) {
+        this.setting = setting;
     }
 
     @Override
@@ -69,7 +66,7 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
     }
 
     private synchronized void log(LogLevel logLevel, String template, Object... args) {
-        if (checkLogLevel(logLevel)){
+        if (setting.get(logLevel)){
             String log = engine.fill(extender.extendTemplate(template), extender.extendArgs(args, logLevel, type));
             for (Writer writer : writers) {
                 try {
@@ -79,10 +76,6 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
                 }
             }
         }
-    }
-
-    private boolean checkLogLevel(LogLevel logLevel) {
-        return levelStates.get(logLevel);
     }
 
     public enum LogLevel{
@@ -96,38 +89,25 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
 
     public static class CustomizableLoggerBuilder {
 
-        private final EnumMap<LogLevel, Boolean> levelStates = new EnumMap<>(LogLevel.class);
         private final Class<?> type;
         private final Set<Writer> writers = new HashSet<>();
+        private final LoggerSetting<LogLevel> setting;
         private TemplateEngine engine;
         private LoggerExtender<LogLevel> extender;
 
-        CustomizableLoggerBuilder(Class<?> type) {
+        CustomizableLoggerBuilder(Class<?> type, LoggerSetting<LogLevel> setting) {
             this.type = type;
+            this.setting = setting;
         }
 
         public CustomizableLogger build() {
-            fillLevelStates();
             return new CustomizableLogger(
                     type,
-                    levelStates,
                     writers,
                     engine,
-                    extender
+                    extender,
+                    setting
             );
-        }
-
-        private void fillLevelStates() {
-            for (LogLevel logLevel : LogLevel.values()) {
-                if (!levelStates.containsKey(logLevel)){
-                    levelStates.put(logLevel, false);
-                }
-            }
-        }
-
-        public CustomizableLoggerBuilder enable(LogLevel logLevel) {
-            levelStates.put(logLevel, true);
-            return this;
         }
 
         public CustomizableLoggerBuilder writer(Writer writer) {
