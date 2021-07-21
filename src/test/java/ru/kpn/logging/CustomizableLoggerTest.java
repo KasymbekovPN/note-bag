@@ -143,7 +143,8 @@ public class CustomizableLoggerTest {
         return CustomizableLogger.builder(this.getClass(), sb.build())
                 .engine(new LoggerTemplateEngine())
                 .writer(writer)
-                .extender(new CustomizableLoggerExtender());
+                .argsStrategy(new ArgsExtendingStrategy())
+                .templateStrategy(new TemplateExtendingStrategy());
     }
 
     private static class TestWriter implements Writer{

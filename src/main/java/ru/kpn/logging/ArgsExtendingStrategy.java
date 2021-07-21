@@ -3,12 +3,12 @@ package ru.kpn.logging;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CustomizableLoggerExtender implements LoggerExtender<CustomizableLogger.LogLevel> {
+public class ArgsExtendingStrategy implements ExtendingStrategy<Object[]> {
 
     @Override
-    public Object[] extendArgs(Object[] args, Object... extension) {
+    public Object[] execute(Object[] value, Object... extension) {
         Thread thread = Thread.currentThread();
-        int size = args.length + 5;
+        int size = value.length + 5;
         Object[] extendedArgs = new Object[size];
         extendedArgs[0] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
         extendedArgs[1] = getLogLevel(extension);
@@ -16,19 +16,14 @@ public class CustomizableLoggerExtender implements LoggerExtender<CustomizableLo
         extendedArgs[3] = thread.getName();
         extendedArgs[4] = getTypeName(extension);
 
-        System.arraycopy(args, 0, extendedArgs, 5, args.length);
+        System.arraycopy(value, 0, extendedArgs, 5, value.length);
 
         return extendedArgs;
     }
 
-    @Override
-    public String extendTemplate(String template) {
-        return "[{}] [{}] [{}] [{}] [{}] : " + template;
-    }
-
-    private CustomizableLogger.LogLevel getLogLevel(Object[] extension) {
-        if (extension.length > 0 && extension[0].getClass().equals(CustomizableLogger.LogLevel.class)){
-            return (CustomizableLogger.LogLevel) extension[0];
+    private CustomizableLogger.LogLevel getLogLevel(Object[] extensions) {
+        if (extensions.length > 0 && extensions[0].getClass().equals(CustomizableLogger.LogLevel.class)){
+            return (CustomizableLogger.LogLevel) extensions[0];
         }
         return CustomizableLogger.LogLevel.UNKNOWN;
     }

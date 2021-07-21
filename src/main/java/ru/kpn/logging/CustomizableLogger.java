@@ -10,20 +10,23 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
     private final Class<?> type;
     private final Set<Writer> writers;
     private final TemplateEngine engine;
-    private final LoggerExtender<LogLevel> extender;
+    private final ExtendingStrategy<Object[]> argsExtendingStrategy;
+    private final ExtendingStrategy<String> templateExtendingStrategy;
 
     private LoggerSetting<LogLevel> setting;
 
     private CustomizableLogger(Class<?> type,
-                               Set<Writer> writers,
-                               TemplateEngine engine,
-                               LoggerExtender<LogLevel> extender,
-                               LoggerSetting<LogLevel> setting) {
+                              Set<Writer> writers,
+                              TemplateEngine engine,
+                              LoggerSetting<LogLevel> setting,
+                              ExtendingStrategy<Object[]> argsExtendingStrategy,
+                              ExtendingStrategy<String> templateExtendingStrategy) {
         this.type = type;
         this.writers = writers;
         this.engine = engine;
-        this.extender = extender;
         this.setting = setting;
+        this.argsExtendingStrategy = argsExtendingStrategy;
+        this.templateExtendingStrategy = templateExtendingStrategy;
     }
 
     public static CustomizableLoggerBuilder builder(Class<?> type, LoggerSetting<LogLevel> setting) {
@@ -67,7 +70,7 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
 
     private synchronized void log(LogLevel logLevel, String template, Object... args) {
         if (setting.get(logLevel)){
-            String log = engine.fill(extender.extendTemplate(template), extender.extendArgs(args, logLevel, type));
+            String log = calculateLogContent(logLevel, template, args);
             for (Writer writer : writers) {
                 try {
                     writer.write(log);
@@ -76,6 +79,13 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
                 }
             }
         }
+    }
+
+    private String calculateLogContent(LogLevel logLevel, String template, Object[] args) {
+        return engine.fill(
+                templateExtendingStrategy.execute(template),
+                argsExtendingStrategy.execute(args, logLevel, type)
+        );
     }
 
     public enum LogLevel{
@@ -93,7 +103,8 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
         private final Set<Writer> writers = new HashSet<>();
         private final LoggerSetting<LogLevel> setting;
         private TemplateEngine engine;
-        private LoggerExtender<LogLevel> extender;
+        private ExtendingStrategy<Object[]> argsExtendingStrategy;
+        private ExtendingStrategy<String> templateExtendingStrategy;
 
         CustomizableLoggerBuilder(Class<?> type, LoggerSetting<LogLevel> setting) {
             this.type = type;
@@ -105,8 +116,9 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
                     type,
                     writers,
                     engine,
-                    extender,
-                    setting
+                    setting,
+                    argsExtendingStrategy,
+                    templateExtendingStrategy
             );
         }
 
@@ -120,8 +132,13 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
             return this;
         }
 
-        public CustomizableLoggerBuilder extender(LoggerExtender<LogLevel> extender){
-            this.extender = extender;
+        public CustomizableLoggerBuilder argsStrategy(ExtendingStrategy<Object[]> argsExtendingStrategy) {
+            this.argsExtendingStrategy = argsExtendingStrategy;
+            return this;
+        }
+
+        public CustomizableLoggerBuilder templateStrategy(ExtendingStrategy<String> templateExtendingStrategy) {
+            this.templateExtendingStrategy = templateExtendingStrategy;
             return this;
         }
     }
