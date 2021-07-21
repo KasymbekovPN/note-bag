@@ -22,7 +22,7 @@ public class CustomizableLoggerTest {
 
     @Test
     void shouldCheckLogSetting() {
-        CustomizableLoggerSetting setting = CustomizableLoggerSetting.builder().build();
+        CustomizableLoggerSettings setting = CustomizableLoggerSettings.builder().build();
         Logger<CustomizableLogger.LogLevel> logger = CustomizableLogger.builder(this.getClass(), setting).build();
         assertThat(setting).isEqualTo(logger.getSetting());
     }
@@ -30,7 +30,7 @@ public class CustomizableLoggerTest {
     @Test
     void shouldSetSetting() {
         CustomizableLogger logger = createLoggerBuilder(CustomizableLogger.LogLevel.UNKNOWN).build();
-        CustomizableLoggerSetting setting = CustomizableLoggerSetting.builder()
+        CustomizableLoggerSettings setting = CustomizableLoggerSettings.builder()
                 .enable(CustomizableLogger.LogLevel.TRACE)
                 .enable(CustomizableLogger.LogLevel.INFO)
                 .enable(CustomizableLogger.LogLevel.ERROR)
@@ -135,7 +135,7 @@ public class CustomizableLoggerTest {
     }
 
     private CustomizableLogger.CustomizableLoggerBuilder createLoggerBuilder(CustomizableLogger.LogLevel logLevel){
-        CustomizableLoggerSetting.CustomizableLoggerSettingBuilder sb = CustomizableLoggerSetting.builder();
+        CustomizableLoggerSettings.CustomizableLoggerSettingBuilder sb = CustomizableLoggerSettings.builder();
         if (logLevel != CustomizableLogger.LogLevel.UNKNOWN){
             sb.enable(logLevel);
         }

@@ -1,6 +1,6 @@
 package ru.kpn.logging;
 
-class LoggerTemplateEngine implements TemplateEngine {
+public class LoggerTemplateEngine implements TemplateEngine {
 
     @Override
     public String fill(String template, Object... args) {

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @EqualsAndHashCode
-public class CustomizableLoggerSetting implements LoggerSetting<CustomizableLogger.LogLevel> {
+public class CustomizableLoggerSettings implements LoggerSettings<CustomizableLogger.LogLevel> {
 
     private final Map<CustomizableLogger.LogLevel, Boolean> logStatus;
 
-    private CustomizableLoggerSetting(Map<CustomizableLogger.LogLevel, Boolean> logStatus) {
+    private CustomizableLoggerSettings(Map<CustomizableLogger.LogLevel, Boolean> logStatus) {
         this.logStatus = logStatus;
     }
 
@@ -29,8 +29,8 @@ public class CustomizableLoggerSetting implements LoggerSetting<CustomizableLogg
         CustomizableLoggerSettingBuilder() {
         }
 
-        public CustomizableLoggerSetting build() {
-            return new CustomizableLoggerSetting(logStatus);
+        public CustomizableLoggerSettings build() {
+            return new CustomizableLoggerSettings(logStatus);
         }
 
         public CustomizableLoggerSettingBuilder enable(CustomizableLogger.LogLevel logLevel){

@@ -1,11 +1,10 @@
 package ru.kpn.logging;
 
 import java.io.IOException;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
 
-class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
+public class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
 
     private final Class<?> type;
     private final Set<Writer> writers;
@@ -13,12 +12,12 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
     private final ExtendingStrategy<Object[]> argsExtendingStrategy;
     private final ExtendingStrategy<String> templateExtendingStrategy;
 
-    private LoggerSetting<LogLevel> setting;
+    private LoggerSettings<LogLevel> setting;
 
     private CustomizableLogger(Class<?> type,
                               Set<Writer> writers,
                               TemplateEngine engine,
-                              LoggerSetting<LogLevel> setting,
+                              LoggerSettings<LogLevel> setting,
                               ExtendingStrategy<Object[]> argsExtendingStrategy,
                               ExtendingStrategy<String> templateExtendingStrategy) {
         this.type = type;
@@ -29,17 +28,17 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
         this.templateExtendingStrategy = templateExtendingStrategy;
     }
 
-    public static CustomizableLoggerBuilder builder(Class<?> type, LoggerSetting<LogLevel> setting) {
+    public static CustomizableLoggerBuilder builder(Class<?> type, LoggerSettings<LogLevel> setting) {
         return new CustomizableLoggerBuilder(type, setting);
     }
 
     @Override
-    public LoggerSetting<LogLevel> getSetting() {
+    public LoggerSettings<LogLevel> getSetting() {
         return setting;
     }
 
     @Override
-    public void setSetting(LoggerSetting<LogLevel> setting) {
+    public void setSetting(LoggerSettings<LogLevel> setting) {
         this.setting = setting;
     }
 
@@ -101,12 +100,12 @@ class CustomizableLogger implements Logger<CustomizableLogger.LogLevel> {
 
         private final Class<?> type;
         private final Set<Writer> writers = new HashSet<>();
-        private final LoggerSetting<LogLevel> setting;
+        private final LoggerSettings<LogLevel> setting;
         private TemplateEngine engine;
         private ExtendingStrategy<Object[]> argsExtendingStrategy;
         private ExtendingStrategy<String> templateExtendingStrategy;
 
-        CustomizableLoggerBuilder(Class<?> type, LoggerSetting<LogLevel> setting) {
+        CustomizableLoggerBuilder(Class<?> type, LoggerSettings<LogLevel> setting) {
             this.type = type;
             this.setting = setting;
         }

@@ -1,5 +1,5 @@
 package ru.kpn.logging;
 
-public interface LoggerSetting<T> {
+public interface LoggerSettings<T> {
     Boolean get(T logLevel);
 }

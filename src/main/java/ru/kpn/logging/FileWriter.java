@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
-class FileWriter implements Writer {
+public class FileWriter implements Writer {
 
     private final Path path;
 

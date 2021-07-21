@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
-class SoutWriter implements Writer {
+public class SoutWriter implements Writer {
 
     @Override
     public void write(String log) throws IOException {
