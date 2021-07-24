@@ -1,5 +1,6 @@
 package ru.kpn.service.logger;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kpn.logging.*;
@@ -9,22 +10,14 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLevel> {
 
-    @Autowired
-    private LoggerSettings<CustomizableLogger.LogLevel> defaultLoggerSettings;
-
-    @Autowired
-    private Set<Writer> writers;
-
-    @Autowired
-    private TemplateEngine engine;
-
-    @Autowired
-    private ExtendingStrategy<Object[]> argsExtendingStrategy;
-
-    @Autowired
-    private ExtendingStrategy<String> templateExtendingStrategy;
+    private final LoggerSettings<CustomizableLogger.LogLevel> defaultLoggerSettings;
+    private final Set<Writer> writers;
+    private final TemplateEngine engine;
+    private final ExtendingStrategy<Object[]> argsExtendingStrategy;
+    private final ExtendingStrategy<String> templateExtendingStrategy;
 
     private final Map<Class<? extends Logger<CustomizableLogger.LogLevel>>, Logger<CustomizableLogger.LogLevel>> loggers = new HashMap<>();
 
@@ -39,6 +32,7 @@ public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLe
     }
 
     private Logger<CustomizableLogger.LogLevel> getLoggerOrCreate(Class<?> type, LoggerSettings<CustomizableLogger.LogLevel> settings) {
+
         return loggers.getOrDefault(type, createLogger(type, settings));
     }
 

@@ -1,22 +1,21 @@
 package ru.kpn.tube;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.logging.CustomizableLogger;
+import ru.kpn.logging.Logger;
+import ru.kpn.service.logger.LoggerService;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 @Service
 class TelegramTube implements Tube<Update> {
 
+    private final Logger<CustomizableLogger.LogLevel> log;
     private final TubeRunner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService subscriberES;
@@ -32,7 +31,8 @@ class TelegramTube implements Tube<Update> {
 
     public TelegramTube(TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
-                        @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit) {
+                        @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit,
+                        LoggerService<CustomizableLogger.LogLevel> loggerService) {
         this.queue = new ArrayBlockingQueue<>(defaultQueueSize);
         this.subscriberES = Executors.newFixedThreadPool(
                 subscriberThreadLimit,
@@ -49,7 +49,7 @@ class TelegramTube implements Tube<Update> {
         this.runner = runner;
         this.runner.setStartProcess(this::startProcess);
         this.runner.setStopProcess(this::stopProcess);
-
+        this.log = loggerService.create(this.getClass());
     }
 
     @Override

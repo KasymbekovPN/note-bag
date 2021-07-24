@@ -1,21 +1,26 @@
 package ru.kpn.service.note;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import ru.kpn.logging.CustomizableLogger;
+import ru.kpn.logging.Logger;
 import ru.kpn.model.note.NoteEntity;
 import ru.kpn.repository.NoteRepository;
+import ru.kpn.service.logger.LoggerService;
 
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
-@AllArgsConstructor
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository repository;
+    private final Logger<CustomizableLogger.LogLevel> log;
+
+    public NoteServiceImpl(NoteRepository repository, LoggerService<CustomizableLogger.LogLevel> loggerService) {
+        this.repository = repository;
+        this.log = loggerService.create(this.getClass());
+    }
 
     @Override
     public void save(NoteEntity entity) {

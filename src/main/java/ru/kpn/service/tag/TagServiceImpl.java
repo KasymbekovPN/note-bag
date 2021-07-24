@@ -1,21 +1,26 @@
 package ru.kpn.service.tag;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import ru.kpn.logging.CustomizableLogger;
+import ru.kpn.logging.Logger;
 import ru.kpn.model.tag.TagEntity;
 import ru.kpn.repository.TagRepository;
+import ru.kpn.service.logger.LoggerService;
 
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
-@AllArgsConstructor
 public class TagServiceImpl implements TagService {
 
     private final TagRepository repository;
+    private final Logger<CustomizableLogger.LogLevel> log;
+
+    public TagServiceImpl(TagRepository repository, LoggerService<CustomizableLogger.LogLevel> loggerService) {
+        this.repository = repository;
+        this.log = loggerService.create(this.getClass());
+    }
 
     @Override
     public void save(TagEntity entity) {

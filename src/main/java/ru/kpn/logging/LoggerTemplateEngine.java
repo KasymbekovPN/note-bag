@@ -6,8 +6,8 @@ public class LoggerTemplateEngine implements TemplateEngine {
     public String fill(String template, Object... args) {
         String result = template;
         for (Object arg : args) {
-            result = result.replaceFirst("\\{}", arg.toString());
+            result = result.replaceFirst("\\{}", String.valueOf(arg));
         }
-        return result;
+        return result + "\n";
     }
 }

@@ -11,7 +11,7 @@ public class CustomizableLoggerTest {
 
     private static final String TEMPLATE = "{} {} {}";
     private static final Object[] ARGS = {"Test", 1, "!!!"};
-    private static final String CHECK_LINE = "Test 1 !!!";
+    private static final String CHECK_LINE = "Test 1 !!!\n";
 
     private TestWriter writer;
 

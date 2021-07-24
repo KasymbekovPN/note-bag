@@ -8,9 +8,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.logging.*;
+import ru.kpn.service.logger.LoggerService;
+import ru.kpn.service.logger.LoggerServiceImpl;
 import ru.kpn.tube.Tube;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -30,8 +34,19 @@ public class WebHookControllerTest {
 
     @BeforeEach
     void setUp() {
+        CustomizableLoggerSettings setting = CustomizableLoggerSettings.builder()
+                .enable(CustomizableLogger.LogLevel.TRACE)
+                .enable(CustomizableLogger.LogLevel.DEBUG)
+                .enable(CustomizableLogger.LogLevel.INFO)
+                .enable(CustomizableLogger.LogLevel.WARN)
+                .enable(CustomizableLogger.LogLevel.DEBUG)
+                .build();
+        HashSet<Writer> writers = new HashSet<>() {{
+            add(new SoutWriter());
+        }};
+        LoggerService<CustomizableLogger.LogLevel> loggerService = new LoggerServiceImpl(setting, writers, new LoggerTemplateEngine(), new ArgsExtendingStrategy(), new TemplateExtendingStrategy());
         tube = new TestTube();
-        controller = new WebHookController(tube);
+        controller = new WebHookController(tube, loggerService);
     }
 
     @ParameterizedTest

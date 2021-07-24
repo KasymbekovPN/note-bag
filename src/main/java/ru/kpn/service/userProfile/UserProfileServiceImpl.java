@@ -1,22 +1,26 @@
 package ru.kpn.service.userProfile;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import ru.kpn.logging.CustomizableLogger;
+import ru.kpn.logging.Logger;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.repository.UserProfileRepository;
+import ru.kpn.service.logger.LoggerService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
-@AllArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
 
     private final UserProfileRepository repository;
+    private final Logger<CustomizableLogger.LogLevel> log;
+
+    public UserProfileServiceImpl(UserProfileRepository repository, LoggerService<CustomizableLogger.LogLevel> loggerService) {
+        this.repository = repository;
+        this.log = loggerService.create(this.getClass());
+    }
 
     @Override
     public void save(UserProfileEntity entity) {
