@@ -34,19 +34,8 @@ public class WebHookControllerTest {
 
     @BeforeEach
     void setUp() {
-        CustomizableLoggerSettings setting = CustomizableLoggerSettings.builder()
-                .enable(CustomizableLogger.LogLevel.TRACE)
-                .enable(CustomizableLogger.LogLevel.DEBUG)
-                .enable(CustomizableLogger.LogLevel.INFO)
-                .enable(CustomizableLogger.LogLevel.WARN)
-                .enable(CustomizableLogger.LogLevel.DEBUG)
-                .build();
-        HashSet<Writer> writers = new HashSet<>() {{
-            add(new SoutWriter());
-        }};
-        LoggerService<CustomizableLogger.LogLevel> loggerService = new LoggerServiceImpl(setting, writers, new LoggerTemplateEngine(), new ArgsExtendingStrategy(), new TemplateExtendingStrategy());
         tube = new TestTube();
-        controller = new WebHookController(tube, loggerService);
+        controller = new WebHookController(tube);
     }
 
     @ParameterizedTest

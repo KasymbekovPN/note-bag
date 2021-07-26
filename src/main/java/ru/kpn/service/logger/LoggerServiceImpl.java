@@ -1,7 +1,6 @@
 package ru.kpn.service.logger;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kpn.logging.*;
 
@@ -19,7 +18,7 @@ public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLe
     private final ExtendingStrategy<Object[]> argsExtendingStrategy;
     private final ExtendingStrategy<String> templateExtendingStrategy;
 
-    private final Map<Class<? extends Logger<CustomizableLogger.LogLevel>>, Logger<CustomizableLogger.LogLevel>> loggers = new HashMap<>();
+    private final Map<Class<?>, Logger<CustomizableLogger.LogLevel>> loggers = new HashMap<>();
 
     @Override
     public synchronized Logger<CustomizableLogger.LogLevel> create(Class<?> type) {
@@ -32,11 +31,13 @@ public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLe
     }
 
     private Logger<CustomizableLogger.LogLevel> getLoggerOrCreate(Class<?> type, LoggerSettings<CustomizableLogger.LogLevel> settings) {
-
-        return loggers.getOrDefault(type, createLogger(type, settings));
+        if (!loggers.containsKey(type)){
+            loggers.put(type, createLogger(type, settings));
+        }
+        return loggers.get(type);
     }
 
-    private CustomizableLogger createLogger(Class<?> type, LoggerSettings<CustomizableLogger.LogLevel> settings) {
+    private Logger<CustomizableLogger.LogLevel> createLogger(Class<?> type, LoggerSettings<CustomizableLogger.LogLevel> settings) {
         CustomizableLogger.CustomizableLoggerBuilder builder = CustomizableLogger.builder(type, settings);
         builder
                 .engine(engine)
