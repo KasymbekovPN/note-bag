@@ -2,6 +2,7 @@ package ru.kpn.tube.runner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.kpn.bpp.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.service.logger.LoggerService;
@@ -12,15 +13,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TelegramTubeRunner implements TubeRunner {
 
     private final AtomicBoolean run;
-    private final Logger<CustomizableLogger.LogLevel> log;
+
+    @InjectLogger
+    private Logger<CustomizableLogger.LogLevel> log;
 
     private Runnable stopProcess;
     private Runnable startProcess;
 
-    public TelegramTubeRunner(@Value("${telegram.tube.runner-init-value}") boolean initValue,
-                              LoggerService<CustomizableLogger.LogLevel> loggerService) {
+    public TelegramTubeRunner(@Value("${telegram.tube.runner-init-value}") boolean initValue) {
         this.run = new AtomicBoolean(initValue);
-        this.log = loggerService.create(this.getClass());
     }
 
     @Override

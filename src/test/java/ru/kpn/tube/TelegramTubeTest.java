@@ -49,8 +49,8 @@ class TelegramTubeTest {
     @ParameterizedTest
     @MethodSource("getInitRunStateTestData")
     void shouldCheckInitialRunState(boolean initState) {
-        TubeRunner runner = new TelegramTubeRunner(initState, loggerService);
-        TelegramTube telegramTube = new TelegramTube(runner, 1_000, 2, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(initState);
+        TelegramTube telegramTube = new TelegramTube(runner, 1_000, 2);
         assertThat(telegramTube.getRunner()).isNotNull();
         assertThat(runner.isRun().get()).isEqualTo(telegramTube.getRunner().isRun().get());
     }
@@ -58,20 +58,20 @@ class TelegramTubeTest {
     @Test
     void shouldCheckSubscribeMethod() {
         TestTelegramTubeSubscriber subscriber = new TestTelegramTubeSubscriber();
-        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(true, loggerService), 1_000, 2, loggerService);
+        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(true), 1_000, 2);
         tube.subscribe(subscriber);
         assertThat(subscriber.isPreviousIsNull()).isTrue();
     }
 
     @Test
     void shouldCheckAppendMethodOnStartedTube() {
-        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(true, loggerService), 1_000, 2, loggerService);
+        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(true), 1_000, 2);
         assertThat(tube.append(new Update())).isTrue();
     }
 
     @Test
     void shouldCheckAppendMethodOnStoppedTube() {
-        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(false, loggerService), 1_000, 2, loggerService);
+        TelegramTube tube = new TelegramTube(new TelegramTubeRunner(false), 1_000, 2);
         assertThat(tube.append(new Update())).isFalse();
     }
 

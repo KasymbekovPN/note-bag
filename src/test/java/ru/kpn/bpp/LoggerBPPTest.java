@@ -5,12 +5,20 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.controller.WebHookController;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.service.logger.LoggerService;
+import ru.kpn.service.note.NoteServiceImpl;
+import ru.kpn.service.tag.TagServiceImpl;
+import ru.kpn.service.userProfile.UserProfileServiceImpl;
+import ru.kpn.tube.Tube;
+import ru.kpn.tube.runner.TelegramTubeRunner;
 
 import java.lang.reflect.Field;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class LoggerBPPTest {
@@ -21,14 +29,59 @@ public class LoggerBPPTest {
     @Autowired
     private WebHookController webHookController;
 
+    @Autowired
+    private NoteServiceImpl noteService;
+
+    @Autowired
+    private TagServiceImpl tagService;
+
+    @Autowired
+    private UserProfileServiceImpl userProfileService;
+
+    @Autowired
+    private TelegramTubeRunner telegramTubeRunner;
+
+    @Autowired
+    private Tube<Update> tube;
+
     @Test
-    @SneakyThrows
     void shouldCheckInjectionIntoWebHookController() {
-        Logger<CustomizableLogger.LogLevel> logger = loggerService.create(WebHookController.class);
-        Class<? extends WebHookController> type = webHookController.getClass();
+        assertThat(checkLogger(webHookController)).isTrue();
+    }
+
+    @Test
+    void shouldCheckInjectionIntoNoteService() {
+        assertThat(checkLogger(noteService)).isTrue();
+    }
+
+    @Test
+    void shouldCheckInjectionIntoTagService() {
+        assertThat(checkLogger(tagService)).isTrue();
+    }
+
+    @Test
+    void shouldCheckInjectionIntoUserProfileService() {
+        assertThat(checkLogger(userProfileService)).isTrue();
+    }
+
+    @Test
+    void shouldCheckInjectionIntoTelegramTubeRunner() {
+        assertThat(checkLogger(telegramTubeRunner)).isTrue();
+    }
+
+    @Test
+    void shouldCheckInjectionIntoTube() {
+        assertThat(checkLogger(tube)).isTrue();
+    }
+
+    @SneakyThrows
+    private boolean checkLogger(Object object) {
+        Class<?> type = object.getClass();
+        Logger<CustomizableLogger.LogLevel> logger = loggerService.create(type);
         Field logField = type.getDeclaredField("log");
         logField.setAccessible(true);
-        Object log = logField.get(webHookController);
-        Assertions.assertThat(logger).isEqualTo(log);
+        Object log = logField.get(object);
+
+        return logger.equals(log);
     }
 }

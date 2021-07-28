@@ -1,12 +1,13 @@
 package ru.kpn.service.note;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kpn.bpp.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.model.note.NoteEntity;
 import ru.kpn.repository.NoteRepository;
-import ru.kpn.service.logger.LoggerService;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,13 +15,11 @@ import java.util.Optional;
 @Service
 public class NoteServiceImpl implements NoteService {
 
-    private final NoteRepository repository;
-    private final Logger<CustomizableLogger.LogLevel> log;
+    @Autowired
+    private NoteRepository repository;
 
-    public NoteServiceImpl(NoteRepository repository, LoggerService<CustomizableLogger.LogLevel> loggerService) {
-        this.repository = repository;
-        this.log = loggerService.create(this.getClass());
-    }
+    @InjectLogger
+    private Logger<CustomizableLogger.LogLevel> log;
 
     @Override
     public void save(NoteEntity entity) {

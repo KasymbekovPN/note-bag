@@ -1,7 +1,9 @@
 package ru.kpn.service.tag;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kpn.bpp.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.model.tag.TagEntity;
@@ -14,13 +16,11 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final TagRepository repository;
-    private final Logger<CustomizableLogger.LogLevel> log;
+    @Autowired
+    private TagRepository repository;
 
-    public TagServiceImpl(TagRepository repository, LoggerService<CustomizableLogger.LogLevel> loggerService) {
-        this.repository = repository;
-        this.log = loggerService.create(this.getClass());
-    }
+    @InjectLogger
+    private Logger<CustomizableLogger.LogLevel> log;
 
     @Override
     public void save(TagEntity entity) {

@@ -50,13 +50,13 @@ public class TelegramTubeRunnerTest {
     @ParameterizedTest
     @MethodSource("getAfterInitTestData")
     void shouldCheckRunStateAfterInit(boolean initValue) {
-        TubeRunner runner = new TelegramTubeRunner(initValue, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(initValue);
         assertThat(runner.isRun().get()).isEqualTo(initValue);
     }
 
     @Test
     void shouldCheckStopMethodAndStateChanging() {
-        TubeRunner runner = new TelegramTubeRunner(true, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(true);
         assertThat(runner.isRun().get()).isTrue();
         runner.stop();
         assertThat(runner.isRun().get()).isFalse();
@@ -64,7 +64,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartMethodAndStateChanging() {
-        TubeRunner runner = new TelegramTubeRunner(false, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(false);
         assertThat(runner.isRun().get()).isEqualTo(false);
         runner.start();
         assertThat(runner.isRun().get()).isEqualTo(true);
@@ -72,7 +72,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStopProcess() {
-        TubeRunner runner = new TelegramTubeRunner(true, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(true);
         runner.stop();
 
         runner.start();
@@ -85,7 +85,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartProcess() {
-        TubeRunner runner = new TelegramTubeRunner(false, loggerService);
+        TubeRunner runner = new TelegramTubeRunner(false);
         runner.start();
 
         runner.stop();
