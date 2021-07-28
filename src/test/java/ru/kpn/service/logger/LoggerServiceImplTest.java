@@ -53,6 +53,11 @@ public class LoggerServiceImplTest {
     }
 
     @Test
+    void shouldGetId() {
+        assertThat(loggerService.getId()).isEqualTo("loggerService");
+    }
+
+    @Test
     void shouldPrint() {
         defaultLogger.trace("{} {}", "Trace", "log");
     }

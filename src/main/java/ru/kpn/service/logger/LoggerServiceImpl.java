@@ -12,6 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLevel> {
 
+    private static final String ID = "loggerService";
+
     private final LoggerSettings<CustomizableLogger.LogLevel> defaultLoggerSettings;
     private final Set<Writer> writers;
     private final TemplateEngine engine;
@@ -19,6 +21,11 @@ public class LoggerServiceImpl implements LoggerService<CustomizableLogger.LogLe
     private final ExtendingStrategy<String> templateExtendingStrategy;
 
     private final Map<Class<?>, Logger<CustomizableLogger.LogLevel>> loggers = new HashMap<>();
+
+    @Override
+    public String getId() {
+        return ID;
+    }
 
     @Override
     public synchronized Logger<CustomizableLogger.LogLevel> create(Class<?> type) {

@@ -1,12 +1,11 @@
 package ru.kpn.bpp;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
@@ -14,6 +13,8 @@ import ru.kpn.service.logger.LoggerService;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,8 +22,11 @@ import java.util.stream.Collectors;
 @Component
 public class LoggerBPP implements BeanPostProcessor {
 
-    @Autowired
-    private LoggerService<CustomizableLogger.LogLevel> loggerService;
+    private final Map<String, LoggerService<?>> loggerServices = new HashMap<>();
+
+    public LoggerBPP(Set<LoggerService<CustomizableLogger.LogLevel>> loggerServices) {
+        loggerServices.forEach(ls -> this.loggerServices.put(ls.getId(), ls));
+    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -35,15 +39,29 @@ public class LoggerBPP implements BeanPostProcessor {
     @SneakyThrows
     private InjectionData checkBean(Object bean) {
         Class<?> type = bean.getClass();
-        boolean success = false;
-        String fieldName = "";
-        if (type.isAnnotationPresent(InjectLogger.class)){
-            Set<String> names = Arrays.stream(type.getDeclaredFields()).map(Field::getName).collect(Collectors.toSet());
-            fieldName = type.getDeclaredAnnotation(InjectLogger.class).value();
-            success = names.contains(fieldName);
+        InjectionData.InjectionDataBuilder builder = InjectionData.builder()
+                .type(type)
+                .bean(bean)
+                .success(false);
+
+        for (Field declaredField : type.getDeclaredFields()) {
+            if (declaredField.isAnnotationPresent(InjectLogger.class)){
+                String supposedLoggerServiceId = declaredField.getAnnotation(InjectLogger.class).value();
+                if (loggerServices.containsKey(supposedLoggerServiceId))
+                {
+                    builder
+                            .loggerServiceId(supposedLoggerServiceId)
+                            .field(declaredField)
+                            .success(true);
+                    break;
+                }
+                else {
+                    throw new BeansException("Logger service with id " + supposedLoggerServiceId + " doesn't exit") {};
+                }
+            }
         }
 
-        return new InjectionData(success, bean, type, fieldName);
+        return builder.build();
     }
 
     @SneakyThrows
@@ -51,25 +69,24 @@ public class LoggerBPP implements BeanPostProcessor {
         if (injectionData.isSuccess()){
             Object bean = injectionData.getBean();
             Class<?> type = injectionData.getType();
-            String fieldName = injectionData.getFieldName();
-            Logger<CustomizableLogger.LogLevel> logger = createLogger(type);
+            Field field = injectionData.getField();
+            String loggerServiceId = injectionData.getLoggerServiceId();
 
-            Field declaredField = type.getDeclaredField(fieldName);
-            declaredField.setAccessible(true);
-            declaredField.set(bean, logger);
+            Logger<?> logger = loggerServices.get(loggerServiceId).create(type);
+
+            field.setAccessible(true);
+            field.set(bean, logger);
         }
     }
 
-    private Logger<CustomizableLogger.LogLevel> createLogger(Class<?> type) {
-        return loggerService.create(type);
-    }
-
     @Getter
+    @Builder
     @AllArgsConstructor
     private static class InjectionData {
         private final boolean success;
         private final Object bean;
         private final Class<?> type;
-        private final String fieldName;
+        private final Field field;
+        private final String loggerServiceId;
     }
 }

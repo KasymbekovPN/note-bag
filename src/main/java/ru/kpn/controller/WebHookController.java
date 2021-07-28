@@ -12,11 +12,11 @@ import ru.kpn.tube.Tube;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
-@InjectLogger("log")
 public class WebHookController {
 
     private final Tube<Update> tube;
 
+    @InjectLogger
     private Logger<CustomizableLogger.LogLevel> log;
 
     public WebHookController(Tube<Update> tube) {
