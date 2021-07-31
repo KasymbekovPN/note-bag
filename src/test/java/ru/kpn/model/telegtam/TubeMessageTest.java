@@ -1,9 +1,7 @@
 package ru.kpn.model.telegtam;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,7 +18,7 @@ public class TubeMessageTest {
     void setUp() {
         user = new User(CHAT_ID, "Pavel", false);
         tubeMessage = TubeMessage.builder()
-                .user(user)
+                .from(user)
                 .chatId(CHAT_ID)
                 .text(TEXT)
                 .build();
@@ -46,15 +44,6 @@ public class TubeMessageTest {
 
     @Test
     void shouldCheckUser() {
-        assertThat(tubeMessage.getUser()).isEqualTo(user);
+        assertThat(tubeMessage.getFrom()).isEqualTo(user);
     }
-
-    //<
-//        Update update = new Update();
-//        update.hasMessage();
-//        Message message = update.getMessage();
-//        String text = message.getText();
-//        User from = message.getFrom();
-//        message.getChatId();
-//        System.out.println(update);
 }
