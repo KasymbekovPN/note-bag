@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.kpn.bpp.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
-import ru.kpn.service.logger.LoggerService;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

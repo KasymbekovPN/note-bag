@@ -1,3 +1,6 @@
+server:
+  port: 5000
+
 telegram:
   tube:
     default-queue-size: 1000
