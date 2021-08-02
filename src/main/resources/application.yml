@@ -6,3 +6,19 @@ telegram:
     default-queue-size: 1000
     subscriber-thread-limit: 2
     runner-init-value: false
+
+mongo:
+  uriTemplate: mongodb+srv://%s:%s@%s/%s?%s
+  mongoTemplateData:
+    login: s5sTM+rs4Y/5CrCk7H4vrWEUAC0lC/hZYi+4sbLnoKQ=
+    password: L4y8K5eFq+J93jyeSa6UEOaE9VcivkfW8yR4GbQlZGE=
+    srvHost: rMKV2l3qM4r0EwgvTzmD/kHABJnXNMEumwYg4Y/6ChmaCAimrLA3dA==
+    dbName: dvxxhdEU9jhzr50YzL+WKwYvLovQvlqJ
+    uriParams: uvdTFJYVkoddZ/fiP8R8tIMJcfPNbGTSOyc2Du0gcHcql535K3kg2g==
+
+decryptor:
+  passwordName: JASYPT_PASSWORD
+
+bot:
+  name: hvAbLHispeqll/+RUKAn5WiRC4mfr410/4MBeV3dLU8=
+  token: Z9Cl8RKzHThq5Ew+l980KIQmZxHljHogzhpUFWPAs3fiNsTr7XidmlaHIl8lUXboEnb8ADqQeIg=
