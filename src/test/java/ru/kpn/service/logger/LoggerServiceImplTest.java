@@ -1,6 +1,5 @@
 package ru.kpn.service.logger;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class LoggerServiceImplTest {
     void setUp() {
         disabledSettings = CustomizableLoggerSettings.builder().build();
         defaultLogger = loggerService.create(this.getClass());
-        disabledLogger = loggerService.create(this.getClass(), disabledSettings);
+        disabledLogger = loggerService.create(DisableLogger.class, disabledSettings);
     }
 
     @Test
@@ -61,4 +60,6 @@ public class LoggerServiceImplTest {
     void shouldPrint() {
         defaultLogger.trace("{} {}", "Trace", "log");
     }
+
+    private static class DisableLogger{}
 }

@@ -11,7 +11,7 @@ public class LoggerTemplateEngineTest {
                 {
                         "{} {} {}",
                         new Object[]{"Hello", "world", "!!!"},
-                        "Hello world !!!"
+                        "Hello world !!!\n"
                 }
         };
     }

@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.1'
+}
+
+group 'ru.kpn'
+version '0.0.1'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+ext{
+    juniperVersion = '5.7.2'
+    springBootVersion = '2.5.3'
+    springSecurityCryptoVersion = '5.5.1'
+    lombokVersion = '1.18.20'
+    telegramVersion = '5.3.0'
+    mongoVersion = '2.5.3'
+    embedMongo = '1.18'
+    jasyptVersion = '1.9.3'
+    mockitoVersion = '3.11.2'
+}
+
+dependencies {
+
+    implementation "org.jasypt:jasypt:${jasyptVersion}"
+
+    implementation "org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}"
+
+    implementation "org.telegram:telegrambots-spring-boot-starter:${telegramVersion}"
+
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${mongoVersion}"
+
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${juniperVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${juniperVersion}"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation "de.flapdoodle.embedmongo:de.flapdoodle.embedmongo:${embedMongo}"
+
+    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}

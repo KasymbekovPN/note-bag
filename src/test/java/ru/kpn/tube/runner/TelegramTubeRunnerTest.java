@@ -1,18 +1,12 @@
 package ru.kpn.tube.runner;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.kpn.controller.WebHookController;
-import ru.kpn.controller.WebHookControllerTest;
+import org.springframework.test.util.ReflectionTestUtils;
 import ru.kpn.logging.*;
-import ru.kpn.service.logger.LoggerService;
-import ru.kpn.service.logger.LoggerServiceImpl;
-
-import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,33 +24,18 @@ public class TelegramTubeRunnerTest {
         };
     }
 
-    private LoggerService<CustomizableLogger.LogLevel> loggerService;
-
-    @BeforeEach
-    void setUp() {
-        CustomizableLoggerSettings setting = CustomizableLoggerSettings.builder()
-                .enable(CustomizableLogger.LogLevel.TRACE)
-                .enable(CustomizableLogger.LogLevel.DEBUG)
-                .enable(CustomizableLogger.LogLevel.INFO)
-                .enable(CustomizableLogger.LogLevel.WARN)
-                .enable(CustomizableLogger.LogLevel.DEBUG)
-                .build();
-        HashSet<Writer> writers = new HashSet<>() {{
-            add(new SoutWriter());
-        }};
-        loggerService = new LoggerServiceImpl(setting, writers, new LoggerTemplateEngine(), new ArgsExtendingStrategy(), new TemplateExtendingStrategy());
-    }
+    private static final CustomizableLogger logger = CustomizableLogger.builder(TelegramTubeRunner.class, CustomizableLoggerSettings.builder().build()).build();
 
     @ParameterizedTest
     @MethodSource("getAfterInitTestData")
     void shouldCheckRunStateAfterInit(boolean initValue) {
-        TubeRunner runner = new TelegramTubeRunner(initValue);
+        TubeRunner runner = createRunner(initValue);
         assertThat(runner.isRun().get()).isEqualTo(initValue);
     }
 
     @Test
     void shouldCheckStopMethodAndStateChanging() {
-        TubeRunner runner = new TelegramTubeRunner(true);
+        TubeRunner runner = createRunner(true);
         assertThat(runner.isRun().get()).isTrue();
         runner.stop();
         assertThat(runner.isRun().get()).isFalse();
@@ -64,7 +43,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartMethodAndStateChanging() {
-        TubeRunner runner = new TelegramTubeRunner(false);
+        TubeRunner runner = createRunner(false);
         assertThat(runner.isRun().get()).isEqualTo(false);
         runner.start();
         assertThat(runner.isRun().get()).isEqualTo(true);
@@ -72,7 +51,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStopProcess() {
-        TubeRunner runner = new TelegramTubeRunner(true);
+        TubeRunner runner = createRunner(true);
         runner.stop();
 
         runner.start();
@@ -85,7 +64,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartProcess() {
-        TubeRunner runner = new TelegramTubeRunner(false);
+        TubeRunner runner = createRunner(false);
         runner.start();
 
         runner.stop();
@@ -94,6 +73,12 @@ public class TelegramTubeRunnerTest {
 
         log.info("testStartProcessCounter: {}", testStartProcessCounter);
         assertThat(testStartProcessCounter).isEqualTo(1);
+    }
+
+    private TubeRunner createRunner(boolean initValue) {
+        TubeRunner runner = new TelegramTubeRunner(initValue);
+        ReflectionTestUtils.setField(runner, "log", logger);
+        return runner;
     }
 
     private void testStopProcess(){

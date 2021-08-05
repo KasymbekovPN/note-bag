@@ -6,15 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.logging.*;
-import ru.kpn.service.logger.LoggerService;
-import ru.kpn.service.logger.LoggerServiceImpl;
 import ru.kpn.tube.Tube;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -36,6 +34,8 @@ public class WebHookControllerTest {
     void setUp() {
         tube = new TestTube();
         controller = new WebHookController(tube);
+        CustomizableLogger logger = CustomizableLogger.builder(WebHookController.class, CustomizableLoggerSettings.builder().build()).build();
+        ReflectionTestUtils.setField(controller, "log", logger);
     }
 
     @ParameterizedTest

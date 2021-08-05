@@ -1,10 +1,12 @@
 package ru.kpn.logging;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ToString
 @EqualsAndHashCode
 public class CustomizableLoggerSettings implements LoggerSettings<CustomizableLogger.LogLevel> {
 
