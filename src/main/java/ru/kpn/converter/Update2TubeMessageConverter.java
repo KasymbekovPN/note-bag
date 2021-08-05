@@ -3,7 +3,7 @@ package ru.kpn.converter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.model.telegtam.TubeMessage;
+import ru.kpn.model.telegram.TubeMessage;
 
 import java.util.function.Function;
 

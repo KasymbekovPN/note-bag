@@ -1,4 +1,4 @@
-package ru.kpn.model.telegtam;
+package ru.kpn.model.telegram;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

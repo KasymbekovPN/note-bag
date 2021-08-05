@@ -1,4 +1,4 @@
-package ru.kpn.model.telegtam;
+package ru.kpn.model.telegram;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
