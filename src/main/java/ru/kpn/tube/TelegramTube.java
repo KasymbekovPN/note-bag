@@ -2,6 +2,7 @@ package ru.kpn.tube;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bpp.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
@@ -13,7 +14,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-class TelegramTube implements Tube<Update> {
+class TelegramTube implements Tube<Update, BotApiMethod<?>> {
 
     private final TubeRunner runner;
     private final BlockingQueue<Update> queue;
@@ -29,7 +30,7 @@ class TelegramTube implements Tube<Update> {
     @InjectLogger
     private Logger<CustomizableLogger.LogLevel> log;
 
-    private TubeSubscriber<Update> rootSubscriber;
+    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
 
     public TelegramTube(TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
@@ -58,7 +59,7 @@ class TelegramTube implements Tube<Update> {
     }
 
     @Override
-    public synchronized void subscribe(TubeSubscriber<Update> subscriber) {
+    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
         rootSubscriber = subscriber.hookUp(rootSubscriber);
     }
 
@@ -76,7 +77,10 @@ class TelegramTube implements Tube<Update> {
         while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
-                subscriberES.submit(() -> rootSubscriber.calculate(datum));
+                subscriberES.submit(() -> {
+                    rootSubscriber.calculate(datum);
+                    // TODO: 12.08.2021 send method through BOT
+                });
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();

@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.logging.*;
 import ru.kpn.tube.runner.TelegramTubeRunner;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,14 +65,19 @@ class TelegramTubeTest {
         return tube;
     }
 
-    private static class TestTelegramTubeSubscriber implements TubeSubscriber<Update>{
+    private static class TestTelegramTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
 
         private boolean previousIsNull;
 
         @Override
-        public TubeSubscriber<Update> hookUp(TubeSubscriber<Update> previous) {
+        public TubeSubscriber<Update, BotApiMethod<?>> hookUp(TubeSubscriber<Update, BotApiMethod<?>> previous) {
             previousIsNull = previous == null;
             return this;
+        }
+
+        @Override
+        public Optional<BotApiMethod<?>> calculate(Update value) {
+            return Optional.empty();
         }
 
         public boolean isPreviousIsNull() {

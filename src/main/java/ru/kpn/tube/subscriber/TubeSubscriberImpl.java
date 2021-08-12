@@ -1,27 +1,36 @@
 package ru.kpn.tube.subscriber;
 
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.strategy.SubscriberStrategy;
 
-public class TubeSubscriberImpl implements TubeSubscriber<TubeMessage> {
+import java.util.Optional;
 
-    private final SubscriberStrategy<TubeMessage> strategy;
+public class TubeSubscriberImpl implements TubeSubscriber<TubeMessage, BotApiMethod<?>> {
 
-    private TubeSubscriber<TubeMessage> next;
+    private final SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy;
 
-    public TubeSubscriberImpl(SubscriberStrategy<TubeMessage> strategy) {
+    private TubeSubscriber<TubeMessage, BotApiMethod<?>> next;
+
+    public TubeSubscriberImpl(SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy) {
         this.strategy = strategy;
     }
 
     @Override
-    public void calculate(TubeMessage value) {
-        if (!strategy.execute(value) && next != null){
-            next.calculate(value);
+    public Optional<BotApiMethod<?>> calculate(TubeMessage value) {
+        Optional<BotApiMethod<?>> maybeExecResult = strategy.execute(value);
+        if (maybeExecResult.isPresent()){
+            return maybeExecResult;
         }
+        if (next != null){
+            return next.calculate(value);
+        }
+        // TODO: 12.08.2021 may be here need default answer
+        return Optional.empty();
     }
 
     @Override
-    public TubeSubscriber<TubeMessage> hookUp(TubeSubscriber<TubeMessage> previous) {
+    public TubeSubscriber<TubeMessage, BotApiMethod<?>> hookUp(TubeSubscriber<TubeMessage, BotApiMethod<?>> previous) {
         if (previous == null) {
             return this;
         }
@@ -31,7 +40,7 @@ public class TubeSubscriberImpl implements TubeSubscriber<TubeMessage> {
     }
 
     @Override
-    public void setNext(TubeSubscriber<TubeMessage> next) {
+    public void setNext(TubeSubscriber<TubeMessage, BotApiMethod<?>> next) {
         if (this.next == null){
             this.next = next;
         } else {

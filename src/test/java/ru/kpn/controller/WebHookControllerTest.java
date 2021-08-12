@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.logging.*;
@@ -50,7 +51,7 @@ public class WebHookControllerTest {
         Assertions.assertThat(tube.getMessageSize()).isEqualTo(size);
     }
 
-    private static class TestTube implements Tube<Update> {
+    private static class TestTube implements Tube<Update, BotApiMethod<?>> {
         private final List<Update> messages = new ArrayList<>();
 
         @Override

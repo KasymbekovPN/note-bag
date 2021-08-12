@@ -1,7 +1,9 @@
 package ru.kpn.tube.subscriber;
 
-public interface TubeSubscriber<T>{
-    default void setNext(TubeSubscriber<T> next){}
-    default TubeSubscriber<T> hookUp(TubeSubscriber<T> previous){return null;}
-    default void calculate(T value){}
+import java.util.Optional;
+
+public interface TubeSubscriber<T, R>{
+    default void setNext(TubeSubscriber<T, R> next){}
+    default TubeSubscriber<T, R> hookUp(TubeSubscriber<T, R> previous){return null;}
+    Optional<R> calculate(T value);
 }
