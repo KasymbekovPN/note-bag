@@ -41,7 +41,7 @@ public class Update2TubeMessageConverterTest {
         tubeMessage = TubeMessage.builder()
                 .nullState(false)
                 .text(TEXT)
-                .chatId(CHAT_ID)
+                .chatId(CHAT_ID.toString())
                 .from(user)
                 .build();
     }

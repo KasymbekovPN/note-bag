@@ -17,7 +17,7 @@ public class Update2TubeMessageConverter implements Function<Update, TubeMessage
             builder
                     .nullState(false)
                     .text(message.getText())
-                    .chatId(message.getChatId())
+                    .chatId(message.getChatId().toString())
                     .from(message.getFrom());
         } else {
             builder.nullState(true);

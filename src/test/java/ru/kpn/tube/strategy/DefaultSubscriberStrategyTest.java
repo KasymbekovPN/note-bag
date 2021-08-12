@@ -19,7 +19,7 @@ public class DefaultSubscriberStrategyTest {
     void setUp() {
         defaultSubscriberStrategy = new DefaultSubscriberStrategy();
         tm = TubeMessage.builder()
-                .chatId(1L)
+                .chatId("1")
                 .text("Hello, world!!!")
                 .nullState(false)
                 .build();
@@ -30,7 +30,7 @@ public class DefaultSubscriberStrategyTest {
         Optional<BotApiMethod<?>> maybeMethod = defaultSubscriberStrategy.execute(tm);
         assertThat(maybeMethod).isPresent();
         SendMessage sendMessage = (SendMessage) maybeMethod.get();
-        assertThat(sendMessage.getChatId()).isEqualTo(tm.getChatId().toString());
+        assertThat(sendMessage.getChatId()).isEqualTo(tm.getChatId());
     }
 
     @Test

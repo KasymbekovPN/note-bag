@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 @AllArgsConstructor
 public class TubeMessage {
     private final Boolean nullState;
-    private final Long chatId;
+    private final String chatId;
     private final String text;
     private final User from;
 }

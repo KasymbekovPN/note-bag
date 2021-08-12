@@ -19,7 +19,7 @@ public class TubeMessageTest {
         user = new User(CHAT_ID, "Pavel", false);
         tubeMessage = TubeMessage.builder()
                 .from(user)
-                .chatId(CHAT_ID)
+                .chatId(CHAT_ID.toString())
                 .text(TEXT)
                 .build();
     }
@@ -34,7 +34,7 @@ public class TubeMessageTest {
 
     @Test
     void shouldCheckChatId() {
-        assertThat(tubeMessage.getChatId()).isEqualTo(CHAT_ID);
+        assertThat(tubeMessage.getChatId()).isEqualTo(CHAT_ID.toString());
     }
 
     @Test
