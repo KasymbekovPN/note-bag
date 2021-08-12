@@ -1,12 +1,13 @@
-package ru.kpn.tube.strategy;
+package ru.kpn.tube.strategy.none;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.model.telegram.TubeMessage;
+import ru.kpn.tube.strategy.SubscriberStrategy;
 
 import java.util.Optional;
 
-public class DefaultSubscriberStrategy implements SubscriberStrategy<TubeMessage, BotApiMethod<?>>{
+public class NoneSubscriberStrategy implements SubscriberStrategy<TubeMessage, BotApiMethod<?>> {
 
     @Override
     public Optional<BotApiMethod<?>> execute(TubeMessage value) {
