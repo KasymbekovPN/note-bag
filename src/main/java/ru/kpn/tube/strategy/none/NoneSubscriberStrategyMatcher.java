@@ -4,7 +4,7 @@ import ru.kpn.tube.strategy.Matcher;
 
 public class NoneSubscriberStrategyMatcher implements Matcher {
     @Override
-    public boolean match(String value) {
+    public Boolean match(String value) {
         return true;
     }
 }
