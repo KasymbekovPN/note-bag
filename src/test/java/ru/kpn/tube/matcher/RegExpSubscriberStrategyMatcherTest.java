@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy.regepx;
+package ru.kpn.tube.matcher;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;

@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy.regepx;
+package ru.kpn.tube.matcher;
 
 import ru.kpn.tube.strategy.Matcher;
 
