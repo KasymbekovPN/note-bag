@@ -6,6 +6,13 @@ telegram:
     default-queue-size: 1000
     subscriber-thread-limit: 2
     runner-init-value: false
+    strategies:
+      noneSubscriberStrategy:
+        priority: 0
+      helpSubscriberStrategy:
+        className: HelpSubscriberStrategy
+        priority: 1
+        template: /help
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

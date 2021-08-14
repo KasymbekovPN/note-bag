@@ -1,4 +1,4 @@
-package ru.kpn.bpp;
+package ru.kpn.bpp.logger;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

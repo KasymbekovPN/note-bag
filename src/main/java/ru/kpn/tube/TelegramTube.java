@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bpp.InjectLogger;
+import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.tube.runner.TubeRunner;

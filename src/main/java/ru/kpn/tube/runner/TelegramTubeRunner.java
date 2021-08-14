@@ -2,7 +2,7 @@ package ru.kpn.tube.runner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.kpn.bpp.InjectLogger;
+import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 

@@ -15,7 +15,6 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
             "/help - print this help message\r\n" +
             "/reset - bot reset";
 
-
     public HelpSubscriberStrategy(Matcher matcher) {
         super(matcher);
     }

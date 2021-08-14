@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bpp.InjectLogger;
+import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.tube.Tube;

@@ -1,22 +1,18 @@
-package ru.kpn.bpp;
+package ru.kpn.bpp.logger;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.service.logger.LoggerService;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component

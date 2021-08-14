@@ -3,7 +3,7 @@ package ru.kpn.service.note;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.kpn.bpp.InjectLogger;
+import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
 import ru.kpn.model.note.NoteEntity;

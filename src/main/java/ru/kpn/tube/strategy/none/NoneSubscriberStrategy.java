@@ -1,5 +1,7 @@
 package ru.kpn.tube.strategy.none;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.model.telegram.TubeMessage;
@@ -8,7 +10,11 @@ import ru.kpn.tube.strategy.Matcher;
 
 import java.util.Optional;
 
+@Component
 public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
+
+    @Value("${telegram.tube.strategies.noneSubscriberStrategy.priority}")
+    private Integer priority;
 
     public NoneSubscriberStrategy() {
         super(new NoneSubscriberStrategyMatcher());
@@ -17,6 +23,11 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
     @Override
     protected Optional<BotApiMethod<?>> executeImpl(TubeMessage value) {
         return Optional.of(new SendMessage(value.getChatId(), calculateMessage(value)));
+    }
+
+    @Override
+    public Integer getPriority() {
+        return priority;
     }
 
     private String calculateMessage(TubeMessage value) {

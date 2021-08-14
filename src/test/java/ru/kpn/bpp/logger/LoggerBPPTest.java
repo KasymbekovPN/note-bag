@@ -1,4 +1,4 @@
-package ru.kpn.bpp;
+package ru.kpn.bpp.logger;
 
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 14.08.2021 there is need to take beans automatically
 @SpringBootTest
 public class LoggerBPPTest {
 
