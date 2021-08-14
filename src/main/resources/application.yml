@@ -10,8 +10,8 @@ telegram:
       noneSubscriberStrategy:
         priority: 0
       helpSubscriberStrategy:
-        className: HelpSubscriberStrategy
         priority: 1
+        text: /help - print this help message\r\n/reset - bot reset
         template: /help
 
 mongo:

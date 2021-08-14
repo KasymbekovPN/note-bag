@@ -7,7 +7,9 @@ import java.util.Optional;
 
 abstract public class BaseSubscriberStrategy implements SubscriberStrategy<TubeMessage, BotApiMethod<?>> {
 
-    protected final Matcher matcher;
+    protected Matcher matcher;
+
+    public BaseSubscriberStrategy(){}
 
     public BaseSubscriberStrategy(Matcher matcher) {
         this.matcher = matcher;
@@ -27,7 +29,7 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<TubeM
     }
 
     private boolean matchTemplate(TubeMessage value) {
-        return !value.getNullState() && matcher.match(value.getText());
+        return !value.getNullState() && matcher != null && matcher.match(value.getText());
     }
 
     protected abstract Optional<BotApiMethod<?>> executeImpl(TubeMessage value);
