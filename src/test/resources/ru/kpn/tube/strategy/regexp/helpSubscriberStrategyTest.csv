@@ -1,0 +1,4 @@
+/help,true,/help - print this help message
+/reset - bot reset;
+help,false,_;
+text,false,_;
