@@ -3,10 +3,10 @@ package ru.kpn.tube;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
+import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
@@ -14,10 +14,10 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-class TelegramTube implements Tube<Update, BotApiMethod<?>> {
+class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
 
     private final TubeRunner runner;
-    private final BlockingQueue<Update> queue;
+    private final BlockingQueue<TubeMessage> queue;
     private final ExecutorService subscriberES;
     private final ExecutorService tubeES = Executors.newSingleThreadExecutor(
             runnable -> {
@@ -30,7 +30,7 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
     @InjectLogger
     private Logger<CustomizableLogger.LogLevel> log;
 
-    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
+    private TubeSubscriber<TubeMessage, BotApiMethod<?>> rootSubscriber;
 
     public TelegramTube(TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
@@ -59,12 +59,12 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
     }
 
     @Override
-    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
+    public synchronized void subscribe(TubeSubscriber<TubeMessage, BotApiMethod<?>> subscriber) {
         rootSubscriber = subscriber.hookUp(rootSubscriber);
     }
 
     @Override
-    public synchronized boolean append(Update update) {
+    public synchronized boolean append(TubeMessage update) {
         if (runner.isRun().get()){
             return queue.offer(update);
         } else {
@@ -76,7 +76,7 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
     private void doTubeRoutine() {
         while (runner.isRun().get()){
             try{
-                Update datum = queue.take();
+                TubeMessage datum = queue.take();
                 subscriberES.submit(() -> {
                     rootSubscriber.calculate(datum);
                     // TODO: 12.08.2021 send method through BOT

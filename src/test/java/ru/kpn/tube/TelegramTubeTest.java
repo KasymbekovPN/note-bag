@@ -1,14 +1,12 @@
 package ru.kpn.tube;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.logging.*;
+import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.runner.TelegramTubeRunner;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
@@ -17,21 +15,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
-@DisplayName("Test of TelegramTube")
 class TelegramTubeTest {
-
-    private static Object[][] getInitRunStateTestData(){
-        return new Object[][]{
-                {false},
-                {true}
-        };
-    }
-
     private static final CustomizableLogger logger = CustomizableLogger.builder(TelegramTube.class, CustomizableLoggerSettings.builder().build()).build();
 
     @ParameterizedTest
-    @MethodSource("getInitRunStateTestData")
+    @CsvFileSource(resources = "shouldCheckInitialRunState.csv")
     void shouldCheckInitialRunState(boolean initState) {
         TubeRunner runner = new TelegramTubeRunner(initState);
         TelegramTube tube = createTelegramTube(runner);
@@ -50,13 +38,13 @@ class TelegramTubeTest {
     @Test
     void shouldCheckAppendMethodOnStartedTube() {
         TelegramTube tube = createTelegramTube(new TelegramTubeRunner(true));
-        assertThat(tube.append(new Update())).isTrue();
+        assertThat(tube.append(TubeMessage.builder().build())).isTrue();
     }
 
     @Test
     void shouldCheckAppendMethodOnStoppedTube() {
         TelegramTube tube = createTelegramTube(new TelegramTubeRunner(false));
-        assertThat(tube.append(new Update())).isFalse();
+        assertThat(tube.append(TubeMessage.builder().build())).isFalse();
     }
 
     private TelegramTube createTelegramTube(TubeRunner runner) {
@@ -65,18 +53,18 @@ class TelegramTubeTest {
         return tube;
     }
 
-    private static class TestTelegramTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
+    private static class TestTelegramTubeSubscriber implements TubeSubscriber<TubeMessage, BotApiMethod<?>>{
 
         private boolean previousIsNull;
 
         @Override
-        public TubeSubscriber<Update, BotApiMethod<?>> hookUp(TubeSubscriber<Update, BotApiMethod<?>> previous) {
+        public TubeSubscriber<TubeMessage, BotApiMethod<?>> hookUp(TubeSubscriber<TubeMessage, BotApiMethod<?>> previous) {
             previousIsNull = previous == null;
             return this;
         }
 
         @Override
-        public Optional<BotApiMethod<?>> calculate(Update value) {
+        public Optional<BotApiMethod<?>> calculate(TubeMessage value) {
             return Optional.empty();
         }
 
