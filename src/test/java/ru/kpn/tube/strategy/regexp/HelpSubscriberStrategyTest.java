@@ -6,7 +6,8 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.model.telegram.TubeMessage;
-import ru.kpn.tube.matcher.RegExpSubscriberStrategyMatcher;
+import ru.kpn.tube.matcher.MatcherType;
+import ru.kpn.tube.matcher.SubscriberStrategyMatcherFactoryImpl;
 import ru.kpn.tube.strategy.SubscriberStrategy;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class HelpSubscriberStrategyTest {
 
     @BeforeEach
     void setUp() {
-        strategy = new HelpSubscriberStrategy(new RegExpSubscriberStrategyMatcher("/help"));
+        strategy = new HelpSubscriberStrategy(new SubscriberStrategyMatcherFactoryImpl().create(MatcherType.REGEX, "/help"));
         builder = TubeMessage.builder()
                 .nullState(false)
                 .chatId(CHAT_ID);

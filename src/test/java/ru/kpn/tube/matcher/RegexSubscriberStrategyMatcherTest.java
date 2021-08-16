@@ -6,12 +6,12 @@ import ru.kpn.tube.strategy.Matcher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RegExpSubscriberStrategyMatcherTest {
+public class RegexSubscriberStrategyMatcherTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "regExpSubscriberStrategyMatcherTestData.csv", delimiter = ' ')
     void shouldDoMatching(String template, String text, Boolean expectedResult) {
-        Matcher matcher = new RegExpSubscriberStrategyMatcher(template);
+        Matcher matcher = new RegexSubscriberStrategyMatcher(template);
         assertThat(matcher.match(text)).isEqualTo(expectedResult);
     }
 }
