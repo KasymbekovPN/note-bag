@@ -60,7 +60,7 @@ class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
 
     @Override
     public synchronized void subscribe(TubeSubscriber<TubeMessage, BotApiMethod<?>> subscriber) {
-        rootSubscriber = subscriber.hookUp(rootSubscriber);
+        rootSubscriber = rootSubscriber == null ? subscriber : rootSubscriber.setNext(subscriber);
     }
 
     @Override
@@ -78,7 +78,8 @@ class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
             try{
                 TubeMessage datum = queue.take();
                 subscriberES.submit(() -> {
-                    rootSubscriber.calculate(datum);
+                    // TODO: 21.08.2021 restore
+//                    rootSubscriber.calculate(datum);
                     // TODO: 12.08.2021 send method through BOT
                 });
             } catch (InterruptedException e) {

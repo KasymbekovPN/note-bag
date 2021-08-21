@@ -13,16 +13,16 @@ public class SubscriberStrategyMatcherFactoryImplTest {
 
     @Test
     void shouldCreateDefaultMatcher() {
-        Matcher expectedMatcher = new PersistentSubscriberStrategyMatcher(false);
+        Matcher expectedMatcher = new ConstantSubscriberStrategyMatcher(false);
         Matcher matcher = factory.create(MatcherType.DEFAULT);
         assertThat(matcher).isEqualTo(expectedMatcher);
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "shouldCreatePersistentMather.csv")
+    @CsvFileSource(resources = "shouldCreateConstantMather.csv")
     void shouldCreatePersistentMather(Boolean result) {
-        Matcher expectedMatcher = new PersistentSubscriberStrategyMatcher(result);
-        Matcher matcher = factory.create(MatcherType.PERSISTENT, result);
+        Matcher expectedMatcher = new ConstantSubscriberStrategyMatcher(result);
+        Matcher matcher = factory.create(MatcherType.CONSTANT, result);
         assertThat(matcher).isEqualTo(expectedMatcher);
     }
 

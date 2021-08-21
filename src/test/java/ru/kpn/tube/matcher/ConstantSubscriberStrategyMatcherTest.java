@@ -7,10 +7,10 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PersistentSubscriberStrategyMatcherTest {
+public class ConstantSubscriberStrategyMatcherTest {
 
-    private final Matcher falseMatcher = new PersistentSubscriberStrategyMatcher(false);
-    private final Matcher trueMatcher = new PersistentSubscriberStrategyMatcher(true);
+    private final Matcher falseMatcher = new ConstantSubscriberStrategyMatcher(false);
+    private final Matcher trueMatcher = new ConstantSubscriberStrategyMatcher(true);
 
     @RepeatedTest(100)
     void shouldCheckMatchingForFalse() {

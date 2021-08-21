@@ -11,8 +11,6 @@ import ru.kpn.tube.runner.TelegramTubeRunner;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TelegramTubeTest {
@@ -31,6 +29,7 @@ class TelegramTubeTest {
     void shouldCheckSubscribeMethod() {
         TestTelegramTubeSubscriber subscriber = new TestTelegramTubeSubscriber();
         TelegramTube tube = createTelegramTube(new TelegramTubeRunner(true));
+        tube.subscribe(subscriber);
         tube.subscribe(subscriber);
         assertThat(subscriber.isPreviousIsNull()).isTrue();
     }
@@ -58,14 +57,9 @@ class TelegramTubeTest {
         private boolean previousIsNull;
 
         @Override
-        public TubeSubscriber<TubeMessage, BotApiMethod<?>> hookUp(TubeSubscriber<TubeMessage, BotApiMethod<?>> previous) {
-            previousIsNull = previous == null;
-            return this;
-        }
-
-        @Override
-        public Optional<BotApiMethod<?>> calculate(TubeMessage value) {
-            return Optional.empty();
+        public TubeSubscriber<TubeMessage, BotApiMethod<?>> setNext(TubeSubscriber<TubeMessage, BotApiMethod<?>> next) {
+            previousIsNull = true;
+            return TubeSubscriber.super.setNext(next);
         }
 
         public boolean isPreviousIsNull() {

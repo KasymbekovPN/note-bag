@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.model.telegram.TubeMessage;
-import ru.kpn.tube.matcher.RegExpSubscriberStrategyMatcherFactory;
+import ru.kpn.tube.matcher.MatcherType;
+import ru.kpn.tube.matcher.SubscriberStrategyMatcherFactory;
 import ru.kpn.tube.strategy.BaseSubscriberStrategy;
 
 import javax.annotation.PostConstruct;
@@ -23,11 +24,12 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     private String template;
 
     @Autowired
-    private RegExpSubscriberStrategyMatcherFactory factory;
+    private SubscriberStrategyMatcherFactory factory;
 
+    // TODO: 18.08.2021 there is need another way of setting of matcher
     @PostConstruct
     private void init(){
-        matcher = factory.create(template);
+        matcher = factory.create(MatcherType.REGEX, template);
     }
 
     @Override

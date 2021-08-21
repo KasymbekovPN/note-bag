@@ -13,11 +13,11 @@ import java.util.Optional;
 @Component
 public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
 
-    @Value("${telegram.tube.strategies.noneSubscriberStrategy.priority}")
-    private Integer priority;
+    private final Integer priority;
 
-    public NoneSubscriberStrategy() {
+    public NoneSubscriberStrategy(@Value("${telegram.tube.strategies.noneSubscriberStrategy.priority}") Integer priority) {
         super(new NoneSubscriberStrategyMatcher());
+        this.priority = priority;
     }
 
     @Override
