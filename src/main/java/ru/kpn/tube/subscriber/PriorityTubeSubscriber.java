@@ -69,6 +69,7 @@ public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotAp
         }
     }
 
+    // TODO: 21.08.2021 change priority setting 
     public static class PriorityTubeSubscriberBuilder {
 
         private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
