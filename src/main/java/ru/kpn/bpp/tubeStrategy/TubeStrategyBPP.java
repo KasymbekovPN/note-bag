@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.Tube;
 import ru.kpn.tube.strategy.SubscriberStrategy;
 import ru.kpn.tube.subscriber.PriorityTubeSubscriber;
@@ -20,20 +20,20 @@ import java.lang.reflect.Type;
 public class TubeStrategyBPP implements BeanPostProcessor {
 
     @Autowired
-    private Tube<TubeMessage, BotApiMethod<?>> tube;
+    private Tube<Update, BotApiMethod<?>> tube;
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (isBeanTubeStrategy(bean)){
-            TubeSubscriber<TubeMessage, BotApiMethod<?>> subscriber = createSubscriber(bean);
+            TubeSubscriber<Update, BotApiMethod<?>> subscriber = createSubscriber(bean);
             tube.subscribe(subscriber);
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 
     // TODO: 21.08.2021 ??? is there need creation-service for tube subscriber
-    private TubeSubscriber<TubeMessage, BotApiMethod<?>> createSubscriber(Object bean) {
-        SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy = (SubscriberStrategy<TubeMessage, BotApiMethod<?>>) bean;
+    private TubeSubscriber<Update, BotApiMethod<?>> createSubscriber(Object bean) {
+        SubscriberStrategy<Update, BotApiMethod<?>> strategy = (SubscriberStrategy<Update, BotApiMethod<?>>) bean;
         return PriorityTubeSubscriber.builder()
                 .strategy(strategy)
                 .priority(strategy.getPriority())

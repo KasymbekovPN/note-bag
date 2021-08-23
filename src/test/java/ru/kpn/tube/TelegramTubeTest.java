@@ -5,8 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.logging.*;
-import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.runner.TelegramTubeRunner;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
@@ -37,13 +37,13 @@ class TelegramTubeTest {
     @Test
     void shouldCheckAppendMethodOnStartedTube() {
         TelegramTube tube = createTelegramTube(new TelegramTubeRunner(true));
-        assertThat(tube.append(TubeMessage.builder().build())).isTrue();
+        assertThat(tube.append(new Update())).isTrue();
     }
 
     @Test
     void shouldCheckAppendMethodOnStoppedTube() {
         TelegramTube tube = createTelegramTube(new TelegramTubeRunner(false));
-        assertThat(tube.append(TubeMessage.builder().build())).isFalse();
+        assertThat(tube.append(new Update())).isFalse();
     }
 
     private TelegramTube createTelegramTube(TubeRunner runner) {
@@ -52,12 +52,12 @@ class TelegramTubeTest {
         return tube;
     }
 
-    private static class TestTelegramTubeSubscriber implements TubeSubscriber<TubeMessage, BotApiMethod<?>>{
+    private static class TestTelegramTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
 
         private boolean previousIsNull;
 
         @Override
-        public TubeSubscriber<TubeMessage, BotApiMethod<?>> setNext(TubeSubscriber<TubeMessage, BotApiMethod<?>> next) {
+        public TubeSubscriber<Update, BotApiMethod<?>> setNext(TubeSubscriber<Update, BotApiMethod<?>> next) {
             previousIsNull = true;
             return TubeSubscriber.super.setNext(next);
         }

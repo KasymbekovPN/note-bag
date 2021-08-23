@@ -2,7 +2,7 @@ package ru.kpn.tube.extractor;
 
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class TubeSubscriberExtractorImplTest {
     void shouldCheckGetNextMethod() {
         TubeSubscriberExtractorImpl extractor = new TubeSubscriberExtractorImpl(new TestTubeSubscriber(AMOUNT));
         int count = 0;
-        Optional<TubeSubscriber<TubeMessage, BotApiMethod<?>>> maybeSubscriber;
+        Optional<TubeSubscriber<Update, BotApiMethod<?>>> maybeSubscriber;
         do{
             maybeSubscriber = extractor.getNext();
             if (maybeSubscriber.isPresent()){
@@ -28,7 +28,7 @@ public class TubeSubscriberExtractorImplTest {
         assertThat(count).isEqualTo(AMOUNT);
     }
 
-    private static class TestTubeSubscriber implements TubeSubscriber<TubeMessage, BotApiMethod<?>> {
+    private static class TestTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>> {
         private int amount;
 
         public TestTubeSubscriber(int amount) {
@@ -36,7 +36,7 @@ public class TubeSubscriberExtractorImplTest {
         }
 
         @Override
-        public Optional<TubeSubscriber<TubeMessage, BotApiMethod<?>>> getNext() {
+        public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
             return amount-- > 0 ? Optional.of(this) : Optional.empty();
         }
     }

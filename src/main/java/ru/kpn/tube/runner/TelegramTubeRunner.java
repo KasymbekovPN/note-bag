@@ -1,5 +1,6 @@
 package ru.kpn.tube.runner;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.kpn.bpp.logger.InjectLogger;
@@ -8,13 +9,15 @@ import ru.kpn.logging.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Slf4j
 @Component
 public class TelegramTubeRunner implements TubeRunner {
 
     private final AtomicBoolean run;
 
-    @InjectLogger
-    private Logger<CustomizableLogger.LogLevel> log;
+    // TODO: 23.08.2021 restore
+//    @InjectLogger
+//    private Logger<CustomizableLogger.LogLevel> log;
 
     private Runnable stopProcess;
     private Runnable startProcess;

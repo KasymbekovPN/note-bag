@@ -1,7 +1,7 @@
 package ru.kpn.tube.subscriber;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.strategy.SubscriberStrategy;
 import ru.kpn.tube.strategy.none.NoneSubscriberStrategy;
 
@@ -9,15 +9,15 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotApiMethod<?>> {
+public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>> {
 
-    private final SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy;
+    private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private final Comparator<Integer> priorityComparator;
     private final int priority;
 
-    private TubeSubscriber<TubeMessage, BotApiMethod<?>> next;
+    private TubeSubscriber<Update, BotApiMethod<?>> next;
 
-    private PriorityTubeSubscriber(SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy,
+    private PriorityTubeSubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
                                    Comparator<Integer> priorityComparator,
                                    int priority) {
         this.strategy = strategy;
@@ -30,7 +30,7 @@ public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotAp
     }
 
     @Override
-    public TubeSubscriber<TubeMessage, BotApiMethod<?>> setNext(TubeSubscriber<TubeMessage, BotApiMethod<?>> next) {
+    public TubeSubscriber<Update, BotApiMethod<?>> setNext(TubeSubscriber<Update, BotApiMethod<?>> next) {
         final int compareResult = priorityComparator.compare(getPriority(), next.getPriority());
         if (compareResult >= 0){
             if (this.next == null){
@@ -45,12 +45,12 @@ public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotAp
     }
 
     @Override
-    public Optional<TubeSubscriber<TubeMessage, BotApiMethod<?>>> getNext() {
+    public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
         return next != null ? Optional.of(next) : Optional.empty();
     }
 
     @Override
-    public Optional<BotApiMethod<?>> executeStrategy(TubeMessage message) {
+    public Optional<BotApiMethod<?>> executeStrategy(Update message) {
         return strategy.execute(message);
     }
 
@@ -74,14 +74,14 @@ public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotAp
 
         private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
 
-        private SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy;
+        private SubscriberStrategy<Update, BotApiMethod<?>> strategy;
         private Comparator<Integer> priorityComparator;
         private Integer priority;
 
         PriorityTubeSubscriberBuilder() {
         }
 
-        public PriorityTubeSubscriberBuilder strategy(SubscriberStrategy<TubeMessage, BotApiMethod<?>> strategy) {
+        public PriorityTubeSubscriberBuilder strategy(SubscriberStrategy<Update, BotApiMethod<?>> strategy) {
             this.strategy = strategy;
             return this;
         }
@@ -96,7 +96,7 @@ public class PriorityTubeSubscriber implements TubeSubscriber<TubeMessage, BotAp
             return this;
         }
 
-        public TubeSubscriber<TubeMessage, BotApiMethod<?>> build() {
+        public TubeSubscriber<Update, BotApiMethod<?>> build() {
             checkOrCreateStrategy();
             checkOrCreateComparator();
             checkOrCreatePriority();

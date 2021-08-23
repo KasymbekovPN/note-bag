@@ -10,9 +10,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.converter.Update2TubeMessageConverter;
 import ru.kpn.logging.*;
-import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.Tube;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class WebHookControllerTest {
     @BeforeEach
     void setUp() {
         tube = new TestTube();
-        controller = new WebHookController(tube, new Update2TubeMessageConverter());
+        controller = new WebHookController(tube);
         CustomizableLogger logger = CustomizableLogger.builder(WebHookController.class, CustomizableLoggerSettings.builder().build()).build();
         ReflectionTestUtils.setField(controller, "log", logger);
     }
@@ -53,11 +51,11 @@ public class WebHookControllerTest {
         Assertions.assertThat(tube.getMessageSize()).isEqualTo(size);
     }
 
-    private static class TestTube implements Tube<TubeMessage, BotApiMethod<?>> {
-        private final List<TubeMessage> messages = new ArrayList<>();
+    private static class TestTube implements Tube<Update, BotApiMethod<?>> {
+        private final List<Update> messages = new ArrayList<>();
 
         @Override
-        public boolean append(TubeMessage update) {
+        public boolean append(Update update) {
             messages.add(update);
             return false;
         }

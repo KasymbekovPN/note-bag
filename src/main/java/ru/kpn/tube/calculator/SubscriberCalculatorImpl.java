@@ -1,23 +1,23 @@
 package ru.kpn.tube.calculator;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.extractor.TubeSubscriberExtractor;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.Optional;
 
-public class SubscriberCalculatorImpl implements SubscriberCalculator<TubeMessage, BotApiMethod<?>> {
+public class SubscriberCalculatorImpl implements SubscriberCalculator<Update, BotApiMethod<?>> {
 
-    private final TubeSubscriberExtractor<TubeMessage, BotApiMethod<?>> extractor;
+    private final TubeSubscriberExtractor<Update, BotApiMethod<?>> extractor;
 
-    public SubscriberCalculatorImpl(TubeSubscriberExtractor<TubeMessage, BotApiMethod<?>> extractor) {
+    public SubscriberCalculatorImpl(TubeSubscriberExtractor<Update, BotApiMethod<?>> extractor) {
         this.extractor = extractor;
     }
 
     @Override
-    public Optional<BotApiMethod<?>> calculate(TubeMessage message) {
-        Optional<TubeSubscriber<TubeMessage, BotApiMethod<?>>> maybe;
+    public Optional<BotApiMethod<?>> calculate(Update message) {
+        Optional<TubeSubscriber<Update, BotApiMethod<?>>> maybe;
         do {
             maybe = extractor.getNext();
             if (maybe.isPresent()){

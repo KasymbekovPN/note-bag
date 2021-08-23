@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.matcher.MatcherType;
 import ru.kpn.tube.matcher.SubscriberStrategyMatcherFactory;
 import ru.kpn.tube.strategy.BaseSubscriberStrategy;
@@ -33,8 +33,8 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected Optional<BotApiMethod<?>> executeImpl(TubeMessage value) {
-        return Optional.of(new SendMessage(value.getChatId(), text));
+    protected Optional<BotApiMethod<?>> executeImpl(Update value) {
+        return Optional.of(new SendMessage(calculateChatId(value), text));
     }
 
     @Override

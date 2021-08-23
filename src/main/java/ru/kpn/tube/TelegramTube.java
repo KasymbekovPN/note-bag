@@ -1,23 +1,25 @@
 package ru.kpn.tube;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bpp.logger.InjectLogger;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
-import ru.kpn.model.telegram.TubeMessage;
 import ru.kpn.tube.runner.TubeRunner;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @Service
-class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
+class TelegramTube implements Tube<Update, BotApiMethod<?>> {
 
     private final TubeRunner runner;
-    private final BlockingQueue<TubeMessage> queue;
+    private final BlockingQueue<Update> queue;
     private final ExecutorService subscriberES;
     private final ExecutorService tubeES = Executors.newSingleThreadExecutor(
             runnable -> {
@@ -27,10 +29,11 @@ class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
             }
     );
 
-    @InjectLogger
-    private Logger<CustomizableLogger.LogLevel> log;
+    // TODO: 23.08.2021 restore
+//    @InjectLogger
+//    private Logger<CustomizableLogger.LogLevel> log;
 
-    private TubeSubscriber<TubeMessage, BotApiMethod<?>> rootSubscriber;
+    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
 
     public TelegramTube(TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
@@ -59,12 +62,12 @@ class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
     }
 
     @Override
-    public synchronized void subscribe(TubeSubscriber<TubeMessage, BotApiMethod<?>> subscriber) {
+    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
         rootSubscriber = rootSubscriber == null ? subscriber : rootSubscriber.setNext(subscriber);
     }
 
     @Override
-    public synchronized boolean append(TubeMessage update) {
+    public synchronized boolean append(Update update) {
         if (runner.isRun().get()){
             return queue.offer(update);
         } else {
@@ -76,8 +79,9 @@ class TelegramTube implements Tube<TubeMessage, BotApiMethod<?>> {
     private void doTubeRoutine() {
         while (runner.isRun().get()){
             try{
-                TubeMessage datum = queue.take();
+                Update datum = queue.take();
                 subscriberES.submit(() -> {
+//                    Optional<BotApiMethod<?>> maybeMethod = rootSubscriber.executeStrategy(datum);
                     // TODO: 21.08.2021 restore
 //                    rootSubscriber.calculate(datum);
                     // TODO: 12.08.2021 send method through BOT

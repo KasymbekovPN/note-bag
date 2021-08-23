@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.kpn.model.telegram.TubeMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.strategy.BaseSubscriberStrategy;
 import ru.kpn.tube.strategy.Matcher;
 
@@ -21,8 +21,8 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected Optional<BotApiMethod<?>> executeImpl(TubeMessage value) {
-        return Optional.of(new SendMessage(value.getChatId(), calculateMessage(value)));
+    protected Optional<BotApiMethod<?>> executeImpl(Update value) {
+        return Optional.of(new SendMessage(calculateChatId(value), calculateMessage(value)));
     }
 
     @Override
@@ -30,9 +30,9 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
         return priority;
     }
 
-    private String calculateMessage(TubeMessage value) {
+    private String calculateMessage(Update value) {
         // TODO: 12.08.2021 translation
-        return String.format("There is unknown input : %s", value.getText());
+        return String.format("There is unknown input : %s", value.getMessage().getText());
     }
 
     private static class NoneSubscriberStrategyMatcher implements Matcher{
