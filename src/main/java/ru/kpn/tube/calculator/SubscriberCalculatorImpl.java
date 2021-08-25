@@ -7,6 +7,7 @@ import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.Optional;
 
+// TODO: 25.08.2021 add setter & rename
 public class SubscriberCalculatorImpl implements SubscriberCalculator<Update, BotApiMethod<?>> {
 
     private final TubeSubscriberExtractor<Update, BotApiMethod<?>> extractor;

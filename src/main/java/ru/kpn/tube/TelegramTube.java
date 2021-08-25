@@ -10,12 +10,17 @@ import ru.kpn.tube.runner.TubeRunner;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
 class TelegramTube implements Tube<Update, BotApiMethod<?>> {
 
-    private final NPBot bot;
+    // TODO: 25.08.2021 through interface
+//    private final NPBot bot;
+    //<
+    private final Consumer<Update> bot;
+    
     private final TubeRunner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService botES;
@@ -27,13 +32,12 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
             }
     );
 
-    // TODO: 23.08.2021 restore ???
+    // TODO: 23.08.2021 restore or del
 //    @InjectLogger
 //    private Logger<CustomizableLogger.LogLevel> log;
-
 //    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
 
-    public TelegramTube(NPBot bot,
+    public TelegramTube(Consumer<Update> bot,
                         TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
                         @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit) {
@@ -81,7 +85,7 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
         while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
-                botES.submit(() -> bot.run(datum));
+                botES.submit(() -> bot.accept(datum));
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();
