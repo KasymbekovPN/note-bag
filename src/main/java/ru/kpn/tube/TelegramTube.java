@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bpp.logger.InjectLogger;
-import ru.kpn.logging.CustomizableLogger;
-import ru.kpn.logging.Logger;
+import ru.kpn.bot.NPBot;
 import ru.kpn.tube.runner.TubeRunner;
-import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,9 +15,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 class TelegramTube implements Tube<Update, BotApiMethod<?>> {
 
+    private final NPBot bot;
     private final TubeRunner runner;
     private final BlockingQueue<Update> queue;
-    private final ExecutorService subscriberES;
+    private final ExecutorService botES;
     private final ExecutorService tubeES = Executors.newSingleThreadExecutor(
             runnable -> {
                 Thread thread = new Thread(runnable);
@@ -29,17 +27,18 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
             }
     );
 
-    // TODO: 23.08.2021 restore
+    // TODO: 23.08.2021 restore ???
 //    @InjectLogger
 //    private Logger<CustomizableLogger.LogLevel> log;
 
-    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
+//    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
 
-    public TelegramTube(TubeRunner runner,
+    public TelegramTube(NPBot bot,
+                        TubeRunner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
                         @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit) {
         this.queue = new ArrayBlockingQueue<>(defaultQueueSize);
-        this.subscriberES = Executors.newFixedThreadPool(
+        this.botES = Executors.newFixedThreadPool(
                 subscriberThreadLimit,
                 new ThreadFactory() {
                     private final AtomicInteger threadCounter = new AtomicInteger(0);
@@ -51,6 +50,7 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
                     }
                 }
         );
+        this.bot = bot;
         this.runner = runner;
         this.runner.setStartProcess(this::startProcess);
         this.runner.setStopProcess(this::stopProcess);
@@ -61,10 +61,11 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
         return runner;
     }
 
-    @Override
-    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
-        rootSubscriber = rootSubscriber == null ? subscriber : rootSubscriber.setNext(subscriber);
-    }
+    // TODO: 23.08.2021 del
+//    @Override
+//    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
+//        rootSubscriber = rootSubscriber == null ? subscriber : rootSubscriber.setNext(subscriber);
+//    }
 
     @Override
     public synchronized boolean append(Update update) {
@@ -80,12 +81,7 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
         while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
-                subscriberES.submit(() -> {
-//                    Optional<BotApiMethod<?>> maybeMethod = rootSubscriber.executeStrategy(datum);
-                    // TODO: 21.08.2021 restore
-//                    rootSubscriber.calculate(datum);
-                    // TODO: 12.08.2021 send method through BOT
-                });
+                botES.submit(() -> bot.run(datum));
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();

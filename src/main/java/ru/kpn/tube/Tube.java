@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public interface Tube<T, R> {
     default TubeRunner getRunner(){return null;}
-    default void subscribe(TubeSubscriber<T, R> subscriber) {}
+
+    // TODO: 23.08.2021 del 
+//    default void subscribe(TubeSubscriber<T, R> subscriber) {}
     default boolean append(T update){return false;}
 }
