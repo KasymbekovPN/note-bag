@@ -3,9 +3,7 @@ package ru.kpn.tube;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bot.NPBot;
 import ru.kpn.tube.runner.TubeRunner;
 
 import java.util.concurrent.*;
@@ -14,11 +12,8 @@ import java.util.function.Consumer;
 
 @Slf4j
 @Service
-class TelegramTube implements Tube<Update, BotApiMethod<?>> {
+class TelegramTube implements Tube<Update> {
 
-    // TODO: 25.08.2021 through interface
-//    private final NPBot bot;
-    //<
     private final Consumer<Update> bot;
     
     private final TubeRunner runner;
@@ -31,11 +26,6 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
                 return thread;
             }
     );
-
-    // TODO: 23.08.2021 restore or del
-//    @InjectLogger
-//    private Logger<CustomizableLogger.LogLevel> log;
-//    private TubeSubscriber<Update, BotApiMethod<?>> rootSubscriber;
 
     public TelegramTube(Consumer<Update> bot,
                         TubeRunner runner,
@@ -60,16 +50,11 @@ class TelegramTube implements Tube<Update, BotApiMethod<?>> {
         this.runner.setStopProcess(this::stopProcess);
     }
 
+    // TODO: 26.08.2021 test
     @Override
     public TubeRunner getRunner() {
         return runner;
     }
-
-    // TODO: 23.08.2021 del
-//    @Override
-//    public synchronized void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
-//        rootSubscriber = rootSubscriber == null ? subscriber : rootSubscriber.setNext(subscriber);
-//    }
 
     @Override
     public synchronized boolean append(Update update) {

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import ru.kpn.bot.NPBot;
 import ru.kpn.decryptor.Decryptor;
-import ru.kpn.tube.extractor.TubeSubscriberExtractorImpl;
+import ru.kpn.tube.calculator.SubscriberCalculatorFactoryImpl;
 
 // TODO: 25.08.2021 use spring-jasypt
 @Configuration
@@ -32,6 +32,7 @@ public class NPBotConfig {
                 botOptions,
                 botPath,
                 decryptor.decrypt(botUserName),
-                decryptor.decrypt(botToken));
+                decryptor.decrypt(botToken),
+                new SubscriberCalculatorFactoryImpl());
     }
 }

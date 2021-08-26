@@ -6,19 +6,25 @@ import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.Optional;
 
-// TODO: 25.08.2021 add setter & rename
+// TODO: 25.08.2021 add rename
 public class TubeSubscriberExtractorImpl implements TubeSubscriberExtractor<Update, BotApiMethod<?>> {
 
-    private TubeSubscriber<Update, BotApiMethod<?>> tubeSubscriber;
+    private TubeSubscriber<Update, BotApiMethod<?>> subscriber;
 
-    public TubeSubscriberExtractorImpl(TubeSubscriber<Update, BotApiMethod<?>> tubeSubscriber) {
-        this.tubeSubscriber = tubeSubscriber;
+    public TubeSubscriberExtractorImpl(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
+        this.subscriber = subscriber;
     }
 
     @Override
     public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
-        Optional<TubeSubscriber<Update, BotApiMethod<?>>> maybeNext = tubeSubscriber.getNext();
-        maybeNext.ifPresent(tubeMessageBotApiMethodTubeSubscriber -> tubeSubscriber = tubeMessageBotApiMethodTubeSubscriber);
-        return maybeNext;
+        if (subscriber != null){
+            Optional<TubeSubscriber<Update, BotApiMethod<?>>> result = Optional.of(this.subscriber);
+            Optional<TubeSubscriber<Update, BotApiMethod<?>>> maybeNext = subscriber.getNext();
+            subscriber = maybeNext.orElse(null);
+
+            return result;
+        } else {
+            return Optional.empty();
+        }
     }
 }

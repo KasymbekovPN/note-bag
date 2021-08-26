@@ -5,10 +5,7 @@ import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public interface Tube<T, R> {
+public interface Tube<T> {
     default TubeRunner getRunner(){return null;}
-
-    // TODO: 23.08.2021 del 
-//    default void subscribe(TubeSubscriber<T, R> subscriber) {}
     default boolean append(T update){return false;}
 }

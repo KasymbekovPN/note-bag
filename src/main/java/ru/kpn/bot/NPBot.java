@@ -1,47 +1,48 @@
 package ru.kpn.bot;
 
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.calculator.SubscriberCalculator;
+import ru.kpn.tube.calculator.SubscriberCalculatorFactory;
 import ru.kpn.tube.subscriber.TubeSubscriber;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-// TODO: 25.08.2021 add builder
 public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotApiMethod<?>>, Consumer<Update> {
 
     private final String botPath;
     private final String botUserName;
     private final String botToken;
+    private final SubscriberCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory;
 
     private TubeSubscriber<Update, BotApiMethod<?>> subscriber;
 
-    @Autowired
     public NPBot(DefaultBotOptions options,
                  String botPath,
                  String botUserName,
-                 String botToken) {
+                 String botToken,
+                 SubscriberCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory) {
         super(options);
         this.botPath = botPath;
         this.botUserName = botUserName;
         this.botToken = botToken;
+        this.calculatorFactory = calculatorFactory;
     }
 
-    // TODO: 23.08.2021 subscribers must be here !!!
-
-    // TODO: 25.08.2021 test
-    // TODO: 23.08.2021 ???
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        SubscriberCalculator<Update, BotApiMethod<?>> calculator = subscriber.createCalculator();
-        Optional<BotApiMethod<?>> calculateResult = calculator.calculate(update);
-        // TODO: 25.08.2021 handle empty
-        return calculateResult.get();
+        final Optional<BotApiMethod<?>> maybeResult = calculatorFactory.create(subscriber).calculate(update);
+        return maybeResult.isPresent() ? maybeResult.get() : getDefaultBotApiMethod(update);
+    }
+
+    private BotApiMethod<?> getDefaultBotApiMethod(Update update) {
+        String chatId = update.getMessage().getChatId().toString();
+        // TODO: 26.08.2021 other text + translate
+        return new SendMessage(chatId, "No one subscriber answer");
     }
 
     @Override
@@ -58,8 +59,7 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
     public String getBotPath() {
         return botPath;
     }
-
-    // TODO: 25.08.2021 test
+    
     @Override
     public void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
         this.subscriber = this.subscriber == null ? subscriber : this.subscriber.setNext(subscriber);

@@ -51,7 +51,7 @@ public class WebHookControllerTest {
         Assertions.assertThat(tube.getMessageSize()).isEqualTo(size);
     }
 
-    private static class TestTube implements Tube<Update, BotApiMethod<?>> {
+    private static class TestTube implements Tube<Update> {
         private final List<Update> messages = new ArrayList<>();
 
         @Override
