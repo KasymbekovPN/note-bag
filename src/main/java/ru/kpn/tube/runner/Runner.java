@@ -9,4 +9,5 @@ public interface Runner {
     default void setStopProcess(Runnable stopProcess){}
     default void setStartProcess(Runnable startProcess) {}
     default void executeCurrentProcess(){}
+    default void setProcessesAndExecuteCurrent(Runnable startProcess, Runnable stopProcess){}
 }

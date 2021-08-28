@@ -46,10 +46,7 @@ class TelegramTube implements Tube<Update> {
         );
         this.consumer = consumer;
         this.runner = runner;
-
-        this.runner.setStartProcess(this::startProcess);
-        this.runner.setStopProcess(this::stopProcess);
-        this.runner.executeCurrentProcess();
+        this.runner.setProcessesAndExecuteCurrent(this::startProcess, this::stopProcess);
     }
 
     @Override

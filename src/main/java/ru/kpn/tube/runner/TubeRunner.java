@@ -49,6 +49,13 @@ public class TubeRunner implements Runner {
         runProcess(run.get()? startProcess : stopProcess);
     }
 
+    @Override
+    public void setProcessesAndExecuteCurrent(Runnable startProcess, Runnable stopProcess) {
+        setStartProcess(startProcess);
+        setStopProcess(stopProcess);
+        executeCurrentProcess();
+    }
+
     private void changeState(boolean newState, Runnable process){
         if (run.get() != newState){
             run.set(newState);

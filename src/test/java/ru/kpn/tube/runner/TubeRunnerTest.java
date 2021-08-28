@@ -1,12 +1,10 @@
 package ru.kpn.tube.runner;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.test.util.ReflectionTestUtils;
-import ru.kpn.logging.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +21,11 @@ public class TubeRunnerTest {
         };
     }
 
-    private static final CustomizableLogger logger = CustomizableLogger.builder(TubeRunner.class, CustomizableLoggerSettings.builder().build()).build();
+    @BeforeEach
+    void setUp() {
+        testStartProcessCounter = 0;
+        testStopProcessCounter = 0;
+    }
 
     @ParameterizedTest
     @MethodSource("getAfterInitTestData")
@@ -72,6 +74,40 @@ public class TubeRunnerTest {
 
         log.info("testStartProcessCounter: {}", testStartProcessCounter);
         assertThat(testStartProcessCounter).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCheckExecuteCurrentProcessForStopState() {
+        Runner runner = createRunner(false);
+        runner.setStopProcess(this::testStopProcess);
+        runner.executeCurrentProcess();
+
+        assertThat(testStopProcessCounter).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCheckExecuteCurrentProcessForStartState() {
+        Runner runner = createRunner(true);
+        runner.setStartProcess(this::testStartProcess);
+        runner.executeCurrentProcess();
+
+        assertThat(testStartProcessCounter).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCheckSetProcessesAndExecuteCurrentForStopState() {
+        Runner runner = createRunner(false);
+        runner.setProcessesAndExecuteCurrent(this::testStartProcess, this::testStopProcess);
+        assertThat(testStartProcessCounter).isEqualTo(0);
+        assertThat(testStopProcessCounter).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCheckSetProcessesAndExecuteCurrentForStartState() {
+        Runner runner = createRunner(true);
+        runner.setProcessesAndExecuteCurrent(this::testStartProcess, this::testStopProcess);
+        assertThat(testStartProcessCounter).isEqualTo(1);
+        assertThat(testStopProcessCounter).isEqualTo(0);
     }
 
     private Runner createRunner(boolean initValue) {
