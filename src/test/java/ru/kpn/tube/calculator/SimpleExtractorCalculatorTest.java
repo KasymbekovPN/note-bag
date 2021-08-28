@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.extractor.SubscriberExtractor;
 import ru.kpn.tube.subscriber.Subscriber;
+import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
 
@@ -16,13 +17,13 @@ public class SimpleExtractorCalculatorTest {
     @Test
     void shouldCheckEmptyCalculation() {
         SimpleExtractorCalculator calculator = new SimpleExtractorCalculator(new TestSubscriberExecutor(10, new EmptyTestSubscriber()));
-        assertThat(calculator.calculate(new Update())).isEmpty();
+        assertThat(calculator.calculate(new UpdateInstanceBuilder().build())).isEmpty();
     }
 
     @Test
     void shouldCheckPresentCalculation() {
         SimpleExtractorCalculator calculator = new SimpleExtractorCalculator(new TestSubscriberExecutor(10, new PresentTestSubscriber()));
-        assertThat(calculator.calculate(new Update())).isPresent();
+        assertThat(calculator.calculate(new UpdateInstanceBuilder().build())).isPresent();
     }
 
     private static class TestSubscriberExecutor implements SubscriberExtractor<Update, BotApiMethod<?>> {

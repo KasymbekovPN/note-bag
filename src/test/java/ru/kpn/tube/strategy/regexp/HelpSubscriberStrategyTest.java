@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
 
@@ -33,7 +34,10 @@ public class HelpSubscriberStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "helpSubscriberStrategyTest.csv")
     void shouldCheckText(String command, boolean isPresent) {
-        Update update = createUpdate(command);
+        Update update = new UpdateInstanceBuilder()
+                .chatId(CHAT_ID)
+                .text(command)
+                .build();
         Optional<BotApiMethod<?>> maybeMethod = strategy.execute(update);
         boolean maybeMethodPresent = maybeMethod.isPresent();
         assertThat(maybeMethodPresent).isEqualTo(isPresent);
@@ -47,19 +51,5 @@ public class HelpSubscriberStrategyTest {
     @Test
     void shouldCheckGetPriority() {
         assertThat(expectedPriority).isEqualTo(strategy.getPriority());
-    }
-
-    private Update createUpdate(String command) {
-        Message message = new Message();
-        Chat chat = new Chat();
-        chat.setId(CHAT_ID);
-        message.setChat(chat);
-        message.setFrom(new User());
-        message.setText(command);
-
-        Update update = new Update();
-        update.setMessage(message);
-
-        return update;
     }
 }

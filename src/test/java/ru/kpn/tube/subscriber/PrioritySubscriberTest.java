@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.strategy.SubscriberStrategy;
+import utils.UpdateInstanceBuilder;
 
 import java.util.*;
 
@@ -55,7 +56,7 @@ public class PrioritySubscriberTest {
     void shouldCheckExecuteStrategy() {
         TestStrategy strategy = new TestStrategy();
         Subscriber<Update, BotApiMethod<?>> subscriber = builder.strategy(strategy).build();
-        subscriber.executeStrategy(new Update());
+        subscriber.executeStrategy(new UpdateInstanceBuilder().build());
         assertThat(strategy.getFlag()).isTrue();
     }
 

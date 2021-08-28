@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.tube.runner.TubeRunner;
+import utils.UpdateInstanceBuilder;
 
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -39,17 +40,7 @@ class TelegramTubeTest {
     }
 
     private Update createUpdateInstance() {
-        Chat chat = new Chat();
-        chat.setId(123L);
-        Message message = new Message();
-        message.setText("");
-        message.setFrom(new User());
-        message.setChat(chat);
-
-        Update update = new Update();
-        update.setMessage(message);
-
-        return update;
+        return new UpdateInstanceBuilder().chatId(123L).build();
     }
 
     private TelegramTube createTube(boolean runnerInitValue, Consumer<Update> consumer) {

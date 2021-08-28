@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.tube.subscriber.Subscriber;
+import utils.UpdateInstanceBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,24 +69,9 @@ public class NPBotTest {
         npBot.subscribe(s1);
         npBot.subscribe(s2);
 
-        npBot.onWebhookUpdateReceived(createUpdate());
+        npBot.onWebhookUpdateReceived(new UpdateInstanceBuilder().chatId(123L).build());
 
         assertThat(checkList).isEqualTo(buffer);
-    }
-
-    private Update createUpdate() {
-        Chat chat = new Chat();
-        chat.setId(123L);
-
-        Message message = new Message();
-        message.setChat(chat);
-        message.setFrom(new User());
-        message.setText("");
-
-        Update update = new Update();
-        update.setMessage(message);
-
-        return update;
     }
 
     private static class TestSubscriber implements Subscriber<Update, BotApiMethod<?>> {

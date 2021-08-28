@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
+import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
 
@@ -30,15 +28,7 @@ public class NoneSubscriberStrategyTest {
 
     @BeforeEach
     void setUp() {
-        Chat chat = new Chat();
-        chat.setId(CHAT_ID);
-        Message message = new Message();
-        message.setChat(chat);
-        message.setFrom(new User());
-        message.setText("");
-
-        update = new Update();
-        update.setMessage(message);
+        update = new UpdateInstanceBuilder().chatId(CHAT_ID).build();
     }
 
     @Test
