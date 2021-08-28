@@ -1,25 +1,21 @@
 package ru.kpn.service.tag;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.kpn.bpp.logger.InjectLogger;
-import ru.kpn.logging.CustomizableLogger;
-import ru.kpn.logging.Logger;
 import ru.kpn.model.tag.TagEntity;
 import ru.kpn.repository.TagRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagRepository repository;
-
-    @InjectLogger
-    private Logger<CustomizableLogger.LogLevel> log;
 
     @Override
     public void save(TagEntity entity) {

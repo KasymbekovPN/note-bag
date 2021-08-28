@@ -1,25 +1,21 @@
 package ru.kpn.service.note;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.kpn.bpp.logger.InjectLogger;
-import ru.kpn.logging.CustomizableLogger;
-import ru.kpn.logging.Logger;
 import ru.kpn.model.note.NoteEntity;
 import ru.kpn.repository.NoteRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class NoteServiceImpl implements NoteService {
 
     @Autowired
     private NoteRepository repository;
-
-    @InjectLogger
-    private Logger<CustomizableLogger.LogLevel> log;
 
     @Override
     public void save(NoteEntity entity) {
