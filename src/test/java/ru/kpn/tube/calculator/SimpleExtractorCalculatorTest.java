@@ -4,40 +4,40 @@ import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.extractor.TubeSubscriberExtractor;
-import ru.kpn.tube.subscriber.TubeSubscriber;
+import ru.kpn.tube.extractor.SubscriberExtractor;
+import ru.kpn.tube.subscriber.Subscriber;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubscriberCalculatorImplTest {
+public class SimpleExtractorCalculatorTest {
 
     @Test
     void shouldCheckEmptyCalculation() {
-        SubscriberCalculatorImpl calculator = new SubscriberCalculatorImpl(new TestTubeSubscriberExecutor(10, new EmptyTestTubeSubscriber()));
+        SimpleExtractorCalculator calculator = new SimpleExtractorCalculator(new TestSubscriberExecutor(10, new EmptyTestSubscriber()));
         assertThat(calculator.calculate(new Update())).isEmpty();
     }
 
     @Test
     void shouldCheckPresentCalculation() {
-        SubscriberCalculatorImpl calculator = new SubscriberCalculatorImpl(new TestTubeSubscriberExecutor(10, new PresentTestTubeSubscriber()));
+        SimpleExtractorCalculator calculator = new SimpleExtractorCalculator(new TestSubscriberExecutor(10, new PresentTestSubscriber()));
         assertThat(calculator.calculate(new Update())).isPresent();
     }
 
-    private static class TestTubeSubscriberExecutor implements TubeSubscriberExtractor<Update, BotApiMethod<?>> {
+    private static class TestSubscriberExecutor implements SubscriberExtractor<Update, BotApiMethod<?>> {
 
-        private final TubeSubscriber<Update, BotApiMethod<?>> subscriber;
+        private final Subscriber<Update, BotApiMethod<?>> subscriber;
 
         private int downCounter;
 
-        public TestTubeSubscriberExecutor(int downCounter, TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
+        public TestSubscriberExecutor(int downCounter, Subscriber<Update, BotApiMethod<?>> subscriber) {
             this.downCounter = downCounter;
             this.subscriber = subscriber;
         }
 
         @Override
-        public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
+        public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
             if (--downCounter > 0){
                 return Optional.of(subscriber);
             }
@@ -45,10 +45,10 @@ public class SubscriberCalculatorImplTest {
         }
     }
 
-    private static class EmptyTestTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
+    private static class EmptyTestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
     }
 
-    private static class PresentTestTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
+    private static class PresentTestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
         @Override
         public Optional<BotApiMethod<?>> executeStrategy(Update message) {
             return Optional.of(new SendMessage("1", "text"));

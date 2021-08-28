@@ -1,6 +1,5 @@
 package ru.kpn.bot;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.decryptor.Decryptor;
-import ru.kpn.tube.subscriber.TubeSubscriber;
+import ru.kpn.tube.subscriber.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,9 +91,9 @@ public class NPBotTest {
         return update;
     }
 
-    private static class TestSubscriber implements TubeSubscriber<Update, BotApiMethod<?>>{
+    private static class TestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
-        private TubeSubscriber<Update, BotApiMethod<?>> next;
+        private Subscriber<Update, BotApiMethod<?>> next;
         private final int priority;
         private final int content;
         private final List<Integer> buffer;
@@ -106,7 +105,7 @@ public class NPBotTest {
         }
 
         @Override
-        public TubeSubscriber<Update, BotApiMethod<?>> setNext(TubeSubscriber<Update, BotApiMethod<?>> next) {
+        public Subscriber<Update, BotApiMethod<?>> setNext(Subscriber<Update, BotApiMethod<?>> next) {
             if (priority >= next.getPriority()){
                 if (this.next == null){
                     this.next = next;
@@ -120,7 +119,7 @@ public class NPBotTest {
         }
 
         @Override
-        public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
+        public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
             return next != null ? Optional.of(next) : Optional.empty();
         }
 

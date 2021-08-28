@@ -6,8 +6,8 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.calculator.SubscriberCalculatorFactory;
-import ru.kpn.tube.subscriber.TubeSubscriber;
+import ru.kpn.tube.calculator.ExtractorCalculatorFactory;
+import ru.kpn.tube.subscriber.Subscriber;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -17,15 +17,15 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
     private final String botPath;
     private final String botUserName;
     private final String botToken;
-    private final SubscriberCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory;
+    private final ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory;
 
-    private TubeSubscriber<Update, BotApiMethod<?>> subscriber;
+    private Subscriber<Update, BotApiMethod<?>> subscriber;
 
     public NPBot(DefaultBotOptions options,
                  String botPath,
                  String botUserName,
                  String botToken,
-                 SubscriberCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory) {
+                 ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory) {
         super(options);
         this.botPath = botPath;
         this.botUserName = botUserName;
@@ -61,7 +61,7 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
     }
     
     @Override
-    public void subscribe(TubeSubscriber<Update, BotApiMethod<?>> subscriber) {
+    public void subscribe(Subscriber<Update, BotApiMethod<?>> subscriber) {
         this.subscriber = this.subscriber == null ? subscriber : this.subscriber.setNext(subscriber);
     }
 

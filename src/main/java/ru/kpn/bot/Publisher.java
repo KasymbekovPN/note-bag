@@ -1,7 +1,7 @@
 package ru.kpn.bot;
 
-import ru.kpn.tube.subscriber.TubeSubscriber;
+import ru.kpn.tube.subscriber.Subscriber;
 
 public interface Publisher<T, R> {
-    void subscribe(TubeSubscriber<T, R> subscriber);
+    void subscribe(Subscriber<T, R> subscriber);
 }

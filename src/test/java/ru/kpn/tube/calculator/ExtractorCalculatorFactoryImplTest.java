@@ -1,0 +1,45 @@
+package ru.kpn.tube.calculator;
+
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+import org.springframework.util.ReflectionUtils;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.tube.extractor.IterableExtractor;
+import ru.kpn.tube.subscriber.Subscriber;
+
+import java.lang.reflect.Field;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ExtractorCalculatorFactoryImplTest {
+
+    private final ExtractorCalculatorFactoryImpl factory = new ExtractorCalculatorFactoryImpl();
+    private final Subscriber<Update, BotApiMethod<?>> subscriber = new TestSubscriber();
+
+    @Test
+    void shouldCheckCalculatorCreation() {
+        SimpleExtractorCalculator calculator = (SimpleExtractorCalculator) factory.create(subscriber);
+        IterableExtractor extractor = getExtractor(calculator);
+        TestSubscriber s = getSubscriber(extractor);
+
+        assertThat(s).isEqualTo(subscriber);
+    }
+
+    @SneakyThrows
+    private IterableExtractor getExtractor(SimpleExtractorCalculator calculator) {
+        Field field = calculator.getClass().getDeclaredField("extractor");
+        field.setAccessible(true);
+        return (IterableExtractor) ReflectionUtils.getField(field, calculator);
+    }
+
+    @SneakyThrows
+    private TestSubscriber getSubscriber(IterableExtractor extractor) {
+        Field field = extractor.getClass().getDeclaredField("subscriber");
+        field.setAccessible(true);
+        return (TestSubscriber) ReflectionUtils.getField(field, extractor);
+    }
+
+    private static class TestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
+    }
+}

@@ -9,17 +9,17 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMethod<?>> {
+public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
     private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private final Comparator<Integer> priorityComparator;
     private final int priority;
 
-    private TubeSubscriber<Update, BotApiMethod<?>> next;
+    private Subscriber<Update, BotApiMethod<?>> next;
 
-    private PriorityTubeSubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
-                                   Comparator<Integer> priorityComparator,
-                                   int priority) {
+    private PrioritySubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
+                               Comparator<Integer> priorityComparator,
+                               int priority) {
         this.strategy = strategy;
         this.priorityComparator = priorityComparator;
         this.priority = priority;
@@ -30,7 +30,7 @@ public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMeth
     }
 
     @Override
-    public TubeSubscriber<Update, BotApiMethod<?>> setNext(TubeSubscriber<Update, BotApiMethod<?>> next) {
+    public Subscriber<Update, BotApiMethod<?>> setNext(Subscriber<Update, BotApiMethod<?>> next) {
         final int compareResult = priorityComparator.compare(getPriority(), next.getPriority());
         if (compareResult >= 0){
             if (this.next == null){
@@ -45,7 +45,7 @@ public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMeth
     }
 
     @Override
-    public Optional<TubeSubscriber<Update, BotApiMethod<?>>> getNext() {
+    public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
         return next != null ? Optional.of(next) : Optional.empty();
     }
 
@@ -69,7 +69,6 @@ public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMeth
         }
     }
 
-    // TODO: 21.08.2021 change priority setting 
     public static class PriorityTubeSubscriberBuilder {
 
         private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
@@ -96,11 +95,11 @@ public class PriorityTubeSubscriber implements TubeSubscriber<Update, BotApiMeth
             return this;
         }
 
-        public TubeSubscriber<Update, BotApiMethod<?>> build() {
+        public Subscriber<Update, BotApiMethod<?>> build() {
             checkOrCreateStrategy();
             checkOrCreateComparator();
             checkOrCreatePriority();
-            return new PriorityTubeSubscriber(strategy, priorityComparator, priority);
+            return new PrioritySubscriber(strategy, priorityComparator, priority);
         }
 
         private void checkOrCreateStrategy() {

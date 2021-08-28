@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.tube.strategy.SubscriberStrategy;
@@ -13,23 +12,23 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PriorityTubeSubscriberTest {
+public class PrioritySubscriberTest {
 
     private static final int AMOUNT = 10;
 
-    private PriorityTubeSubscriber.PriorityTubeSubscriberBuilder builder;
+    private PrioritySubscriber.PriorityTubeSubscriberBuilder builder;
     private Random random;
 
     @BeforeEach
     void setUp() {
-        builder = PriorityTubeSubscriber.builder();
+        builder = PrioritySubscriber.builder();
         random = new Random();
     }
 
     @Test
     void shouldCheckSetGetNextMethods() {
         TreeSet<Integer> priorities = new TreeSet<>(new TextComparator());
-        TubeSubscriber<Update, BotApiMethod<?>> ps = null;
+        Subscriber<Update, BotApiMethod<?>> ps = null;
         for (int i = 0; i < AMOUNT; i++) {
             int priority = random.nextInt();
             if (ps == null){
@@ -45,7 +44,7 @@ public class PriorityTubeSubscriberTest {
         for (Integer priority : priorities) {
             assertThat(priority).isEqualTo(ps.getPriority());
             if (counter++ < size - 1){
-                Optional<TubeSubscriber<Update, BotApiMethod<?>>> maybeNext = ps.getNext();
+                Optional<Subscriber<Update, BotApiMethod<?>>> maybeNext = ps.getNext();
                 assertThat(maybeNext).isPresent();
                 ps = maybeNext.get();
             }
@@ -55,7 +54,7 @@ public class PriorityTubeSubscriberTest {
     @Test
     void shouldCheckExecuteStrategy() {
         TestStrategy strategy = new TestStrategy();
-        TubeSubscriber<Update, BotApiMethod<?>> subscriber = builder.strategy(strategy).build();
+        Subscriber<Update, BotApiMethod<?>> subscriber = builder.strategy(strategy).build();
         subscriber.executeStrategy(new Update());
         assertThat(strategy.getFlag()).isTrue();
     }
@@ -63,13 +62,13 @@ public class PriorityTubeSubscriberTest {
     @RepeatedTest(100)
     void shouldCheckPriority() {
         int priority = random.nextInt();
-        TubeSubscriber<Update, BotApiMethod<?>> subscriber = builder.priority(priority).build();
+        Subscriber<Update, BotApiMethod<?>> subscriber = builder.priority(priority).build();
         assertThat(priority).isEqualTo(subscriber.getPriority());
     }
 
     private static class TextComparator implements Comparator<Integer>{
 
-        private static final Comparator<Integer> COMPARATOR = new PriorityTubeSubscriber.DefaultComparator();
+        private static final Comparator<Integer> COMPARATOR = new PrioritySubscriber.DefaultComparator();
 
         @Override
         public int compare(Integer integer, Integer t1) {

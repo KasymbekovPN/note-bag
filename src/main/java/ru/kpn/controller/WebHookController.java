@@ -13,8 +13,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class WebHookController {
-
-    // TODO: 26.08.2021 through spec interface
+    
     private final Tube<Update> tube;
 
     @InjectLogger

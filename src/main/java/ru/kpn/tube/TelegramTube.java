@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.runner.TubeRunner;
+import ru.kpn.tube.runner.Runner;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,9 +14,9 @@ import java.util.function.Consumer;
 @Service
 class TelegramTube implements Tube<Update> {
 
-    private final Consumer<Update> bot;
+    private final Consumer<Update> consumer;
     
-    private final TubeRunner runner;
+    private final Runner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService botES;
     private final ExecutorService tubeES = Executors.newSingleThreadExecutor(
@@ -27,13 +27,13 @@ class TelegramTube implements Tube<Update> {
             }
     );
 
-    public TelegramTube(Consumer<Update> bot,
-                        TubeRunner runner,
+    public TelegramTube(Consumer<Update> consumer,
+                        Runner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
-                        @Value("${telegram.tube.subscriber-thread-limit}") int subscriberThreadLimit) {
+                        @Value("${telegram.tube.subscriber-thread-limit}") int consumerThreadLimit) {
         this.queue = new ArrayBlockingQueue<>(defaultQueueSize);
         this.botES = Executors.newFixedThreadPool(
-                subscriberThreadLimit,
+                consumerThreadLimit,
                 new ThreadFactory() {
                     private final AtomicInteger threadCounter = new AtomicInteger(0);
                     @Override
@@ -44,16 +44,12 @@ class TelegramTube implements Tube<Update> {
                     }
                 }
         );
-        this.bot = bot;
+        this.consumer = consumer;
         this.runner = runner;
+
         this.runner.setStartProcess(this::startProcess);
         this.runner.setStopProcess(this::stopProcess);
-    }
-
-    // TODO: 26.08.2021 test
-    @Override
-    public TubeRunner getRunner() {
-        return runner;
+        this.runner.executeCurrentProcess();
     }
 
     @Override
@@ -70,7 +66,7 @@ class TelegramTube implements Tube<Update> {
         while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
-                botES.submit(() -> bot.accept(datum));
+                botES.submit(() -> consumer.accept(datum));
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();

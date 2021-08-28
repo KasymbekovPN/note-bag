@@ -8,10 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
 @SpringBootTest
-public class TelegramTubeRunnerContextTest {
+public class TubeRunnerContextTest {
 
     @Autowired
-    private TelegramTubeRunner runner;
+    private TubeRunner runner;
 
     @Test
     void shouldCheckRunnerBeanExistence() {

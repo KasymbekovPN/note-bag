@@ -26,7 +26,6 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     @Autowired
     private SubscriberStrategyMatcherFactory factory;
 
-    // TODO: 18.08.2021 there is need another way of setting of matcher
     @PostConstruct
     private void init(){
         matcher = factory.create(MatcherType.REGEX, template);

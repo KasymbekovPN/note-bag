@@ -4,8 +4,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.controller.WebHookController;
 import ru.kpn.logging.CustomizableLogger;
 import ru.kpn.logging.Logger;
@@ -13,8 +11,6 @@ import ru.kpn.service.logger.LoggerService;
 import ru.kpn.service.note.NoteServiceImpl;
 import ru.kpn.service.tag.TagServiceImpl;
 import ru.kpn.service.userProfile.UserProfileServiceImpl;
-import ru.kpn.tube.Tube;
-import ru.kpn.tube.runner.TelegramTubeRunner;
 
 import java.lang.reflect.Field;
 

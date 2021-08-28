@@ -11,8 +11,7 @@ import ru.kpn.logging.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@DisplayName("Testing of TelegramTubeRunner")
-public class TelegramTubeRunnerTest {
+public class TubeRunnerTest {
 
     private int testStopProcessCounter;
     private int testStartProcessCounter;
@@ -24,18 +23,18 @@ public class TelegramTubeRunnerTest {
         };
     }
 
-    private static final CustomizableLogger logger = CustomizableLogger.builder(TelegramTubeRunner.class, CustomizableLoggerSettings.builder().build()).build();
+    private static final CustomizableLogger logger = CustomizableLogger.builder(TubeRunner.class, CustomizableLoggerSettings.builder().build()).build();
 
     @ParameterizedTest
     @MethodSource("getAfterInitTestData")
     void shouldCheckRunStateAfterInit(boolean initValue) {
-        TubeRunner runner = createRunner(initValue);
+        Runner runner = createRunner(initValue);
         assertThat(runner.isRun().get()).isEqualTo(initValue);
     }
 
     @Test
     void shouldCheckStopMethodAndStateChanging() {
-        TubeRunner runner = createRunner(true);
+        Runner runner = createRunner(true);
         assertThat(runner.isRun().get()).isTrue();
         runner.stop();
         assertThat(runner.isRun().get()).isFalse();
@@ -43,7 +42,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartMethodAndStateChanging() {
-        TubeRunner runner = createRunner(false);
+        Runner runner = createRunner(false);
         assertThat(runner.isRun().get()).isEqualTo(false);
         runner.start();
         assertThat(runner.isRun().get()).isEqualTo(true);
@@ -51,7 +50,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStopProcess() {
-        TubeRunner runner = createRunner(true);
+        Runner runner = createRunner(true);
         runner.stop();
 
         runner.start();
@@ -64,7 +63,7 @@ public class TelegramTubeRunnerTest {
 
     @Test
     void shouldCheckStartProcess() {
-        TubeRunner runner = createRunner(false);
+        Runner runner = createRunner(false);
         runner.start();
 
         runner.stop();
@@ -75,10 +74,8 @@ public class TelegramTubeRunnerTest {
         assertThat(testStartProcessCounter).isEqualTo(1);
     }
 
-    private TubeRunner createRunner(boolean initValue) {
-        TubeRunner runner = new TelegramTubeRunner(initValue);
-        ReflectionTestUtils.setField(runner, "log", logger);
-        return runner;
+    private Runner createRunner(boolean initValue) {
+        return new TubeRunner(initValue);
     }
 
     private void testStopProcess(){
