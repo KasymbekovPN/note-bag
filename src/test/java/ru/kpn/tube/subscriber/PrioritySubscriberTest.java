@@ -33,9 +33,9 @@ public class PrioritySubscriberTest {
         for (int i = 0; i < AMOUNT; i++) {
             int priority = random.nextInt();
             if (ps == null){
-                ps = builder.priority(priority).build();
+                ps = builder.strategy(new TestStrategyWithPriority(priority)).build();
             } else {
-                ps = ps.setNext(builder.priority(priority).build());
+                ps = ps.setNext(builder.strategy(new TestStrategyWithPriority(priority)).build());
             }
             priorities.add(priority);
         }
@@ -63,7 +63,7 @@ public class PrioritySubscriberTest {
     @RepeatedTest(100)
     void shouldCheckPriority() {
         int priority = random.nextInt();
-        Subscriber<Update, BotApiMethod<?>> subscriber = builder.priority(priority).build();
+        Subscriber<Update, BotApiMethod<?>> subscriber = builder.strategy(new TestStrategyWithPriority(priority)).build();
         assertThat(priority).isEqualTo(subscriber.getPriority());
     }
 
@@ -86,6 +86,25 @@ public class PrioritySubscriberTest {
         public Optional<BotApiMethod<?>> execute(Update value) {
             flag = true;
             return Optional.empty();
+        }
+    }
+
+    private static class TestStrategyWithPriority implements SubscriberStrategy<Update, BotApiMethod<?>>{
+
+        private final Integer priority;
+
+        public TestStrategyWithPriority(Integer priority) {
+            this.priority = priority;
+        }
+
+        @Override
+        public Optional<BotApiMethod<?>> execute(Update value) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Integer getPriority() {
+            return priority;
         }
     }
 }

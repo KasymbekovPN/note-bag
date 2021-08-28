@@ -90,15 +90,10 @@ public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
             return this;
         }
 
-        public PriorityTubeSubscriberBuilder priority(int priority) {
-            this.priority = priority;
-            return this;
-        }
-
         public Subscriber<Update, BotApiMethod<?>> build() {
             checkOrCreateStrategy();
             checkOrCreateComparator();
-            checkOrCreatePriority();
+            priority = strategy.getPriority();
             return new PrioritySubscriber(strategy, priorityComparator, priority);
         }
 
@@ -111,12 +106,6 @@ public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
         private void checkOrCreateComparator() {
             if (priorityComparator == null){
                 priorityComparator = new DefaultComparator();
-            }
-        }
-
-        private void checkOrCreatePriority() {
-            if (priority == null){
-                priority = DEFAULT_PRIORITY;
             }
         }
     }

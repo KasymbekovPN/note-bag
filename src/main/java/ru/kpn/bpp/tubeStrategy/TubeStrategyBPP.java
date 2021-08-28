@@ -34,7 +34,6 @@ public class TubeStrategyBPP implements BeanPostProcessor {
         SubscriberStrategy<Update, BotApiMethod<?>> strategy = (SubscriberStrategy<Update, BotApiMethod<?>>) bean;
         return PrioritySubscriber.builder()
                 .strategy(strategy)
-                .priority(strategy.getPriority())
                 .build();
     }
 
