@@ -9,29 +9,34 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
+class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
+
+    private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
+    private static final SubscriberStrategy<Update, BotApiMethod<?>> DEFAULT_STRATEGY = new NoneSubscriberStrategy(DEFAULT_PRIORITY);
+    private static final Comparator<Integer> DEFAULT_COMPARATOR = new DefaultComparator();
 
     private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
-    private final Comparator<Integer> priorityComparator;
-    private final int priority;
+    private final Comparator<Integer> comparator;
 
     private Subscriber<Update, BotApiMethod<?>> next;
 
-    private PrioritySubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
-                               Comparator<Integer> priorityComparator,
-                               int priority) {
-        this.strategy = strategy;
-        this.priorityComparator = priorityComparator;
-        this.priority = priority;
+    public PrioritySubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
+                               Comparator<Integer> comparator) {
+        this.strategy = checkOrCreateStrategy(strategy);
+        this.comparator = checkOrCreateComparator(comparator);
     }
 
-    public static PriorityTubeSubscriberBuilder builder() {
-        return new PriorityTubeSubscriberBuilder();
+    private static SubscriberStrategy<Update, BotApiMethod<?>> checkOrCreateStrategy(SubscriberStrategy<Update, BotApiMethod<?>> strategy) {
+        return strategy == null ? DEFAULT_STRATEGY : strategy;
+    }
+
+    private static Comparator<Integer> checkOrCreateComparator(Comparator<Integer> comparator) {
+        return comparator == null ? DEFAULT_COMPARATOR : comparator;
     }
 
     @Override
     public Subscriber<Update, BotApiMethod<?>> setNext(Subscriber<Update, BotApiMethod<?>> next) {
-        final int compareResult = priorityComparator.compare(getPriority(), next.getPriority());
+        final int compareResult = comparator.compare(getPriority(), next.getPriority());
         if (compareResult >= 0){
             if (this.next == null){
                 this.next = next;
@@ -56,57 +61,16 @@ public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
     @Override
     public Integer getPriority() {
-        return priority;
+        return strategy.getPriority();
     }
 
-    public static class DefaultComparator implements Comparator<Integer> {
+    static class DefaultComparator implements Comparator<Integer> {
         @Override
         public int compare(Integer p0, Integer p1) {
             if (Objects.equals(p0, p1)){
                 return 0;
             }
             return p0 > p1 ? 1 : -1;
-        }
-    }
-
-    public static class PriorityTubeSubscriberBuilder {
-
-        private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
-
-        private SubscriberStrategy<Update, BotApiMethod<?>> strategy;
-        private Comparator<Integer> priorityComparator;
-        private Integer priority;
-
-        PriorityTubeSubscriberBuilder() {
-        }
-
-        public PriorityTubeSubscriberBuilder strategy(SubscriberStrategy<Update, BotApiMethod<?>> strategy) {
-            this.strategy = strategy;
-            return this;
-        }
-
-        public PriorityTubeSubscriberBuilder priorityComparator(Comparator<Integer> priorityComparator) {
-            this.priorityComparator = priorityComparator;
-            return this;
-        }
-
-        public Subscriber<Update, BotApiMethod<?>> build() {
-            checkOrCreateStrategy();
-            checkOrCreateComparator();
-            priority = strategy.getPriority();
-            return new PrioritySubscriber(strategy, priorityComparator, priority);
-        }
-
-        private void checkOrCreateStrategy() {
-            if (strategy == null){
-                strategy = new NoneSubscriberStrategy(DEFAULT_PRIORITY);
-            }
-        }
-
-        private void checkOrCreateComparator() {
-            if (priorityComparator == null){
-                priorityComparator = new DefaultComparator();
-            }
         }
     }
 }

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,13 +14,6 @@ public class TubeRunnerTest {
     private int testStopProcessCounter;
     private int testStartProcessCounter;
 
-    private static Object[][] getAfterInitTestData(){
-        return new Object[][]{
-                {false},
-                {true}
-        };
-    }
-
     @BeforeEach
     void setUp() {
         testStartProcessCounter = 0;
@@ -28,7 +21,7 @@ public class TubeRunnerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("getAfterInitTestData")
+    @CsvFileSource(resources = "shouldCheckRunStateAfterInit.csv")
     void shouldCheckRunStateAfterInit(boolean initValue) {
         Runner runner = createRunner(initValue);
         assertThat(runner.isRun().get()).isEqualTo(initValue);

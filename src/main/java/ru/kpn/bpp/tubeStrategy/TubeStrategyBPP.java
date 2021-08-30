@@ -9,8 +9,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.Publisher;
 import ru.kpn.tube.strategy.SubscriberStrategy;
-import ru.kpn.tube.subscriber.PrioritySubscriber;
 import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.tube.subscriber.SubscriberFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -18,6 +18,9 @@ import java.lang.reflect.Type;
 @Slf4j
 @Component
 public class TubeStrategyBPP implements BeanPostProcessor {
+
+    @Autowired
+    private SubscriberFactory<Update, BotApiMethod<?>, Integer> subscriberFactory;
 
     @Autowired
     private Publisher<Update, BotApiMethod<?>> npBot;
@@ -32,7 +35,8 @@ public class TubeStrategyBPP implements BeanPostProcessor {
 
     private Subscriber<Update, BotApiMethod<?>> createSubscriber(Object bean) {
         SubscriberStrategy<Update, BotApiMethod<?>> strategy = (SubscriberStrategy<Update, BotApiMethod<?>>) bean;
-        return PrioritySubscriber.builder()
+        return subscriberFactory
+                .reset()
                 .strategy(strategy)
                 .build();
     }
