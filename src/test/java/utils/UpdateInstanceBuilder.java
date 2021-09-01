@@ -43,7 +43,7 @@ public class UpdateInstanceBuilder {
     }
 
     private User checkOrCreateFrom(User from) {
-        return from == null ? new User() : from;
+        return from == null ? UserInstanceBuilder.builder().build() : from;
     }
 
     private Chat createChat(Long chatId) {
