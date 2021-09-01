@@ -1,9 +1,9 @@
-package ru.kpn.tube.extractor;
+package ru.kpn.extractor;
 
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
 

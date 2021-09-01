@@ -1,7 +1,7 @@
-package ru.kpn.tube.matcher;
+package ru.kpn.matcher;
 
 import lombok.EqualsAndHashCode;
-import ru.kpn.tube.strategy.Matcher;
+import ru.kpn.strategy.Matcher;
 
 @EqualsAndHashCode
 class ConstantSubscriberStrategyMatcher implements Matcher {

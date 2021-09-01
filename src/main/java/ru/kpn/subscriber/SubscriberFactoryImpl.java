@@ -1,9 +1,9 @@
-package ru.kpn.tube.subscriber;
+package ru.kpn.subscriber;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.strategy.SubscriberStrategy;
+import ru.kpn.strategy.SubscriberStrategy;
 
 import java.util.Comparator;
 

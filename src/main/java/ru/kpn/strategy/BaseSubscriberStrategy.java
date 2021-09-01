@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy;
+package ru.kpn.strategy;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;

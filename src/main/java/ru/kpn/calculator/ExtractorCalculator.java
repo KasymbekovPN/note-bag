@@ -1,4 +1,4 @@
-package ru.kpn.tube.calculator;
+package ru.kpn.calculator;
 
 import java.util.Optional;
 

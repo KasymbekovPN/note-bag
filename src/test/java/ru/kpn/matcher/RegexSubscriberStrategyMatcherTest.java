@@ -1,8 +1,8 @@
-package ru.kpn.tube.matcher;
+package ru.kpn.matcher;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import ru.kpn.tube.strategy.Matcher;
+import ru.kpn.strategy.Matcher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,12 +1,12 @@
-package ru.kpn.tube.strategy.none;
+package ru.kpn.strategy.none;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.strategy.BaseSubscriberStrategy;
-import ru.kpn.tube.strategy.Matcher;
+import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategy.Matcher;
 
 import java.util.Optional;
 

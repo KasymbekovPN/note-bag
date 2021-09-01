@@ -1,4 +1,4 @@
-package ru.kpn.bot;
+package ru.kpn.bot.state;
 
 public interface BotStateService<T, R> {
     R get(T value);

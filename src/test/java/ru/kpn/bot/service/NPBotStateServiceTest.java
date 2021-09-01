@@ -1,4 +1,4 @@
-package ru.kpn.bot;
+package ru.kpn.bot.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

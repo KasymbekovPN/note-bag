@@ -1,7 +1,7 @@
-package ru.kpn.tube.matcher;
+package ru.kpn.matcher;
 
 import org.springframework.stereotype.Service;
-import ru.kpn.tube.strategy.Matcher;
+import ru.kpn.strategy.Matcher;
 
 import java.util.EnumMap;
 import java.util.function.Function;

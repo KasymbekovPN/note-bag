@@ -1,4 +1,4 @@
-package ru.kpn.tube.runner;
+package ru.kpn.runner;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

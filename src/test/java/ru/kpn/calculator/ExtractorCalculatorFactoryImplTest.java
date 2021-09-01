@@ -1,12 +1,12 @@
-package ru.kpn.tube.calculator;
+package ru.kpn.calculator;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.extractor.IterableExtractor;
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.extractor.IterableExtractor;
+import ru.kpn.subscriber.Subscriber;
 
 import java.lang.reflect.Field;
 

@@ -1,6 +1,6 @@
-package ru.kpn.tube.calculator;
+package ru.kpn.calculator;
 
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.subscriber.Subscriber;
 
 public interface ExtractorCalculatorFactory<T, R> {
     ExtractorCalculator<T,R> create(Subscriber<T, R> subscriber);

@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy.regexp;
+package ru.kpn.strategy.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.matcher.MatcherType;
-import ru.kpn.tube.matcher.SubscriberStrategyMatcherFactory;
-import ru.kpn.tube.strategy.BaseSubscriberStrategy;
+import ru.kpn.matcher.MatcherType;
+import ru.kpn.matcher.SubscriberStrategyMatcherFactory;
+import ru.kpn.strategy.BaseSubscriberStrategy;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;

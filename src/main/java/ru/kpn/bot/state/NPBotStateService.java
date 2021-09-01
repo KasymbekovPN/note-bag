@@ -1,4 +1,4 @@
-package ru.kpn.bot;
+package ru.kpn.bot.state;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;

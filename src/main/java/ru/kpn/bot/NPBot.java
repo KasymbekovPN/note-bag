@@ -6,8 +6,9 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.calculator.ExtractorCalculatorFactory;
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.bot.publisher.Publisher;
+import ru.kpn.calculator.ExtractorCalculatorFactory;
+import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
 import java.util.function.Consumer;

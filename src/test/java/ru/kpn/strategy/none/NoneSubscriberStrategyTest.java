@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy.none;
+package ru.kpn.strategy.none;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

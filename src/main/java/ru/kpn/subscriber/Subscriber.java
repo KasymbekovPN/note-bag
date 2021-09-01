@@ -1,4 +1,4 @@
-package ru.kpn.tube.subscriber;
+package ru.kpn.subscriber;
 
 import java.util.Optional;
 

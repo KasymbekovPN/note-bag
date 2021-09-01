@@ -1,7 +1,7 @@
-package ru.kpn.tube.matcher;
+package ru.kpn.matcher;
 
 import org.junit.jupiter.api.RepeatedTest;
-import ru.kpn.tube.strategy.Matcher;
+import ru.kpn.strategy.Matcher;
 
 import java.util.Random;
 

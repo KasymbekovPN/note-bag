@@ -1,4 +1,4 @@
-package ru.kpn.tube.matcher;
+package ru.kpn.matcher;
 
 public enum MatcherType {
     DEFAULT,

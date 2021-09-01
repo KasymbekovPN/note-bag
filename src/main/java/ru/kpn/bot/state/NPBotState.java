@@ -1,4 +1,4 @@
-package ru.kpn.bot;
+package ru.kpn.bot.state;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,9 +1,9 @@
-package ru.kpn.tube.calculator;
+package ru.kpn.calculator;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.tube.extractor.SubscriberExtractor;
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.extractor.SubscriberExtractor;
+import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
 

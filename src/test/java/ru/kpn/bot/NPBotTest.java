@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.decryptor.Decryptor;
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
 
 import java.util.ArrayList;

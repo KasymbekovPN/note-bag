@@ -7,10 +7,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bot.Publisher;
-import ru.kpn.tube.strategy.SubscriberStrategy;
-import ru.kpn.tube.subscriber.Subscriber;
-import ru.kpn.tube.subscriber.SubscriberFactory;
+import ru.kpn.bot.publisher.Publisher;
+import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.subscriber.Subscriber;
+import ru.kpn.subscriber.SubscriberFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

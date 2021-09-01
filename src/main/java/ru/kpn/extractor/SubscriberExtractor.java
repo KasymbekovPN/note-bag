@@ -1,6 +1,6 @@
-package ru.kpn.tube.extractor;
+package ru.kpn.extractor;
 
-import ru.kpn.tube.subscriber.Subscriber;
+import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
 

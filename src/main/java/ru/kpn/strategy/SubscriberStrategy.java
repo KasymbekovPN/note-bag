@@ -1,4 +1,4 @@
-package ru.kpn.tube.strategy;
+package ru.kpn.strategy;
 
 import java.util.Optional;
 

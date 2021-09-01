@@ -1,6 +1,6 @@
-package ru.kpn.tube.subscriber;
+package ru.kpn.subscriber;
 
-import ru.kpn.tube.strategy.SubscriberStrategy;
+import ru.kpn.strategy.SubscriberStrategy;
 
 import java.util.Comparator;
 
