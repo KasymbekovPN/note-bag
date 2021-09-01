@@ -3,11 +3,14 @@ package ru.kpn.bot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.User;
+import ru.kpn.bot.state.BotStateService;
+import ru.kpn.bot.state.NPBotState;
+import ru.kpn.bot.state.NPBotStateService;
 import utils.UserInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.kpn.bot.NPBotState.RESET;
-import static ru.kpn.bot.NPBotState.UNKNOWN;
+import static ru.kpn.bot.state.NPBotState.RESET;
+import static ru.kpn.bot.state.NPBotState.UNKNOWN;
 
 public class NPBotStateServiceTest {
 
