@@ -68,9 +68,6 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
 
     private void checkStrategy() {
         if (strategy == null){
-            // TODO: 04.09.2021 del
-//            strategy = new NoneSubscriberStrategy(Integer.MIN_VALUE, i18n);
-            //<
             NoneSubscriberStrategy noneSubscriberStrategy = new NoneSubscriberStrategy();
             noneSubscriberStrategy.setPriority(Integer.MIN_VALUE);
             noneSubscriberStrategy.setI18n(i18n);

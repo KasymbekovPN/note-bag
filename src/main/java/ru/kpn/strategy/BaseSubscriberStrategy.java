@@ -1,5 +1,6 @@
 package ru.kpn.strategy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,10 +16,14 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
     protected Matcher matcher;
     protected StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
 
-    public BaseSubscriberStrategy(){}
+    @Autowired
+    public void setI18n(I18n i18n) {
+        this.i18n = i18n;
+    }
 
-    public BaseSubscriberStrategy(Matcher matcher) {
-        this.matcher = matcher;
+    @Autowired
+    public void setResultCalculator(StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator) {
+        this.resultCalculator = resultCalculator;
     }
 
     @Override
