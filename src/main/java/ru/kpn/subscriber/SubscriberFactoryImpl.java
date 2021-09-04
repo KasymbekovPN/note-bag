@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.calculator.strategy.StrategyResultCalculator;
 import ru.kpn.i18n.I18n;
 import ru.kpn.strategy.SubscriberStrategy;
 import ru.kpn.strategy.none.NoneSubscriberStrategy;
@@ -17,6 +18,9 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
 
     @Autowired
     private I18n i18n;
+
+    @Autowired
+    private StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
 
     private SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private Comparator<Integer> comparator;
@@ -64,7 +68,14 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
 
     private void checkStrategy() {
         if (strategy == null){
-            strategy = new NoneSubscriberStrategy(Integer.MIN_VALUE, i18n);
+            // TODO: 04.09.2021 del
+//            strategy = new NoneSubscriberStrategy(Integer.MIN_VALUE, i18n);
+            //<
+            NoneSubscriberStrategy noneSubscriberStrategy = new NoneSubscriberStrategy();
+            noneSubscriberStrategy.setPriority(Integer.MIN_VALUE);
+            noneSubscriberStrategy.setI18n(i18n);
+            noneSubscriberStrategy.setResultCalculator(resultCalculator);
+            strategy = noneSubscriberStrategy;
         }
     }
 

@@ -3,12 +3,17 @@ package ru.kpn.strategy;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.calculator.strategy.StrategyResultCalculator;
+import ru.kpn.i18n.I18n;
 
 import java.util.Optional;
 
 abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Update, BotApiMethod<?>> {
 
+    protected Integer priority;
+    protected I18n i18n;
     protected Matcher matcher;
+    protected StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
 
     public BaseSubscriberStrategy(){}
 
@@ -26,6 +31,11 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public Integer getPriority() {
+        return priority;
     }
 
     private Optional<Message> checkAndGetMessage(Update value) {
