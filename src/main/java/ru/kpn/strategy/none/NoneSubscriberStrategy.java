@@ -12,9 +12,11 @@ import ru.kpn.strategy.Matcher;
 
 import java.util.Optional;
 
+// TODO: 04.09.2021 ?? set fields through setters 
 @Component
 public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
 
+    // TODO: 04.09.2021 to base class 
     private final Integer priority;
     private final I18n i18n;
 
@@ -31,6 +33,7 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
         return Optional.of(new SendMessage(calculateChatId(value), calculateMessage(value)));
     }
 
+    // TODO: 04.09.2021 to base class
     @Override
     public Integer getPriority() {
         return priority;
@@ -40,6 +43,7 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
         return i18n.get("noneSubscriberStrategy.unknownInput", value.getMessage().getText());
     }
 
+    // TODO: 04.09.2021 replace with ConstantSubscriberStrategyMatcher 
     private static class NoneSubscriberStrategyMatcher implements Matcher{
         @Override
         public Boolean match(String value) {

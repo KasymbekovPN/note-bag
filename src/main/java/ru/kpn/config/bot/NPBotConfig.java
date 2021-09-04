@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import ru.kpn.bot.NPBot;
 import ru.kpn.decryptor.Decryptor;
-import ru.kpn.calculator.ExtractorCalculatorFactoryImpl;
+import ru.kpn.calculator.extractor.ExtractorCalculatorFactoryImpl;
 import ru.kpn.i18n.I18n;
 
 @Configuration

@@ -16,8 +16,11 @@ import java.util.Optional;
 @Component
 public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
 
+    // TODO: 04.09.2021 to base class 
     @Value("${telegram.tube.strategies.helpSubscriberStrategy.priority}")
     private Integer priority;
+
+    // TODO: 04.09.2021 translate it
     @Value("${telegram.tube.strategies.helpSubscriberStrategy.text}")
     private String text;
     @Value("${telegram.tube.strategies.helpSubscriberStrategy.template}")
@@ -26,6 +29,7 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     @Autowired
     private SubscriberStrategyMatcherFactory factory;
 
+    // TODO: 04.09.2021 remove 
     @PostConstruct
     private void init(){
         matcher = factory.create(MatcherType.REGEX, template);
@@ -36,6 +40,7 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
         return Optional.of(new SendMessage(calculateChatId(value), text));
     }
 
+    // TODO: 04.09.2021 to base class
     @Override
     public Integer getPriority() {
         return priority;

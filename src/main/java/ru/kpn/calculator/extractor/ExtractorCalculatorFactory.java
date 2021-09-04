@@ -1,4 +1,4 @@
-package ru.kpn.calculator;
+package ru.kpn.calculator.extractor;
 
 import ru.kpn.subscriber.Subscriber;
 

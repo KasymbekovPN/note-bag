@@ -1,4 +1,4 @@
-package ru.kpn.calculator;
+package ru.kpn.calculator.extractor;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

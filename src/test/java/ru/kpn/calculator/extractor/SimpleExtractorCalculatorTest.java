@@ -1,4 +1,4 @@
-package ru.kpn.calculator;
+package ru.kpn.calculator.extractor;
 
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
