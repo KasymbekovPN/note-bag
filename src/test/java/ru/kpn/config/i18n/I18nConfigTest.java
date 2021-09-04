@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.i18n.I18n;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Slf4j
 @SpringBootTest
 public class I18nConfigTest {
@@ -15,8 +17,7 @@ public class I18nConfigTest {
 
     @Test
     void shouldDoSth() {
-        // TODO: 02.09.2021 use other codes 
-        String result = i18n.get("test", 1, 2);
-        System.out.println(result);
+        log.info("{}", i18n);
+        assertThat(i18n).isNotNull();
     }
 }

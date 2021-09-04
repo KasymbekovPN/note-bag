@@ -11,10 +11,6 @@ import java.util.Optional;
 
 class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
-    private static final int DEFAULT_PRIORITY = Integer.MIN_VALUE;
-    private static final SubscriberStrategy<Update, BotApiMethod<?>> DEFAULT_STRATEGY = new NoneSubscriberStrategy(DEFAULT_PRIORITY);
-    private static final Comparator<Integer> DEFAULT_COMPARATOR = new DefaultComparator();
-
     private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private final Comparator<Integer> comparator;
 
@@ -22,16 +18,8 @@ class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
     public PrioritySubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
                                Comparator<Integer> comparator) {
-        this.strategy = checkOrCreateStrategy(strategy);
-        this.comparator = checkOrCreateComparator(comparator);
-    }
-
-    private static SubscriberStrategy<Update, BotApiMethod<?>> checkOrCreateStrategy(SubscriberStrategy<Update, BotApiMethod<?>> strategy) {
-        return strategy == null ? DEFAULT_STRATEGY : strategy;
-    }
-
-    private static Comparator<Integer> checkOrCreateComparator(Comparator<Integer> comparator) {
-        return comparator == null ? DEFAULT_COMPARATOR : comparator;
+        this.strategy = strategy;
+        this.comparator = comparator;
     }
 
     @Override

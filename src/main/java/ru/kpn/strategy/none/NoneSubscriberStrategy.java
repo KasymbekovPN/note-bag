@@ -1,10 +1,12 @@
 package ru.kpn.strategy.none;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.i18n.I18n;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategy.Matcher;
 
@@ -14,10 +16,14 @@ import java.util.Optional;
 public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
 
     private final Integer priority;
+    private final I18n i18n;
 
-    public NoneSubscriberStrategy(@Value("${telegram.tube.strategies.noneSubscriberStrategy.priority}") Integer priority) {
+    @Autowired
+    public NoneSubscriberStrategy(@Value("${telegram.tube.strategies.noneSubscriberStrategy.priority}") Integer priority,
+                                  I18n i18n) {
         super(new NoneSubscriberStrategyMatcher());
         this.priority = priority;
+        this.i18n = i18n;
     }
 
     @Override
@@ -31,8 +37,7 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     private String calculateMessage(Update value) {
-        // TODO: 12.08.2021 translation
-        return String.format("There is unknown input : %s", value.getMessage().getText());
+        return i18n.get("noneSubscriberStrategy.unknownInput", value.getMessage().getText());
     }
 
     private static class NoneSubscriberStrategyMatcher implements Matcher{

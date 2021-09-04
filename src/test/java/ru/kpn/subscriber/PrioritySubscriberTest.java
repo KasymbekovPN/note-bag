@@ -31,9 +31,9 @@ public class PrioritySubscriberTest {
         for (int i = 0; i < AMOUNT; i++) {
             int priority = random.nextInt();
             if (ps == null){
-                ps = new PrioritySubscriber(new TestStrategyWithPriority(priority), null);
+                ps = new PrioritySubscriber(new TestStrategyWithPriority(priority), new PrioritySubscriber.DefaultComparator());
             } else {
-                ps = ps.setNext(new PrioritySubscriber(new TestStrategyWithPriority(priority), null));
+                ps = ps.setNext(new PrioritySubscriber(new TestStrategyWithPriority(priority), new PrioritySubscriber.DefaultComparator()));
             }
             priorities.add(priority);
         }

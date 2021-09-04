@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.decryptor.JasyptDecryptor;
+import ru.kpn.i18n.I18n;
 import ru.kpn.service.env.EnvironmentService;
 import ru.kpn.service.env.PropertyChunk;
 
@@ -17,6 +18,9 @@ import ru.kpn.service.env.PropertyChunk;
 @Configuration
 @ConfigurationProperties(prefix = "decryptor")
 public class JasyptDecryptorConfig {
+
+    @Autowired
+    private I18n i18n;
 
     @Autowired
     private EnvironmentService environmentService;
@@ -30,8 +34,8 @@ public class JasyptDecryptorConfig {
             return new JasyptDecryptor(propertyChunk.getPassword());
         }
 
-        // TODO: 02.08.2021 translate it
-        throw new BeansException("Env. var. " + passwordName + " doesn't exist") {};
+        String msg = i18n.get("envVar.itDoesNotExist", passwordName);
+        throw new BeansException(msg) {};
     }
 
     @Getter

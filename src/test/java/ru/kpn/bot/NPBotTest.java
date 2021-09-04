@@ -35,7 +35,6 @@ public class NPBotTest {
     @Autowired
     private Decryptor decryptor;
 
-
     @BeforeEach
     void setUp() {
         botToken = decryptor.decrypt(botToken);

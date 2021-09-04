@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.publisher.Publisher;
 import ru.kpn.calculator.ExtractorCalculatorFactory;
+import ru.kpn.i18n.I18n;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
     private final String botUserName;
     private final String botToken;
     private final ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory;
+    private final I18n i18n;
 
     private Subscriber<Update, BotApiMethod<?>> subscriber;
 
@@ -26,24 +28,26 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
                  String botPath,
                  String botUserName,
                  String botToken,
-                 ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory) {
+                 ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory,
+                 I18n i18n) {
         super(options);
         this.botPath = botPath;
         this.botUserName = botUserName;
         this.botToken = botToken;
         this.calculatorFactory = calculatorFactory;
+        this.i18n = i18n;
     }
 
+    // TODO: 04.09.2021 test it
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        final Optional<BotApiMethod<?>> maybeResult = calculatorFactory.create(subscriber).calculate(update);
+        Optional<BotApiMethod<?>> maybeResult = calculatorFactory.create(subscriber).calculate(update);
         return maybeResult.isPresent() ? maybeResult.get() : getDefaultBotApiMethod(update);
     }
 
     private BotApiMethod<?> getDefaultBotApiMethod(Update update) {
         String chatId = update.getMessage().getChatId().toString();
-        // TODO: 26.08.2021 other text + translate
-        return new SendMessage(chatId, "No one subscriber answer");
+        return new SendMessage(chatId, i18n.get("npBot.noOneSubscribersAnswer"));
     }
 
     @Override

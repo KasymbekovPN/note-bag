@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NoneSubscriberStrategyTest {
 
     private static final Long CHAT_ID = 123L;
+    private static final String TEXT = "some text";
+
     @Autowired
     private NoneSubscriberStrategy strategy;
 
@@ -28,7 +30,10 @@ public class NoneSubscriberStrategyTest {
 
     @BeforeEach
     void setUp() {
-        update = new UpdateInstanceBuilder().chatId(CHAT_ID).build();
+        update = new UpdateInstanceBuilder()
+                .chatId(CHAT_ID)
+                .text(TEXT)
+                .build();
     }
 
     @Test

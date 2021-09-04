@@ -8,9 +8,13 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import ru.kpn.bot.NPBot;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.calculator.ExtractorCalculatorFactoryImpl;
+import ru.kpn.i18n.I18n;
 
 @Configuration
 public class NPBotConfig {
+
+    @Autowired
+    private I18n i18n;
 
     @Value("${bot.path}")
     private String botPath;
@@ -32,6 +36,7 @@ public class NPBotConfig {
                 botPath,
                 decryptor.decrypt(botUserName),
                 decryptor.decrypt(botToken),
-                new ExtractorCalculatorFactoryImpl());
+                new ExtractorCalculatorFactoryImpl(),
+                i18n);
     }
 }
