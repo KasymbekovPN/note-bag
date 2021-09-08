@@ -5,7 +5,7 @@ import org.springframework.context.MessageSource;
 import java.util.Locale;
 
 public interface I18n {
-    void setLocale(Locale locale);
-    void setMessageSource(MessageSource messageSource);
-    String get(String code, Object... args);
+    default void setLocale(Locale locale){}
+    default void setMessageSource(MessageSource messageSource){}
+    default String get(String code, Object... args){return "";}
 }
