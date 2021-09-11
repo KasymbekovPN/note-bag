@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class MessageBuilderImpl implements MessageBuilder {
+class MessageBuilderImpl implements MessageBuilder {
     private final String code;
     private final I18n i18n;
     private final ArgumentsAdapter argumentsAdapter;

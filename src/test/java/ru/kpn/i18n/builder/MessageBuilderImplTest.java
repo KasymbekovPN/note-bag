@@ -53,7 +53,6 @@ public class MessageBuilderImplTest {
         return (List<Object>) ReflectionUtils.getField(field, builder);
     }
 
-    @AllArgsConstructor
     private static class TestI18n implements I18n {
 
         @Override
