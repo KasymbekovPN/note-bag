@@ -28,11 +28,6 @@ public class ArgumentsAdapterImpl implements ArgumentsAdapter {
     }
 
     @Override
-    public Boolean matchCode(String code) {
-        return this.code.equals(code);
-    }
-
-    @Override
     public Object[] adapt(Object[] sourceObjects) {
         Object[] resultObjects = resizer.apply(sourceObjects);
         for (int i = 0; i < resultObjects.length; i++) {

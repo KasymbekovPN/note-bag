@@ -24,14 +24,6 @@ public class ArgumentsAdapterImplTest {
         assertThat(code).isEqualTo(adapter.getCode());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckCodeMatching.csv")
-    void shouldCheckCodeMatching(String initCode, String code, Boolean expectedResult) {
-        ArgumentsAdapterImpl adapter = ArgumentsAdapterImpl.builder().code(initCode).build();
-        Boolean result = adapter.matchCode(code);
-        assertThat(expectedResult).isEqualTo(result);
-    }
-
     @Test
     void shouldCheckAdaptation() {
         Object[] objects = {0, 1, 2};
