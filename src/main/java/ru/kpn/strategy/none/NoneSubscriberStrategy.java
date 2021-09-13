@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategy.Matcher;
 
@@ -31,6 +32,8 @@ public class NoneSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     private String calculateMessage(Update value) {
-        return i18n.get("noneSubscriberStrategy.unknownInput", value.getMessage().getText());
+        return messageBuilderFactory.create("noneSubscriberStrategy.unknownInput")
+                .arg(value.getMessage().getText())
+                .build();
     }
 }

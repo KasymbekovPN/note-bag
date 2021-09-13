@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.publisher.Publisher;
 import ru.kpn.calculator.extractor.ExtractorCalculatorFactory;
-import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
     private final String botUserName;
     private final String botToken;
     private final ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory;
-    private final I18n i18n;
+    private final MessageBuilderFactory messageBuilderFactory;
 
     private Subscriber<Update, BotApiMethod<?>> subscriber;
 
@@ -29,13 +29,13 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
                  String botUserName,
                  String botToken,
                  ExtractorCalculatorFactory<Update, BotApiMethod<?>> calculatorFactory,
-                 I18n i18n) {
+                 MessageBuilderFactory messageBuilderFactory) {
         super(options);
         this.botPath = botPath;
         this.botUserName = botUserName;
         this.botToken = botToken;
         this.calculatorFactory = calculatorFactory;
-        this.i18n = i18n;
+        this.messageBuilderFactory = messageBuilderFactory;
     }
 
     // TODO: 04.09.2021 test it
@@ -45,9 +45,10 @@ public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotAp
         return maybeResult.isPresent() ? maybeResult.get() : getDefaultBotApiMethod(update);
     }
 
+    // TODO: 13.09.2021 this result must be taken out of calculator as default value e.g. some SendMessage instance
     private BotApiMethod<?> getDefaultBotApiMethod(Update update) {
         String chatId = update.getMessage().getChatId().toString();
-        return new SendMessage(chatId, i18n.get("npBot.noOneSubscribersAnswer"));
+        return new SendMessage(chatId, messageBuilderFactory.create("npBot.noOneSubscribersAnswer").build());
     }
 
     @Override

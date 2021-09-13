@@ -1,7 +1,6 @@
 package ru.kpn.i18n.builder;
 
 import lombok.AllArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kpn.i18n.I18n;

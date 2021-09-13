@@ -6,19 +6,20 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculator;
 import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 import java.util.Optional;
 
 abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Update, BotApiMethod<?>> {
 
     protected Integer priority;
-    protected I18n i18n;
+    protected MessageBuilderFactory messageBuilderFactory;
     protected Matcher matcher;
     protected StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
 
     @Autowired
-    public void setI18n(I18n i18n) {
-        this.i18n = i18n;
+    public void setMessageBuilderFactory (MessageBuilderFactory messageBuilderFactory) {
+        this.messageBuilderFactory = messageBuilderFactory;
     }
 
     @Autowired

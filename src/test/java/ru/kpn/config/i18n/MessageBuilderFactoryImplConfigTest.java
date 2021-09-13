@@ -4,20 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
-public class I18nConfigTest {
+class MessageBuilderFactoryImplConfigTest {
 
     @Autowired
-    private I18n i18n;
+    private MessageBuilderFactory messageBuilderFactory;
 
     @Test
-    void shouldDoSth() {
-        log.info("{}", i18n);
-        assertThat(i18n).isNotNull();
+    void shouldCheckMessageBuilderFactory() {
+        log.info("{}", messageBuilderFactory);
+        assertThat(messageBuilderFactory).isNotNull();
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculator;
-import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategy.SubscriberStrategy;
 import ru.kpn.strategy.none.NoneSubscriberStrategy;
 
@@ -17,7 +17,7 @@ import java.util.Comparator;
 public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMethod<?>, Integer> {
 
     @Autowired
-    private I18n i18n;
+    private MessageBuilderFactory messageBuilderFactory;
 
     @Autowired
     private StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
@@ -52,13 +52,13 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
     }
 
     private void logCreation() {
-        String comparatorName = comparator == null ? "null" : comparator.getClass().getSimpleName();
-        String msg = i18n.get(
-                "factory.subscriberBuilding",
-                PrioritySubscriber.class.getSimpleName(),
-                strategy.getClass().getSimpleName() ,
-                comparatorName);
-        log.info("{}", msg);
+        String message = messageBuilderFactory
+                .create("factory.subscriberBuilding")
+                .arg(PrioritySubscriber.class)
+                .arg(strategy)
+                .arg(comparator)
+                .build();
+        log.info("{}", message);
     }
 
     private void check() {
@@ -70,7 +70,7 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
         if (strategy == null){
             NoneSubscriberStrategy noneSubscriberStrategy = new NoneSubscriberStrategy();
             noneSubscriberStrategy.setPriority(Integer.MIN_VALUE);
-            noneSubscriberStrategy.setI18n(i18n);
+            noneSubscriberStrategy.setMessageBuilderFactory(messageBuilderFactory);
             noneSubscriberStrategy.setResultCalculator(resultCalculator);
             strategy = noneSubscriberStrategy;
         }

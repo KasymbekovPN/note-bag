@@ -9,12 +9,13 @@ import ru.kpn.bot.NPBot;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.calculator.extractor.ExtractorCalculatorFactoryImpl;
 import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 @Configuration
 public class NPBotConfig {
 
     @Autowired
-    private I18n i18n;
+    private MessageBuilderFactory messageBuilderFactory;
 
     @Value("${bot.path}")
     private String botPath;
@@ -37,6 +38,6 @@ public class NPBotConfig {
                 decryptor.decrypt(botUserName),
                 decryptor.decrypt(botToken),
                 new ExtractorCalculatorFactoryImpl(),
-                i18n);
+                messageBuilderFactory);
     }
 }

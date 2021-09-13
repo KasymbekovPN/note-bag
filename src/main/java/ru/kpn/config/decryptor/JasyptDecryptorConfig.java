@@ -11,6 +11,8 @@ import org.springframework.core.env.Environment;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.decryptor.JasyptDecryptor;
 import ru.kpn.i18n.I18n;
+import ru.kpn.i18n.builder.MessageBuilder;
+import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.service.env.EnvironmentService;
 import ru.kpn.service.env.PropertyChunk;
 
@@ -20,7 +22,7 @@ import ru.kpn.service.env.PropertyChunk;
 public class JasyptDecryptorConfig {
 
     @Autowired
-    private I18n i18n;
+    private MessageBuilderFactory messageBuilderFactory;
 
     @Autowired
     private EnvironmentService environmentService;
@@ -34,8 +36,8 @@ public class JasyptDecryptorConfig {
             return new JasyptDecryptor(propertyChunk.getPassword());
         }
 
-        String msg = i18n.get("envVar.itDoesNotExist", passwordName);
-        throw new BeansException(msg) {};
+        String message = messageBuilderFactory.create("envVar.itDoesNotExist").arg(passwordName).build();
+        throw new BeansException(message) {};
     }
 
     @Getter
