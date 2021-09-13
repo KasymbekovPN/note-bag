@@ -6,9 +6,9 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.kpn.strategy.Matcher;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,22 +17,22 @@ public class StrategyMatcherConfigTest {
 
     @Autowired
     @Qualifier("alwaysTrueStrategyMatcher")
-    private Matcher alwaysTrueStrategyMatcher;
+    private Function<String, Boolean> alwaysTrueStrategyMatcher;
 
     @Autowired
     @Qualifier("helpStrategyMatcher")
-    private Matcher helpStrategyMatcher;
+    private Function<String, Boolean> helpStrategyMatcher;
 
     private final Random random = new Random();
 
     @RepeatedTest(100)
     void shouldCheckAlwaysTrueStrategyMatcher() {
-        assertThat(alwaysTrueStrategyMatcher.match(String.valueOf(random.nextInt()))).isTrue();
+        assertThat(alwaysTrueStrategyMatcher.apply(String.valueOf(random.nextInt()))).isTrue();
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckHelpStrategyMatcher.csv")
     public void shouldCheckHelpStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(helpStrategyMatcher.match(text)).isEqualTo(expectedResult);
+        assertThat(helpStrategyMatcher.apply(text)).isEqualTo(expectedResult);
     }
 }

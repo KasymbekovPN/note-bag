@@ -5,16 +5,16 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculator;
-import ru.kpn.i18n.I18n;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Update, BotApiMethod<?>> {
 
     protected Integer priority;
     protected MessageBuilderFactory messageBuilderFactory;
-    protected Matcher matcher;
+    protected Function<String, Boolean> matcher;
     protected StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
 
     @Autowired
@@ -56,7 +56,7 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
     }
 
     private boolean matchTemplate(String text) {
-        return matcher != null && matcher.match(text);
+        return matcher != null && matcher.apply(text);
     }
 
     protected String calculateChatId(Update value) {

@@ -1,7 +1,7 @@
 package ru.kpn.matcher;
 
-import ru.kpn.strategy.Matcher;
+import java.util.function.Function;
 
-public interface SubscriberStrategyMatcherFactory {
-    Matcher create(MatcherType matcherType, Object... args);
+public interface SubscriberStrategyMatcherFactory<T, R> {
+    Function<T, R> create(MatcherType matcherType, Object... args);
 }

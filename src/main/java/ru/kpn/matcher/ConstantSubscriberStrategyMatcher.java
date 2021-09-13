@@ -1,11 +1,12 @@
 package ru.kpn.matcher;
 
 import lombok.EqualsAndHashCode;
-import ru.kpn.strategy.Matcher;
+
+import java.util.function.Function;
 
 // TODO: 04.09.2021 ?? del eq & hash
 @EqualsAndHashCode
-class ConstantSubscriberStrategyMatcher implements Matcher {
+class ConstantSubscriberStrategyMatcher implements Function<String, Boolean> {
 
     private final boolean result;
 
@@ -14,7 +15,7 @@ class ConstantSubscriberStrategyMatcher implements Matcher {
     }
 
     @Override
-    public Boolean match(String value) {
+    public Boolean apply(String value) {
         return result;
     }
 }

@@ -1,11 +1,10 @@
 package ru.kpn.matcher;
 
-import ru.kpn.strategy.Matcher;
-
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
-class RegexSubscriberStrategyMatcher implements Matcher {
+class RegexSubscriberStrategyMatcher implements Function<String, Boolean> {
 
     private final Pattern pattern;
 
@@ -14,7 +13,7 @@ class RegexSubscriberStrategyMatcher implements Matcher {
     }
 
     @Override
-    public Boolean match(String value) {
+    public Boolean apply(String value) {
         return pattern.matcher(value).matches();
     }
 

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategy.Matcher;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Component
 public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
@@ -24,7 +24,7 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     @Qualifier("helpStrategyMatcher")
-    public void setMatcher(Matcher matcher){
+    public void setMatcher(Function<String, Boolean> matcher){
         this.matcher = matcher;
     }
 
