@@ -14,9 +14,6 @@ import java.util.function.Function;
 @Component
 public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
 
-    @Value("${telegram.tube.strategies.helpSubscriberStrategy.text}")
-    private String text;
-
     @Value("${telegram.tube.strategies.helpSubscriberStrategy.priority}")
     public void setPriority(Integer priority){
         this.priority = priority;
@@ -30,6 +27,10 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
 
     @Override
     protected Optional<BotApiMethod<?>> executeImpl(Update value) {
-        return Optional.of(resultCalculator.calculate(calculateChatId(value), text));
+        return Optional.of(resultCalculator.calculate(calculateChatId(value), getMessage()));
+    }
+
+    private String getMessage() {
+        return messageBuilderFactory.create("strategy.message.help").build();
     }
 }
