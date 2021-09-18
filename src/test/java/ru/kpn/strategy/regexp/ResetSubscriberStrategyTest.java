@@ -20,13 +20,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class GetStateSubscriberStrategyTest {
+public class ResetSubscriberStrategyTest {
 
     private static final Long CHAT_ID = 123L;
-    private static final String COMMAND = "/getstate";
+    private static final String COMMAND = "/reset";
 
     @Autowired
-    private GetStateSubscriberStrategy strategy;
+    private ResetSubscriberStrategy strategy;
 
     @Autowired
     private MessageBuilderFactory messageBuilderFactory;
@@ -48,7 +48,7 @@ public class GetStateSubscriberStrategyTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckStrategyExecution_getstate.csv")
+    @CsvFileSource(resources = "shouldCheckStrategyExecution_reset.csv")
     void shouldCheckStrategyExecution(String command, Boolean expectedIsPresent) {
         Update update = builder.text(command).build();
         assertThat(strategy.execute(update).isPresent()).isEqualTo(expectedIsPresent);
@@ -70,9 +70,9 @@ public class GetStateSubscriberStrategyTest {
 
     private String calculateExpectedAnswer(User user) {
         return messageBuilderFactory
-                .create("strategy.message.getstate")
+                .create("strategy.message.reset")
                 .arg(user.getId())
-                .arg(NPBotState.UNKNOWN)
+                .arg(NPBotState.RESET)
                 .build();
     }
 }

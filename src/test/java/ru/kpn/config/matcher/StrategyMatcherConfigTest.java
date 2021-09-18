@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 18.09.2021 test all matcher
 @SpringBootTest
 public class StrategyMatcherConfigTest {
 

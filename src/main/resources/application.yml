@@ -13,6 +13,9 @@ telegram:
       getStateSubscriberStrategy:
         priority: 1
         template: /getstate
+      resetSubscriberStrategy:
+        priority: 2
+        template: /reset
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s
