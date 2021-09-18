@@ -27,4 +27,10 @@ public class StrategyMatcherConfig {
     public Function<String, Boolean> helpStrategyMatcher(@Value("${telegram.tube.strategies.helpSubscriberStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
+
+    @Bean
+    @Qualifier("getStateStrategyMatcher")
+    public Function<String, Boolean> getStateStrategyMatcher(@Value("${telegram.tube.strategies.getStateSubscriberStrategy.template}") String template){
+        return factory.create(MatcherType.REGEX, template);
+    }
 }

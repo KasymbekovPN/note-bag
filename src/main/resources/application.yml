@@ -7,11 +7,12 @@ telegram:
     subscriber-thread-limit: 2
     runner-init-value: false
     strategies:
-      noneSubscriberStrategy:
-        priority: 0
       helpSubscriberStrategy:
-        priority: 1
+        priority: 0
         template: /help
+      getStateSubscriberStrategy:
+        priority: 1
+        template: /getstate
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s
