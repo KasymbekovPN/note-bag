@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.NPBot;
+import ru.kpn.calculator.extractor.ExtractorCalculatorFactory;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.calculator.extractor.ExtractorCalculatorFactoryImpl;
 import ru.kpn.i18n.I18n;
@@ -30,6 +33,9 @@ public class NPBotConfig {
     @Autowired
     private Decryptor decryptor;
 
+    @Autowired
+    private ExtractorCalculatorFactory<Update, BotApiMethod<?>> extractorCalculatorFactory;
+
     @Bean
     public NPBot npBot(){
         return new NPBot(
@@ -37,7 +43,7 @@ public class NPBotConfig {
                 botPath,
                 decryptor.decrypt(botUserName),
                 decryptor.decrypt(botToken),
-                new ExtractorCalculatorFactoryImpl(),
+                extractorCalculatorFactory,
                 messageBuilderFactory);
     }
 }

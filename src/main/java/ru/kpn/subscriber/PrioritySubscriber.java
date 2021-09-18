@@ -3,7 +3,6 @@ package ru.kpn.subscriber;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.SubscriberStrategy;
-import ru.kpn.strategy.none.NoneSubscriberStrategy;
 
 import java.util.Comparator;
 import java.util.Objects;

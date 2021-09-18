@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculator;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategy.SubscriberStrategy;
-import ru.kpn.strategy.none.NoneSubscriberStrategy;
 
 import java.util.Comparator;
 
@@ -62,18 +61,7 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
     }
 
     private void check() {
-        checkStrategy();
         checkComparator();
-    }
-
-    private void checkStrategy() {
-        if (strategy == null){
-            NoneSubscriberStrategy noneSubscriberStrategy = new NoneSubscriberStrategy();
-            noneSubscriberStrategy.setPriority(Integer.MIN_VALUE);
-            noneSubscriberStrategy.setMessageBuilderFactory(messageBuilderFactory);
-            noneSubscriberStrategy.setResultCalculator(resultCalculator);
-            strategy = noneSubscriberStrategy;
-        }
     }
 
     private void checkComparator() {
