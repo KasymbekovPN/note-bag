@@ -5,14 +5,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import ru.kpn.matcher.MatcherType;
 
 import java.util.Random;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// TODO: 18.09.2021 test all matcher
 @SpringBootTest
 public class StrategyMatcherConfigTest {
 
@@ -23,6 +25,14 @@ public class StrategyMatcherConfigTest {
     @Autowired
     @Qualifier("helpStrategyMatcher")
     private Function<String, Boolean> helpStrategyMatcher;
+
+    @Autowired
+    @Qualifier("getStateStrategyMatcher")
+    private Function<String, Boolean> getStateStrategyMatcher;
+
+    @Autowired
+    @Qualifier("resetStrategyMatcher")
+    private Function<String, Boolean> resetStrategyMatcher;
 
     private final Random random = new Random();
 
@@ -35,5 +45,17 @@ public class StrategyMatcherConfigTest {
     @CsvFileSource(resources = "shouldCheckHelpStrategyMatcher.csv")
     public void shouldCheckHelpStrategyMatcher(String text, Boolean expectedResult){
         assertThat(helpStrategyMatcher.apply(text)).isEqualTo(expectedResult);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckGetStateStrategyMatcher.csv")
+    public void shouldCheckGetStateStrategyMatcher(String text, Boolean expectedResult){
+        assertThat(getStateStrategyMatcher.apply(text)).isEqualTo(expectedResult);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckResetStrategyMatcher.csv")
+    public void shouldCheckResetStrategyMatcher(String text, Boolean expectedResult){
+        assertThat(resetStrategyMatcher.apply(text)).isEqualTo(expectedResult);
     }
 }
