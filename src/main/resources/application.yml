@@ -35,6 +35,6 @@ bot:
   path: https://000000000000.ngrok.io
 
 i18n:
-  locale: 'en'
-  encoding: 'UTF-8'
-  resource: 'classpath:translation'
+  locale: en
+  encoding: UTF-8
+  resource: classpath:translation
