@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculator;
+import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.extractor.IterableExtractor;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.subscriber.Subscriber;
@@ -16,7 +16,7 @@ public class ExtractorCalculatorFactoryImpl implements ExtractorCalculatorFactor
     private MessageBuilderFactory messageBuilderFactory;
 
     @Autowired
-    private StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
+    private StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
 
     @Override
     public ExtractorCalculator<Update, BotApiMethod<?>> create(Subscriber<Update, BotApiMethod<?>> subscriber) {

@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 class TelegramTube implements Tube<Update> {
 
     private final Consumer<Update> consumer;
-    
     private final Runner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService botES;

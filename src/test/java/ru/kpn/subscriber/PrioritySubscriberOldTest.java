@@ -13,7 +13,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PrioritySubscriberTest {
+public class PrioritySubscriberOldTest {
 
     private static final int AMOUNT = 10;
 
@@ -31,9 +31,9 @@ public class PrioritySubscriberTest {
         for (int i = 0; i < AMOUNT; i++) {
             int priority = random.nextInt();
             if (ps == null){
-                ps = new PrioritySubscriber(new TestStrategyWithPriority(priority), new PrioritySubscriber.DefaultComparator());
+                ps = new PrioritySubscriberOld(new TestStrategyWithPriority(priority), new PrioritySubscriberOld.DefaultComparator());
             } else {
-                ps = ps.setNext(new PrioritySubscriber(new TestStrategyWithPriority(priority), new PrioritySubscriber.DefaultComparator()));
+                ps = ps.setNext(new PrioritySubscriberOld(new TestStrategyWithPriority(priority), new PrioritySubscriberOld.DefaultComparator()));
             }
             priorities.add(priority);
         }
@@ -53,7 +53,7 @@ public class PrioritySubscriberTest {
     @Test
     void shouldCheckExecuteStrategy() {
         TestStrategy strategy = new TestStrategy();
-        Subscriber<Update, BotApiMethod<?>> subscriber = new PrioritySubscriber(strategy, null);
+        Subscriber<Update, BotApiMethod<?>> subscriber = new PrioritySubscriberOld(strategy, null);
         subscriber.executeStrategy(new UpdateInstanceBuilder().build());
         assertThat(strategy.getFlag()).isTrue();
     }
@@ -61,13 +61,13 @@ public class PrioritySubscriberTest {
     @RepeatedTest(100)
     void shouldCheckPriority() {
         int priority = random.nextInt();
-        Subscriber<Update, BotApiMethod<?>> subscriber = new PrioritySubscriber(new TestStrategyWithPriority(priority), null);
+        Subscriber<Update, BotApiMethod<?>> subscriber = new PrioritySubscriberOld(new TestStrategyWithPriority(priority), null);
         assertThat(priority).isEqualTo(subscriber.getPriority());
     }
 
     private static class TextComparator implements Comparator<Integer>{
 
-        private static final Comparator<Integer> COMPARATOR = new PrioritySubscriber.DefaultComparator();
+        private static final Comparator<Integer> COMPARATOR = new PrioritySubscriberOld.DefaultComparator();
 
         @Override
         public int compare(Integer integer, Integer t1) {

@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class SubscriberFactoryImplTest {
+public class SubscriberFactoryOldImplTest {
 
     @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>, Integer> factory;

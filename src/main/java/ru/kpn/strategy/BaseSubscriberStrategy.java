@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculator;
+import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
     protected Integer priority;
     protected MessageBuilderFactory messageBuilderFactory;
     protected Function<String, Boolean> matcher;
-    protected StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
+    protected StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
 
     @Autowired
     public void setMessageBuilderFactory (MessageBuilderFactory messageBuilderFactory) {
@@ -23,7 +23,7 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
     }
 
     @Autowired
-    public void setResultCalculator(StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator) {
+    public void setResultCalculator(StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator) {
         this.resultCalculator = resultCalculator;
     }
 
@@ -63,5 +63,6 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
         return value.getMessage().getChatId().toString();
     }
 
+    // TODO: 22.09.2021 must return not-Optional 
     protected abstract Optional<BotApiMethod<?>> executeImpl(Update value);
 }

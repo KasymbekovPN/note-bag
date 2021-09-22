@@ -6,12 +6,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TelegramMethodStrategyResultCalculatorTest {
+public class TelegramMethodStrategyResultCalculatorOLdTest {
 
     private static final String ID = "123";
     private static final String CONTENT = "some text";
 
-    private final TelegramMethodStrategyResultCalculator calculator = new TelegramMethodStrategyResultCalculator();
+    private final TelegramMethodStrategyResultCalculatorOLd calculator = new TelegramMethodStrategyResultCalculatorOLd();
 
     @Test
     void shouldCheckTypeOfInstance() {

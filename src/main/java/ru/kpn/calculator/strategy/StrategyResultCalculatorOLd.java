@@ -1,5 +1,6 @@
 package ru.kpn.calculator.strategy;
 
-public interface StrategyResultCalculator<T, I> {
+// TODO: 22.09.2021 del
+public interface StrategyResultCalculatorOLd<T, I> {
     T calculate(I id, Object content);
 }

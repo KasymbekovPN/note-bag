@@ -3,7 +3,7 @@ package ru.kpn.calculator.extractor;
 import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculator;
+import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.extractor.SubscriberExtractor;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.subscriber.Subscriber;
@@ -44,7 +44,7 @@ class SimpleExtractorCalculator implements ExtractorCalculator<Update, BotApiMet
     static class DefaultAnswerGeneratorImpl implements AnswerGenerator{
 
         private final MessageBuilderFactory messageBuilderFactory;
-        private final StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
+        private final StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
 
         @Override
         public BotApiMethod<?> generate(Update update) {

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculator;
+import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategy.SubscriberStrategy;
 
@@ -13,13 +13,13 @@ import java.util.Comparator;
 
 @Slf4j
 @Service
-public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMethod<?>, Integer> {
+public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotApiMethod<?>, Integer> {
 
     @Autowired
     private MessageBuilderFactory messageBuilderFactory;
 
     @Autowired
-    private StrategyResultCalculator<BotApiMethod<?>, String> resultCalculator;
+    private StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
 
     private SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private Comparator<Integer> comparator;
@@ -28,7 +28,7 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
     public Subscriber<Update, BotApiMethod<?>> build() {
         check();
         logCreation();
-        return new PrioritySubscriber(strategy, comparator);
+        return new PrioritySubscriberOld(strategy, comparator);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
     private void logCreation() {
         String message = messageBuilderFactory
                 .create("factory.subscriberBuilding")
-                .arg(PrioritySubscriber.class)
+                .arg(PrioritySubscriberOld.class)
                 .arg(strategy)
                 .arg(comparator)
                 .build();
@@ -66,7 +66,7 @@ public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMe
 
     private void checkComparator() {
         if (comparator == null){
-            comparator = new PrioritySubscriber.DefaultComparator();
+            comparator = new PrioritySubscriberOld.DefaultComparator();
         }
     }
 }

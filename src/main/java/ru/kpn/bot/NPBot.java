@@ -15,6 +15,11 @@ import ru.kpn.subscriber.Subscriber;
 
 import java.util.function.Consumer;
 
+// TODO: 22.09.2021 rename to BotTransmitter 
+// TODO: 22.09.2021 rm interfaces Publisher and Consumer
+// TODO: 22.09.2021 clr onWebhookUpdateReceived
+// TODO: 22.09.2021 del calculatorFactory
+// TODO: 22.09.2021 override execute as sync 
 @Service
 public class NPBot extends TelegramWebhookBot implements Publisher<Update, BotApiMethod<?>>, Consumer<Update> {
 

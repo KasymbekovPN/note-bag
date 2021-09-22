@@ -8,19 +8,22 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
-class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
+// TODO: 22.09.2021 del
+class PrioritySubscriberOld implements Subscriber<Update, BotApiMethod<?>> {
 
     private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
     private final Comparator<Integer> comparator;
 
+    // TODO: 22.09.2021 del 
     private Subscriber<Update, BotApiMethod<?>> next;
 
-    public PrioritySubscriber(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
-                               Comparator<Integer> comparator) {
+    public PrioritySubscriberOld(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
+                                 Comparator<Integer> comparator) {
         this.strategy = strategy;
         this.comparator = comparator;
     }
 
+    // TODO: 22.09.2021 del 
     @Override
     public Subscriber<Update, BotApiMethod<?>> setNext(Subscriber<Update, BotApiMethod<?>> next) {
         final int compareResult = comparator.compare(getPriority(), next.getPriority());
@@ -36,6 +39,7 @@ class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
         }
     }
 
+    // TODO: 22.09.2021 del 
     @Override
     public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
         return next != null ? Optional.of(next) : Optional.empty();
@@ -46,11 +50,13 @@ class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
         return strategy.execute(message);
     }
 
+    // TODO: 22.09.2021 del 
     @Override
     public Integer getPriority() {
         return strategy.getPriority();
     }
 
+    // TODO: 22.09.2021 del
     static class DefaultComparator implements Comparator<Integer> {
         @Override
         public int compare(Integer p0, Integer p1) {

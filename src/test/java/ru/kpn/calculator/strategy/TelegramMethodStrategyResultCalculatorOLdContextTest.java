@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest
-public class TelegramMethodStrategyResultCalculatorContextTest {
+public class TelegramMethodStrategyResultCalculatorOLdContextTest {
 
     @Autowired
-    private StrategyResultCalculator<BotApiMethod<?>, String> calculator;
+    private StrategyResultCalculatorOLd<BotApiMethod<?>, String> calculator;
 
     @Test
     void shouldCheckExistence() {
