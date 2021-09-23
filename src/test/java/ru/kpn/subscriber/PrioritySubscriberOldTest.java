@@ -6,7 +6,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.strategy.Strategy;
 import utils.UpdateInstanceBuilder;
 
 import java.util.*;
@@ -76,7 +76,7 @@ public class PrioritySubscriberOldTest {
     }
 
     @Getter
-    private static class TestStrategy implements SubscriberStrategy<Update, BotApiMethod<?>> {
+    private static class TestStrategy implements Strategy<Update, BotApiMethod<?>> {
 
         private Boolean flag = false;
 
@@ -87,7 +87,7 @@ public class PrioritySubscriberOldTest {
         }
     }
 
-    private static class TestStrategyWithPriority implements SubscriberStrategy<Update, BotApiMethod<?>>{
+    private static class TestStrategyWithPriority implements Strategy<Update, BotApiMethod<?>> {
 
         private final Integer priority;
 

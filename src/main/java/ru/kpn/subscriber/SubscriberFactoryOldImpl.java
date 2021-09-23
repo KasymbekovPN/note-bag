@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.strategy.Strategy;
 
 import java.util.Comparator;
 
@@ -21,7 +21,7 @@ public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotAp
     @Autowired
     private StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
 
-    private SubscriberStrategy<Update, BotApiMethod<?>> strategy;
+    private Strategy<Update, BotApiMethod<?>> strategy;
     private Comparator<Integer> comparator;
 
     @Override
@@ -39,7 +39,7 @@ public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotAp
     }
 
     @Override
-    public SubscriberFactory<Update, BotApiMethod<?>, Integer> strategy(SubscriberStrategy<Update, BotApiMethod<?>> strategy) {
+    public SubscriberFactory<Update, BotApiMethod<?>, Integer> strategy(Strategy<Update, BotApiMethod<?>> strategy) {
         this.strategy = strategy;
         return this;
     }

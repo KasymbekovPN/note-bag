@@ -6,25 +6,50 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
+import ru.kpn.strategyCalculator.StrategyCalculator;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Update, BotApiMethod<?>> {
+abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
+
+
+    // TODO: 23.09.2021 del 
+//    protected MessageBuilderFactory messageBuilderFactory;
+    
+
+    protected StrategyCalculator<BotApiMethod<?>> strategyCalculator;
     protected Integer priority;
-    protected MessageBuilderFactory messageBuilderFactory;
     protected Function<String, Boolean> matcher;
-    protected StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
+
+    // TODO: 23.09.2021 del 
+//    protected StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
+
+    // TODO: 23.09.2021 del 
+//    @Autowired
+//    public void setMessageBuilderFactory (MessageBuilderFactory messageBuilderFactory) {
+//        this.messageBuilderFactory = messageBuilderFactory;
+//    }
+
+    // TODO: 23.09.2021 del
+//    @Autowired
+//    public void setResultCalculator(StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator) {
+//        this.resultCalculator = resultCalculator;
+//    }
 
     @Autowired
-    public void setMessageBuilderFactory (MessageBuilderFactory messageBuilderFactory) {
-        this.messageBuilderFactory = messageBuilderFactory;
+    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>> strategyCalculator) {
+        this.strategyCalculator = strategyCalculator;
     }
 
-    @Autowired
-    public void setResultCalculator(StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator) {
-        this.resultCalculator = resultCalculator;
+    public abstract void setPriority(Integer priority);
+
+    public abstract void setMatcher(Function<String, Boolean> matcher);
+
+    @Override
+    public Integer getPriority() {
+        return priority;
     }
 
     @Override
@@ -32,16 +57,11 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
         Optional<Message> maybeMessage = checkAndGetMessage(value);
         if (maybeMessage.isPresent()){
             if (matchTemplate(maybeMessage.get().getText())){
-                return executeImpl(value);
+                return Optional.of(executeImpl(value));
             }
         }
 
         return Optional.empty();
-    }
-
-    @Override
-    public Integer getPriority() {
-        return priority;
     }
 
     private Optional<Message> checkAndGetMessage(Update value) {
@@ -63,6 +83,5 @@ abstract public class BaseSubscriberStrategy implements SubscriberStrategy<Updat
         return value.getMessage().getChatId().toString();
     }
 
-    // TODO: 22.09.2021 must return not-Optional 
-    protected abstract Optional<BotApiMethod<?>> executeImpl(Update value);
+    protected abstract BotApiMethod<?> executeImpl(Update value);
 }

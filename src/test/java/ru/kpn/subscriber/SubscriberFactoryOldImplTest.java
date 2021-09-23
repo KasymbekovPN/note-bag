@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.strategy.Strategy;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;
@@ -42,7 +42,7 @@ public class SubscriberFactoryOldImplTest {
     @Test
     void shouldCheckMethodStrategy() {
         factory.strategy(expectedStrategy);
-        SubscriberStrategy<Update, BotApiMethod<?>> strategy = getStrategy(factory);
+        Strategy<Update, BotApiMethod<?>> strategy = getStrategy(factory);
         assertThat(strategy).isEqualTo(expectedStrategy);
     }
 
@@ -54,10 +54,10 @@ public class SubscriberFactoryOldImplTest {
     }
 
     @SneakyThrows
-    private SubscriberStrategy<Update, BotApiMethod<?>> getStrategy(SubscriberFactory<Update, BotApiMethod<?>, Integer> factory) {
+    private Strategy<Update, BotApiMethod<?>> getStrategy(SubscriberFactory<Update, BotApiMethod<?>, Integer> factory) {
         Field field = factory.getClass().getDeclaredField("strategy");
         field.setAccessible(true);
-        return (SubscriberStrategy<Update, BotApiMethod<?>>) ReflectionUtils.getField(field, factory);
+        return (Strategy<Update, BotApiMethod<?>>) ReflectionUtils.getField(field, factory);
     }
 
     @SneakyThrows
@@ -67,7 +67,7 @@ public class SubscriberFactoryOldImplTest {
         return (Comparator<Integer>) ReflectionUtils.getField(field, factory);
     }
 
-    private static class TestStrategy implements SubscriberStrategy<Update, BotApiMethod<?>>{
+    private static class TestStrategy implements Strategy<Update, BotApiMethod<?>> {
         @Override
         public Optional<BotApiMethod<?>> execute(Update value) {
             return Optional.empty();
@@ -75,7 +75,7 @@ public class SubscriberFactoryOldImplTest {
 
         @Override
         public Integer getPriority() {
-            return SubscriberStrategy.super.getPriority();
+            return Strategy.super.getPriority();
         }
     }
 

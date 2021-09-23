@@ -2,7 +2,7 @@ package ru.kpn.subscriber;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.strategy.Strategy;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -11,13 +11,13 @@ import java.util.Optional;
 // TODO: 22.09.2021 del
 class PrioritySubscriberOld implements Subscriber<Update, BotApiMethod<?>> {
 
-    private final SubscriberStrategy<Update, BotApiMethod<?>> strategy;
+    private final Strategy<Update, BotApiMethod<?>> strategy;
     private final Comparator<Integer> comparator;
 
     // TODO: 22.09.2021 del 
     private Subscriber<Update, BotApiMethod<?>> next;
 
-    public PrioritySubscriberOld(SubscriberStrategy<Update, BotApiMethod<?>> strategy,
+    public PrioritySubscriberOld(Strategy<Update, BotApiMethod<?>> strategy,
                                  Comparator<Integer> comparator) {
         this.strategy = strategy;
         this.comparator = comparator;

@@ -11,7 +11,6 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -32,15 +31,16 @@ public class GetStateSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected Optional<BotApiMethod<?>> executeImpl(Update value) {
-        return Optional.of(resultCalculator.calculate(calculateChatId(value), getMessage(value.getMessage().getFrom())));
+    protected BotApiMethod<?> executeImpl(Update value) {
+        return strategyCalculator.calculate("strategy.message.getstate", getArgs(value));
     }
 
-    private String getMessage(User user) {
-        return messageBuilderFactory
-                .create("strategy.message.getstate")
-                .arg(user.getId())
-                .arg(stateService.get(user))
-                .build();
+    private Object[] getArgs(Update value) {
+        User user = value.getMessage().getFrom();
+        return new Object[]{
+                calculateChatId(value),
+                user.getId(),
+                stateService.get(user)
+        };
     }
 }

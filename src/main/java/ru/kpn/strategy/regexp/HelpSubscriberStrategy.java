@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -26,11 +25,11 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected Optional<BotApiMethod<?>> executeImpl(Update value) {
-        return Optional.of(resultCalculator.calculate(calculateChatId(value), getMessage()));
+    protected BotApiMethod<?> executeImpl(Update value) {
+        return strategyCalculator.calculate("strategy.message.help", getArgs(value));
     }
 
-    private String getMessage() {
-        return messageBuilderFactory.create("strategy.message.help").build();
+    private Object[] getArgs(Update value) {
+        return new Object[]{calculateChatId(value)};
     }
 }

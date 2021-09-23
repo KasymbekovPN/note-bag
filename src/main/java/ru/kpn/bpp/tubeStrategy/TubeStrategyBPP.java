@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.publisher.Publisher;
-import ru.kpn.strategy.SubscriberStrategy;
+import ru.kpn.strategy.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
 
@@ -34,7 +34,7 @@ public class TubeStrategyBPP implements BeanPostProcessor {
     }
 
     private Subscriber<Update, BotApiMethod<?>> createSubscriber(Object bean) {
-        SubscriberStrategy<Update, BotApiMethod<?>> strategy = (SubscriberStrategy<Update, BotApiMethod<?>>) bean;
+        Strategy<Update, BotApiMethod<?>> strategy = (Strategy<Update, BotApiMethod<?>>) bean;
         return subscriberFactory
                 .reset()
                 .strategy(strategy)
@@ -50,7 +50,7 @@ public class TubeStrategyBPP implements BeanPostProcessor {
             }
             ParameterizedType pt = (ParameterizedType) genericInterface;
             Type rawType = pt.getRawType();
-            success = rawType.getTypeName().equals(SubscriberStrategy.class.getTypeName());
+            success = rawType.getTypeName().equals(Strategy.class.getTypeName());
         }
 
         return success;

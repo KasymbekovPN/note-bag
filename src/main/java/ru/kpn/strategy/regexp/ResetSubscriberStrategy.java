@@ -11,7 +11,6 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -32,24 +31,20 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected Optional<BotApiMethod<?>> executeImpl(Update value) {
-        User user = getUser(value);
-        resetState(user);
-        return Optional.of(resultCalculator.calculate(calculateChatId(value), getMessage(user)));
+    protected BotApiMethod<?> executeImpl(Update value) {
+        resetState(value);
+        return strategyCalculator.calculate("strategy.message.reset", getArgs(value));
     }
 
-    private User getUser(Update value) {
-        return value.getMessage().getFrom();
+    private Object[] getArgs(Update value) {
+        String chatId = calculateChatId(value);
+        return new Object[]{
+                chatId,
+                chatId
+        };
     }
 
-    private void resetState(User user) {
-        stateService.set(user, NPBotState.RESET);
-    }
-
-    private String getMessage(User user) {
-        return messageBuilderFactory
-                .create("strategy.message.reset")
-                .arg(user.getId())
-                .build();
+    private void resetState(Update value) {
+        stateService.set(value.getMessage().getFrom(), NPBotState.RESET);
     }
 }
