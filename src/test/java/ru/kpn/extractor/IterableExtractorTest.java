@@ -36,6 +36,11 @@ public class IterableExtractorTest {
         }
 
         @Override
+        public int compareTo(Integer integer) {
+            return 0;
+        }
+
+        @Override
         public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
             return amount-- > 0 ? Optional.of(this) : Optional.empty();
         }

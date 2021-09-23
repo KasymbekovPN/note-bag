@@ -41,5 +41,9 @@ public class ExtractorCalculatorFactoryImplTest {
     }
 
     private static class TestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
+        @Override
+        public int compareTo(Integer integer) {
+            return 0;
+        }
     }
 }

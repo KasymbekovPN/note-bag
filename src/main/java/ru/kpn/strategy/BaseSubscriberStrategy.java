@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
-import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategyCalculator.StrategyCalculator;
 
 import java.util.Optional;
@@ -13,30 +11,9 @@ import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
-
-
-    // TODO: 23.09.2021 del 
-//    protected MessageBuilderFactory messageBuilderFactory;
-    
-
     protected StrategyCalculator<BotApiMethod<?>> strategyCalculator;
     protected Integer priority;
     protected Function<String, Boolean> matcher;
-
-    // TODO: 23.09.2021 del 
-//    protected StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
-
-    // TODO: 23.09.2021 del 
-//    @Autowired
-//    public void setMessageBuilderFactory (MessageBuilderFactory messageBuilderFactory) {
-//        this.messageBuilderFactory = messageBuilderFactory;
-//    }
-
-    // TODO: 23.09.2021 del
-//    @Autowired
-//    public void setResultCalculator(StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator) {
-//        this.resultCalculator = resultCalculator;
-//    }
 
     @Autowired
     public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>> strategyCalculator) {

@@ -39,7 +39,12 @@ class PrioritySubscriberOld implements Subscriber<Update, BotApiMethod<?>> {
         }
     }
 
-    // TODO: 22.09.2021 del 
+    @Override
+    public int compareTo(Integer integer) {
+        return 0;
+    }
+
+    // TODO: 22.09.2021 del
     @Override
     public Optional<Subscriber<Update, BotApiMethod<?>>> getNext() {
         return next != null ? Optional.of(next) : Optional.empty();

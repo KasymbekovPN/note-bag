@@ -55,11 +55,20 @@ public class SimpleExtractorCalculatorTest {
     }
 
     private static class EmptyTestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
+        @Override
+        public int compareTo(Integer integer) {
+            return 0;
+        }
     }
 
     private static class PresentTestSubscriber implements Subscriber<Update, BotApiMethod<?>> {
         private static final String CHAT_ID = "1";
         private static final String TEXT = "some text";
+
+        @Override
+        public int compareTo(Integer integer) {
+            return 0;
+        }
 
         @Override
         public Optional<BotApiMethod<?>> executeStrategy(Update message) {

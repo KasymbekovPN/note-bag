@@ -115,5 +115,10 @@ public class NPBotTest {
         public Integer getPriority() {
             return priority;
         }
+
+        @Override
+        public int compareTo(Integer integer) {
+            return 0;
+        }
     }
 }
