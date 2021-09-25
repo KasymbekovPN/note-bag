@@ -15,9 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrioritySubscriberTest {
 
-    private static final Integer SIZE = 10;
-    private static final Random RANDOM = new Random();
-
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckStrategyExecution.csv")
     void shouldCheckStrategyExecution(Long chatId, Boolean expectedIsPresent) {
@@ -29,18 +26,26 @@ public class PrioritySubscriberTest {
 
     @Test
     void shouldCheckDefaultComparator() {
-        PrioritySubscriber s1 = new PrioritySubscriber(new TestStrategy(1));
-        assertThat(s1.compareTo(1)).isZero();
-        assertThat(s1.compareTo(0)).isEqualTo(1);
-        assertThat(s1.compareTo(2)).isEqualTo(-1);
+        PrioritySubscriber s1 = createSubscriber(1);
+        assertThat(s1.compareTo(createSubscriber(1))).isZero();
+        assertThat(s1.compareTo(createSubscriber(0))).isEqualTo(1);
+        assertThat(s1.compareTo(createSubscriber(2))).isEqualTo(-1);
+    }
+
+    private PrioritySubscriber createSubscriber(int priority) {
+        return new PrioritySubscriber(new TestStrategy(priority));
     }
 
     @Test
     void shouldCheckCustomComparator() {
-        PrioritySubscriber s1 = new PrioritySubscriber(new TestStrategy(1), new TestComparator());
-        assertThat(s1.compareTo(1)).isZero();
-        assertThat(s1.compareTo(0)).isEqualTo(-1);
-        assertThat(s1.compareTo(2)).isEqualTo(1);
+        PrioritySubscriber s1 = createSubscriberWithComparator(1);
+        assertThat(s1.compareTo(createSubscriberWithComparator(1))).isZero();
+        assertThat(s1.compareTo(createSubscriberWithComparator(0))).isEqualTo(-1);
+        assertThat(s1.compareTo(createSubscriberWithComparator(2))).isEqualTo(1);
+    }
+
+    private PrioritySubscriber createSubscriberWithComparator(int priority) {
+        return new PrioritySubscriber(new TestStrategy(priority), new TestComparator());
     }
 
     private static class TestStrategy implements Strategy<Update, BotApiMethod<?>> {
@@ -65,13 +70,13 @@ public class PrioritySubscriberTest {
         }
     }
 
-    private static class TestComparator implements Comparator<Integer> {
+    private static class TestComparator implements Comparator<Subscriber<Update, BotApiMethod<?>>> {
         @Override
-        public int compare(Integer i1, Integer i2) {
-            if (Objects.equals(i1, i2)){
+        public int compare(Subscriber<Update, BotApiMethod<?>> s1, Subscriber<Update, BotApiMethod<?>> s2) {
+            if (Objects.equals(s1.getPriority(), s2.getPriority())){
                 return 0;
             }
-            return i1 > i2 ? -1 : 1;
+            return s1.getPriority() > s2.getPriority() ? -1 : 1;
         }
     }
 }

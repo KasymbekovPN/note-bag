@@ -40,7 +40,7 @@ class PrioritySubscriberOld implements Subscriber<Update, BotApiMethod<?>> {
     }
 
     @Override
-    public int compareTo(Integer integer) {
+    public int compareTo(Subscriber<Update, BotApiMethod<?>> s) {
         return 0;
     }
 

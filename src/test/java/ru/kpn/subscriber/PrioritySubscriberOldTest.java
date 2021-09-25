@@ -13,6 +13,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 23.09.2021 del
 public class PrioritySubscriberOldTest {
 
     private static final int AMOUNT = 10;

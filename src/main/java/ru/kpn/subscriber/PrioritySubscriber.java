@@ -11,14 +11,14 @@ import java.util.Optional;
 public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
 
     private final Strategy<Update, BotApiMethod<?>> strategy;
-    private final Comparator<Integer> comparator;
+    private final Comparator<Subscriber<Update, BotApiMethod<?>>> comparator;
 
     public PrioritySubscriber(Strategy<Update, BotApiMethod<?>> strategy) {
         this.strategy = strategy;
         this.comparator = new DefaultComparator();
     }
 
-    public PrioritySubscriber(Strategy<Update, BotApiMethod<?>> strategy, Comparator<Integer> comparator) {
+    public PrioritySubscriber(Strategy<Update, BotApiMethod<?>> strategy, Comparator<Subscriber<Update, BotApiMethod<?>>> comparator) {
         this.strategy = strategy;
         this.comparator = comparator;
     }
@@ -29,17 +29,22 @@ public class PrioritySubscriber implements Subscriber<Update, BotApiMethod<?>> {
     }
 
     @Override
-    public int compareTo(Integer i) {
-        return comparator.compare(strategy.getPriority(), i);
+    public Integer getPriority() {
+        return strategy.getPriority();
     }
 
-    public static class DefaultComparator implements Comparator<Integer> {
+    @Override
+    public int compareTo(Subscriber<Update, BotApiMethod<?>> subscriber) {
+        return comparator.compare(this, subscriber);
+    }
+
+    public static class DefaultComparator implements Comparator<Subscriber<Update, BotApiMethod<?>>> {
         @Override
-        public int compare(Integer i1, Integer i2) {
-            if (Objects.equals(i1, i2)){
+        public int compare(Subscriber<Update, BotApiMethod<?>> s1, Subscriber<Update, BotApiMethod<?>> s2) {
+            if (Objects.equals(s1.getPriority(), s2.getPriority())){
                 return 0;
             }
-            return i1 > i2 ? 1 : -1;
+            return s1.getPriority() > s2.getPriority() ? 1 : -1;
         }
     }
 }
