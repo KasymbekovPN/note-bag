@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import ru.kpn.decryptor.Decryptor;
 import ru.kpn.decryptor.JasyptDecryptor;
-import ru.kpn.i18n.I18n;
-import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.service.env.EnvironmentService;
 import ru.kpn.service.env.PropertyChunk;

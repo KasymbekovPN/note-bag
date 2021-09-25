@@ -3,18 +3,19 @@ package ru.kpn.tube;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.runner.Runner;
+import ru.kpn.subscriptionManager.SubscriptionManager;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 @Slf4j
 @Service
 class TelegramTube implements Tube<Update> {
 
-    private final Consumer<Update> consumer;
+    private final SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager;
     private final Runner runner;
     private final BlockingQueue<Update> queue;
     private final ExecutorService botES;
@@ -26,7 +27,7 @@ class TelegramTube implements Tube<Update> {
             }
     );
 
-    public TelegramTube(Consumer<Update> consumer,
+    public TelegramTube(SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager,
                         Runner runner,
                         @Value("${telegram.tube.default-queue-size}") int defaultQueueSize,
                         @Value("${telegram.tube.subscriber-thread-limit}") int consumerThreadLimit) {
@@ -43,7 +44,7 @@ class TelegramTube implements Tube<Update> {
                     }
                 }
         );
-        this.consumer = consumer;
+        this.subscriptionManager = subscriptionManager;
         this.runner = runner;
         this.runner.setProcessesAndExecuteCurrent(this::startProcess, this::stopProcess);
     }
@@ -62,7 +63,7 @@ class TelegramTube implements Tube<Update> {
         while (runner.isRun().get()){
             try{
                 Update datum = queue.take();
-                botES.submit(() -> consumer.accept(datum));
+                botES.submit(() -> subscriptionManager.execute(datum));
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
                 Thread.currentThread().interrupt();

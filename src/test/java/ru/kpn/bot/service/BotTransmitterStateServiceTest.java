@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.kpn.bot.state.NPBotState.RESET;
 import static ru.kpn.bot.state.NPBotState.UNKNOWN;
 
-public class NPBotStateServiceTest {
+public class BotTransmitterStateServiceTest {
 
     private static final Long USER_ID = 12345L;
 

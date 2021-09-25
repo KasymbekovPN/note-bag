@@ -1,12 +1,14 @@
 package ru.kpn.subscriptionManager;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
@@ -23,10 +25,12 @@ public class BotSubscriptionManagerTest {
     private static final String MESSAGE = "message";
 
     private BotSubscriptionManager subscriptionManager;
+    private TestTransmitter transmitter;
 
     @BeforeEach
     void setUp() {
-        subscriptionManager = new BotSubscriptionManager(new TestStrategyCalculator());
+        transmitter = new TestTransmitter();
+        subscriptionManager = new BotSubscriptionManager(transmitter, new TestStrategyCalculator());
         subscriptionManager.subscribe(new TestSubscriber(PRIORITY, CHAT_ID, MESSAGE));
     }
 
@@ -34,7 +38,8 @@ public class BotSubscriptionManagerTest {
     @CsvFileSource(resources = "shouldCheckExecution.csv")
     void shouldCheckExecution(Long chatId, String expectedMessage, String expectedChatId) {
         Update update = new UpdateInstanceBuilder().chatId(chatId).build();
-        SendMessage result = (SendMessage) subscriptionManager.execute(update);
+        subscriptionManager.execute(update);
+        SendMessage result = transmitter.getSendMessage();
         assertThat(expectedChatId).isEqualTo(result.getChatId());
         assertThat(expectedMessage).isEqualTo(result.getText());
     }
@@ -70,6 +75,18 @@ public class BotSubscriptionManagerTest {
         @Override
         public BotApiMethod<?> calculate(String code, Object... args) {
             return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
+        }
+    }
+
+
+    @Getter
+    private static class TestTransmitter implements Transmitter<BotApiMethod<?>> {
+
+        private SendMessage sendMessage;
+
+        @Override
+        public void transmit(BotApiMethod<?> value) {
+            sendMessage = (SendMessage) value;
         }
     }
 }

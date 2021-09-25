@@ -18,10 +18,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class SubscriberFactoryOldImplTest {
+public class SubscriberFactoryImplTest {
 
     @Autowired
-    private SubscriberFactory<Update, BotApiMethod<?>, Integer> factory;
+    private SubscriberFactory<Update, BotApiMethod<?>> factory;
 
     private TestStrategy expectedStrategy;
     private TestComparator expectedComparator;
@@ -54,14 +54,14 @@ public class SubscriberFactoryOldImplTest {
     }
 
     @SneakyThrows
-    private Strategy<Update, BotApiMethod<?>> getStrategy(SubscriberFactory<Update, BotApiMethod<?>, Integer> factory) {
+    private Strategy<Update, BotApiMethod<?>> getStrategy(SubscriberFactory<Update, BotApiMethod<?>> factory) {
         Field field = factory.getClass().getDeclaredField("strategy");
         field.setAccessible(true);
         return (Strategy<Update, BotApiMethod<?>>) ReflectionUtils.getField(field, factory);
     }
 
     @SneakyThrows
-    private Comparator<Integer> getComparator(SubscriberFactory<Update, BotApiMethod<?>, Integer> factory) {
+    private Comparator<Integer> getComparator(SubscriberFactory<Update, BotApiMethod<?>> factory) {
         Field field = factory.getClass().getDeclaredField("comparator");
         field.setAccessible(true);
         return (Comparator<Integer>) ReflectionUtils.getField(field, factory);
@@ -79,13 +79,13 @@ public class SubscriberFactoryOldImplTest {
         }
     }
 
-    private static class TestComparator implements Comparator<Integer> {
+    private static class TestComparator implements Comparator<Subscriber<Update, BotApiMethod<?>>> {
         @Override
-        public int compare(Integer p0, Integer p1) {
-            if (Objects.equals(p0, p1)){
+        public int compare(Subscriber<Update, BotApiMethod<?>> s1, Subscriber<Update, BotApiMethod<?>> s2) {
+            if (Objects.equals(s1.getPriority(), s2.getPriority())){
                 return 0;
             }
-            return p0 > p1 ? 1 : -1;
+            return s1.getPriority() > s2.getPriority() ? 1 : -1;
         }
     }
 }

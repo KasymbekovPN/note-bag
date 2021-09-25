@@ -1,4 +1,4 @@
-package ru.kpn.bpp.tubeStrategy;
+package ru.kpn.bpp.subscriptionManager;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -7,28 +7,28 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.bot.publisher.Publisher;
 import ru.kpn.strategy.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
+import ru.kpn.subscriptionManager.SubscriptionManager;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 @Slf4j
 @Component
-public class TubeStrategyBPP implements BeanPostProcessor {
+public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @Autowired
-    private SubscriberFactory<Update, BotApiMethod<?>, Integer> subscriberFactory;
+    private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
 
     @Autowired
-    private Publisher<Update, BotApiMethod<?>> npBot;
+    private SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager;
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (isBeanTubeStrategy(bean)){
-            npBot.subscribe(createSubscriber(bean));
+            subscriptionManager.subscribe(createSubscriber(bean));
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
@@ -55,5 +55,4 @@ public class TubeStrategyBPP implements BeanPostProcessor {
 
         return success;
     }
-
 }

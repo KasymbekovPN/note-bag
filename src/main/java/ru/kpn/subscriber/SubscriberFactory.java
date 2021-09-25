@@ -4,9 +4,9 @@ import ru.kpn.strategy.Strategy;
 
 import java.util.Comparator;
 
-public interface SubscriberFactory<T, R, C> {
+public interface SubscriberFactory<T, R> {
     Subscriber<T, R> build();
-    SubscriberFactory<T, R, C> reset();
-    default SubscriberFactory<T, R, C> strategy(Strategy<T, R> strategy){return this;}
-    default SubscriberFactory<T, R, C> comparator(Comparator<C> comparator) {return this;}
+    SubscriberFactory<T, R> reset();
+    default SubscriberFactory<T, R> strategy(Strategy<T, R> strategy){return this;}
+    default SubscriberFactory<T, R> comparator(Comparator<Subscriber<T, R>> comparator) {return this;}
 }

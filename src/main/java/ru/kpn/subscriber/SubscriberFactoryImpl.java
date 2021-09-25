@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.calculator.strategy.StrategyResultCalculatorOLd;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.strategy.Strategy;
 
@@ -13,39 +12,36 @@ import java.util.Comparator;
 
 @Slf4j
 @Service
-public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotApiMethod<?>, Integer> {
+public class SubscriberFactoryImpl implements SubscriberFactory<Update, BotApiMethod<?>> {
 
     @Autowired
     private MessageBuilderFactory messageBuilderFactory;
 
-    @Autowired
-    private StrategyResultCalculatorOLd<BotApiMethod<?>, String> resultCalculator;
-
     private Strategy<Update, BotApiMethod<?>> strategy;
-    private Comparator<Integer> comparator;
+    private Comparator<Subscriber<Update, BotApiMethod<?>>> comparator;
 
     @Override
     public Subscriber<Update, BotApiMethod<?>> build() {
         check();
         logCreation();
-        return new PrioritySubscriberOld(strategy, comparator);
+        return new PrioritySubscriber(strategy, comparator);
     }
 
     @Override
-    public SubscriberFactory<Update, BotApiMethod<?>, Integer> reset() {
+    public SubscriberFactory<Update, BotApiMethod<?>> reset() {
         strategy = null;
         comparator = null;
         return this;
     }
 
     @Override
-    public SubscriberFactory<Update, BotApiMethod<?>, Integer> strategy(Strategy<Update, BotApiMethod<?>> strategy) {
+    public SubscriberFactory<Update, BotApiMethod<?>> strategy(Strategy<Update, BotApiMethod<?>> strategy) {
         this.strategy = strategy;
         return this;
     }
 
     @Override
-    public SubscriberFactory<Update, BotApiMethod<?>, Integer> comparator(Comparator<Integer> comparator) {
+    public SubscriberFactory<Update, BotApiMethod<?>> comparator(Comparator<Subscriber<Update, BotApiMethod<?>>> comparator) {
         this.comparator = comparator;
         return this;
     }
@@ -53,7 +49,7 @@ public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotAp
     private void logCreation() {
         String message = messageBuilderFactory
                 .create("factory.subscriberBuilding")
-                .arg(PrioritySubscriberOld.class)
+                .arg(PrioritySubscriber.class)
                 .arg(strategy)
                 .arg(comparator)
                 .build();
@@ -66,7 +62,7 @@ public class SubscriberFactoryOldImpl implements SubscriberFactory<Update, BotAp
 
     private void checkComparator() {
         if (comparator == null){
-            comparator = new PrioritySubscriberOld.DefaultComparator();
+            comparator = new PrioritySubscriber.DefaultComparator();
         }
     }
 }

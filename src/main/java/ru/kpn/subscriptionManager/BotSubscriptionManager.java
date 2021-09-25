@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.subscriber.Subscriber;
 
@@ -15,6 +16,7 @@ import java.util.TreeSet;
 @Service
 public class BotSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
+    private final Transmitter<BotApiMethod<?>> transmitter;
     private final StrategyCalculator<BotApiMethod<?>> defaultStrategyCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
 
@@ -24,14 +26,16 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
     }
 
     @Override
-    public synchronized BotApiMethod<?> execute(Update update) {
+    public synchronized void execute(Update update) {
+        Optional<BotApiMethod<?>> maybeResult = Optional.empty();;
         for (Subscriber<Update, BotApiMethod<?>> subscriber : subscribers) {
-            Optional<BotApiMethod<?>> maybeResult = subscriber.executeStrategy(update);
+            maybeResult = subscriber.executeStrategy(update);
             if (maybeResult.isPresent()){
-                return maybeResult.get();
+                break;
             }
         }
-        return calculateDefaultAnswer(update);
+        BotApiMethod<?> result = maybeResult.isPresent() ? maybeResult.get() : calculateDefaultAnswer(update);
+        transmitter.transmit(result);
     }
 
     private BotApiMethod<?> calculateDefaultAnswer(Update update) {

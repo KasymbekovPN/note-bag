@@ -3,12 +3,14 @@ package ru.kpn.tube;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.runner.TubeRunner;
+import ru.kpn.subscriber.Subscriber;
+import ru.kpn.subscriptionManager.SubscriptionManager;
 import utils.UpdateInstanceBuilder;
 
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,14 +23,14 @@ class TelegramTubeTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAppending.csv")
     void shouldCheckAppending(boolean runnerInitValue, boolean expectedResult) {
-        TelegramTube tube = createTube(runnerInitValue, new TestConsumer());
+        TelegramTube tube = createTube(runnerInitValue, new TestSubscriptionManager());
         assertThat(tube.append(createUpdateInstance())).isEqualTo(expectedResult);
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckCheckConsumerAccepting.csv")
     void shouldCheckCheckConsumerAccepting(boolean runnerInitValue, boolean expectedResult) throws ExecutionException, InterruptedException {
-        TestConsumer consumer = new TestConsumer();
+        TestSubscriptionManager consumer = new TestSubscriptionManager();
         TelegramTube tube = createTube(runnerInitValue, consumer);
         tube.append(createUpdateInstance());
         Thread.sleep(150);
@@ -40,22 +42,25 @@ class TelegramTubeTest {
         return new UpdateInstanceBuilder().chatId(123L).build();
     }
 
-    private TelegramTube createTube(boolean runnerInitValue, Consumer<Update> consumer) {
-        return new TelegramTube(consumer, new TubeRunner(runnerInitValue), DEFAULT_QUEUE_SIZE, CONSUMER_THREAD_LIMIT);
+    private TelegramTube createTube(boolean runnerInitValue, SubscriptionManager<Update, BotApiMethod<?>> manager) {
+        return new TelegramTube(manager, new TubeRunner(runnerInitValue), DEFAULT_QUEUE_SIZE, CONSUMER_THREAD_LIMIT);
     }
 
-    private static class TestConsumer implements Consumer<Update> {
+    private static class TestSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
         private boolean accepted = false;
 
-        @Override
-        public void accept(Update update) {
-            accepted = true;
-            log.info("in accept : {}", update);
-        }
-
         public boolean isAccepted() {
             return accepted;
+        }
+
+        @Override
+        public void subscribe(Subscriber<Update, BotApiMethod<?>> subscriber) {
+        }
+
+        @Override
+        public void execute(Update update) {
+            accepted = true;
         }
     }
 }
