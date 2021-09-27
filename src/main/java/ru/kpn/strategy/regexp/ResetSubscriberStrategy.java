@@ -44,6 +44,7 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
         };
     }
 
+    // TODO: 27.09.2021 change user state in DB
     private void resetState(Update value) {
         stateService.set(value.getMessage().getFrom(), NPBotState.RESET);
     }
