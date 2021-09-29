@@ -16,6 +16,9 @@ telegram:
       resetSubscriberStrategy:
         priority: 2
         template: /reset
+      getBufferStatusStrategy:
+        priority: 3
+        template: /get buffer status
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

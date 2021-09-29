@@ -34,6 +34,10 @@ public class StrategyMatcherConfigTest {
     @Qualifier("resetStrategyMatcher")
     private Function<String, Boolean> resetStrategyMatcher;
 
+    @Autowired
+    @Qualifier("getBufferStatusStrategyMatcher")
+    private Function<String, Boolean> getBufferStatusStrategyMatcher;
+
     private final Random random = new Random();
 
     @RepeatedTest(100)
@@ -57,5 +61,11 @@ public class StrategyMatcherConfigTest {
     @CsvFileSource(resources = "shouldCheckResetStrategyMatcher.csv")
     public void shouldCheckResetStrategyMatcher(String text, Boolean expectedResult){
         assertThat(resetStrategyMatcher.apply(text)).isEqualTo(expectedResult);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckGetBufferStatusStrategyMatcher.csv")
+    public void shouldCheckGetBufferStatusStrategyMatcher(String text, Boolean expectedResult) {
+        assertThat(getBufferStatusStrategyMatcher.apply(text)).isEqualTo(expectedResult);
     }
 }

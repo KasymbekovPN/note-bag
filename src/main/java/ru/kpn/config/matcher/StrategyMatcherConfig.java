@@ -39,4 +39,10 @@ public class StrategyMatcherConfig {
     public Function<String, Boolean> resetStrategyMatcher(@Value("${telegram.tube.strategies.resetSubscriberStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
+
+    @Bean
+    @Qualifier("getBufferStatusStrategyMatcher")
+    public Function<String, Boolean> getBufferStatusStrategyMatcher(@Value("${telegram.tube.strategies.getBufferStatusStrategy.template}") String template){
+        return factory.create(MatcherType.REGEX, template);
+    }
 }
