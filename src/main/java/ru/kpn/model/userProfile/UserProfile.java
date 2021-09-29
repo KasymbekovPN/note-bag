@@ -7,6 +7,7 @@ import ru.kpn.model.note.Note;
 
 import java.util.Set;
 
+// TODO: 27.09.2021 which fields are needed?
 @Data
 @Builder
 @AllArgsConstructor
