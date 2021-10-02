@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
 
@@ -68,12 +69,12 @@ public class BotSubscriptionManagerTest {
         }
     }
 
-    private static class TestStrategyCalculator implements StrategyCalculator<BotApiMethod<?>> {
+    private static class TestStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
         private static final String DEFAULT_CHAT_ID = "0";
         private static final String DEFAULT_MESSAGE = "default message";
 
         @Override
-        public BotApiMethod<?> calculate(String code, Object... args) {
+        public BotApiMethod<?> calculate(StrategyCalculatorSource<String> source) {
             return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
         }
     }

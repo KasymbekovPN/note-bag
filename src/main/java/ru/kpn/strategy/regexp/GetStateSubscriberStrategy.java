@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
@@ -31,16 +31,16 @@ public class GetStateSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected BotApiMethod<?> executeImpl(Update value) {
-        return strategyCalculator.calculate("strategy.message.getstate", getArgs(value));
+    protected StrategyCalculatorSource<String> getSource(Update value) {
+        StrategyCalculatorSource<String> source = createSource("strategy.message.getstate");
+        source.add(calculateChatId(value));
+        source.add(calculateChatId(value));
+        source.add(stateService.get(getUser(value)));
+
+        return source;
     }
 
-    private Object[] getArgs(Update value) {
-        User user = value.getMessage().getFrom();
-        return new Object[]{
-                calculateChatId(value),
-                user.getId(),
-                stateService.get(user)
-        };
+    private User getUser(Update value) {
+        return value.getMessage().getFrom();
     }
 }

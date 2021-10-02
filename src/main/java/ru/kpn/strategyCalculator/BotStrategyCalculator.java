@@ -8,7 +8,7 @@ import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 
 @Component
-public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>> {
+public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
 
     private final MessageBuilderFactory messageBuilderFactory;
 
@@ -18,11 +18,11 @@ public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>
     }
 
     @Override
-    public synchronized BotApiMethod<?> calculate(String code, Object... args) {
-        String chatId = String.valueOf(args[0]);
-        MessageBuilder builder = messageBuilderFactory.create(code);
-        for (int i = 1; i < args.length; i++) {
-            builder.arg(args[i]);
+    public synchronized BotApiMethod<?> calculate(StrategyCalculatorSource<String> source) {
+        String chatId = String.valueOf(source.getArgs()[0]);
+        MessageBuilder builder = messageBuilderFactory.create(source.getCode());
+        for (int i = 0; i < source.getArgs().length; i++) {
+            builder.arg(source.getArgs()[i]);
         }
         return new SendMessage(chatId, builder.build());
     }

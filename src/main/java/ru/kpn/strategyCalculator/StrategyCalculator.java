@@ -1,5 +1,5 @@
 package ru.kpn.strategyCalculator;
 
-public interface StrategyCalculator<R> {
-    R calculate(String code, Object... args);
+public interface StrategyCalculator<R, C> {
+    R calculate(StrategyCalculatorSource<C> source);
 }

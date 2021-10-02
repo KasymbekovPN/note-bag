@@ -4,19 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
 import ru.kpn.strategyCalculator.StrategyCalculator;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
-    protected StrategyCalculator<BotApiMethod<?>> strategyCalculator;
-    protected Integer priority;
+    private StrategyCalculator<BotApiMethod<?>, String> strategyCalculator;
+
     protected Function<String, Boolean> matcher;
+    protected Integer priority;
 
     @Autowired
-    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>> strategyCalculator) {
+    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>, String> strategyCalculator) {
         this.strategyCalculator = strategyCalculator;
     }
 
@@ -34,7 +37,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         Optional<Message> maybeMessage = checkAndGetMessage(value);
         if (maybeMessage.isPresent()){
             if (matchTemplate(maybeMessage.get().getText())){
-                return Optional.of(executeImpl(value));
+                return Optional.of(calculateBotApiMethod(value));
             }
         }
 
@@ -56,9 +59,18 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         return matcher != null && matcher.apply(text);
     }
 
+    private BotApiMethod<?> calculateBotApiMethod(Update value) {
+        StrategyCalculatorSource<String> source = getSource(value);
+        return strategyCalculator.calculate(source);
+    }
+
     protected String calculateChatId(Update value) {
         return value.getMessage().getChatId().toString();
     }
 
-    protected abstract BotApiMethod<?> executeImpl(Update value);
+    protected StrategyCalculatorSource<String> createSource(String code){
+        return new BotStrategyCalculatorSource(code);
+    }
+
+    protected abstract StrategyCalculatorSource<String> getSource(Update value);
 }

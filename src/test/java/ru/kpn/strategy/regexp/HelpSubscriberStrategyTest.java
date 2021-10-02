@@ -1,18 +1,16 @@
 package ru.kpn.strategy.regexp;
 
+import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.i18n.builder.MessageBuilderFactory;
+import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import utils.UpdateInstanceBuilder;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,36 +18,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HelpSubscriberStrategyTest {
 
     private static final Long CHAT_ID = 123L;
+    private static final String COMMAND = "/help";
 
     @Autowired
     private HelpSubscriberStrategy strategy;
 
-    @Autowired
-    private MessageBuilderFactory messageBuilderFactory;
+    private UpdateInstanceBuilder builder;
+    private Decoder decoder;
 
-    @Value("${telegram.tube.strategies.helpSubscriberStrategy.priority}")
-    private Integer expectedPriority;
+    @BeforeEach
+    void setUp() {
+        builder = new UpdateInstanceBuilder().chatId(CHAT_ID);
+        decoder = new Decoder(strategy);
+    }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "helpSubscriberStrategyTest.csv")
-    void shouldCheckText(String command, boolean isPresent) {
-        Update update = new UpdateInstanceBuilder()
-                .chatId(CHAT_ID)
-                .text(command)
-                .build();
-        Optional<BotApiMethod<?>> maybeMethod = strategy.execute(update);
-        boolean maybeMethodPresent = maybeMethod.isPresent();
-        assertThat(maybeMethodPresent).isEqualTo(isPresent);
-        if (maybeMethodPresent){
-            String expectedText = messageBuilderFactory.create("strategy.message.help").build();
-            SendMessage sm = (SendMessage) maybeMethod.get();
-            assertThat(sm.getChatId()).isEqualTo(CHAT_ID.toString());
-            assertThat(sm.getText()).isEqualTo(expectedText);
-        }
+    @CsvFileSource(resources = "shouldCheckStrategyExecution_help.csv")
+    void shouldCheckStrategyExecution(String command, boolean isPresent) {
+        Update update = builder.text(command).build();
+        assertThat(strategy.execute(update).isPresent()).isEqualTo(isPresent);
     }
 
     @Test
-    void shouldCheckGetPriority() {
-        assertThat(expectedPriority).isEqualTo(strategy.getPriority());
+    void shouldCheckAnswer() {
+        BotStrategyCalculatorSource expectedSource = new BotStrategyCalculatorSource("strategy.message.help");
+        expectedSource.add(String.valueOf(CHAT_ID));
+
+        StrategyCalculatorSource<String> source = decoder.getSource(builder.text(COMMAND).build());
+        assertThat(expectedSource).isEqualTo(source);
+    }
+
+    @AllArgsConstructor
+    private static class Decoder extends HelpSubscriberStrategy{
+        private final HelpSubscriberStrategy strategy;
+
+        @Override
+        protected StrategyCalculatorSource<String> getSource(Update value) {
+            return strategy.getSource(value);
+        }
     }
 }

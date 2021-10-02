@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -17,7 +18,7 @@ import java.util.TreeSet;
 public class BotSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
     private final Transmitter<BotApiMethod<?>> transmitter;
-    private final StrategyCalculator<BotApiMethod<?>> defaultStrategyCalculator;
+    private final StrategyCalculator<BotApiMethod<?>, String> defaultStrategyCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
 
     @Override
@@ -41,6 +42,22 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
     private BotApiMethod<?> calculateDefaultAnswer(Update update) {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
-        return defaultStrategyCalculator.calculate("noneSubscriberStrategy.unknownInput", chatId, text);
+
+        StrategyCalculatorSource<String> source = new StrategyCalculatorSource<>() {
+            @Override
+            public String getCode() {
+                return "noneSubscriberStrategy.unknownInput";
+            }
+
+            @Override
+            public void add(Object o) {}
+
+            @Override
+            public Object[] getArgs() {
+                return new Object[]{chatId, text};
+            }
+        };
+
+        return defaultStrategyCalculator.calculate(source);
     }
 }

@@ -28,10 +28,30 @@ public class BotStrategyCalculatorTest {
     void shouldCheckCalculation() {
         Update update = createUpdate();
         SendMessage expectedCalcResult = createExpectedCalcResult(update);
-        SendMessage calcResult = (SendMessage) strategyCalculator.calculate(CODE, update.getMessage().getChatId(), update.getMessage().getText());
+        SendMessage calcResult = (SendMessage) strategyCalculator.calculate(new TextSource());
 
         assertThat(expectedCalcResult.getChatId()).isEqualTo(calcResult.getChatId());
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
+    }
+
+    private static class TextSource implements StrategyCalculatorSource<String>{
+
+
+        @Override
+        public String getCode() {
+            return CODE;
+        }
+
+        @Override
+        public void add(Object o) {}
+
+        @Override
+        public Object[] getArgs() {
+            return new Object[]{
+                    String.valueOf(CHAT_ID),
+                    TEXT
+            };
+        }
     }
 
     private SendMessage createExpectedCalcResult(Update update) {

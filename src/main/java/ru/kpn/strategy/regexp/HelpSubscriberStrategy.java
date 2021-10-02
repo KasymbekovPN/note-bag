@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
@@ -25,11 +25,10 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected BotApiMethod<?> executeImpl(Update value) {
-        return strategyCalculator.calculate("strategy.message.help", getArgs(value));
-    }
+    protected StrategyCalculatorSource<String> getSource(Update value) {
+        StrategyCalculatorSource<String> source = createSource("strategy.message.help");
+        source.add(calculateChatId(value));
 
-    private Object[] getArgs(Update value) {
-        return new Object[]{calculateChatId(value)};
+        return source;
     }
 }

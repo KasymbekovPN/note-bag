@@ -1,21 +1,19 @@
 package ru.kpn.strategy.regexp;
 
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.i18n.builder.MessageBuilderFactory;
+import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import utils.UpdateInstanceBuilder;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,13 +27,11 @@ public class GetStateSubscriberStrategyTest {
     private GetStateSubscriberStrategy strategy;
 
     @Autowired
-    private MessageBuilderFactory messageBuilderFactory;
-
-    @Autowired
     private BotStateService<User, NPBotState> stateService;
 
     private User user;
     private UpdateInstanceBuilder builder;
+    private Decorator decorator;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +40,10 @@ public class GetStateSubscriberStrategyTest {
 
         builder = new UpdateInstanceBuilder()
                 .chatId(CHAT_ID)
-                .from(user);
+                .from(user)
+                .text(COMMAND);
+
+        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -56,23 +55,22 @@ public class GetStateSubscriberStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        Update update = builder.text(COMMAND).build();
-        Optional<BotApiMethod<?>> maybeResult = strategy.execute(update);
-        assertThat(maybeResult).isPresent();
-        String answer = extractAnswer(maybeResult.get());
-        String expectedAnswer = calculateExpectedAnswer(user);
-        assertThat(answer).isEqualTo(expectedAnswer);
+        StrategyCalculatorSource<String> expectedSource = new BotStrategyCalculatorSource("strategy.message.getstate");
+        expectedSource.add(String.valueOf(CHAT_ID));
+        expectedSource.add(String.valueOf(CHAT_ID));
+        expectedSource.add(stateService.get(user));
+
+        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
+        assertThat(expectedSource).isEqualTo(source);
     }
 
-    private String extractAnswer(BotApiMethod<?> botApiMethod) {
-        return ((SendMessage) botApiMethod).getText();
-    }
+    @AllArgsConstructor
+    private static class Decorator extends GetStateSubscriberStrategy{
+        private final GetStateSubscriberStrategy strategy;
 
-    private String calculateExpectedAnswer(User user) {
-        return messageBuilderFactory
-                .create("strategy.message.getstate")
-                .arg(user.getId())
-                .arg(NPBotState.UNKNOWN)
-                .build();
+        @Override
+        protected StrategyCalculatorSource<String> getSource(Update value) {
+            return strategy.getSource(value);
+        }
     }
 }
