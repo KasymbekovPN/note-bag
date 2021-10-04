@@ -3,5 +3,6 @@ package ru.kpn.matcher;
 public enum MatcherType {
     DEFAULT,
     CONSTANT,
-    REGEX
+    REGEX,
+    MULTI_REGEX
 }

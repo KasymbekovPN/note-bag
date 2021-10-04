@@ -7,10 +7,10 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConstantSubscriberStrategyMatcherTest {
+public class ConstantMatcherTest {
 
-    private final Function<String, Boolean> falseMatcher = new ConstantSubscriberStrategyMatcher(false);
-    private final Function<String, Boolean> trueMatcher = new ConstantSubscriberStrategyMatcher(true);
+    private final Function<String, Boolean> falseMatcher = new ConstantMatcher(false);
+    private final Function<String, Boolean> trueMatcher = new ConstantMatcher(true);
 
     @RepeatedTest(100)
     void shouldCheckMatchingForFalse() {

@@ -7,12 +7,12 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RegexSubscriberStrategyMatcherTest {
+public class RegexMatcherTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "regExpSubscriberStrategyMatcherTestData.csv", delimiter = ' ')
     void shouldDoMatching(String template, String text, Boolean expectedResult) {
-        Function<String, Boolean> matcher = new RegexSubscriberStrategyMatcher(template);
+        Function<String, Boolean> matcher = new RegexMatcher(template);
         assertThat(matcher.apply(text)).isEqualTo(expectedResult);
     }
 }

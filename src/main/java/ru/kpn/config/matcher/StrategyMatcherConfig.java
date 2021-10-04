@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.kpn.matcher.MatcherType;
-import ru.kpn.matcher.SubscriberStrategyMatcherFactory;
+import ru.kpn.matcher.MatcherFactory;
 
 import java.util.function.Function;
 
@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class StrategyMatcherConfig {
 
     @Autowired
-    private SubscriberStrategyMatcherFactory<String, Boolean> factory;
+    private MatcherFactory<String, Boolean> factory;
 
     @Bean
     @Qualifier("alwaysTrueStrategyMatcher")

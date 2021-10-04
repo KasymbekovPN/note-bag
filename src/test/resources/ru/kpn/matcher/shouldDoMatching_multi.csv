@@ -1,0 +1,3 @@
+/help,/reset,/help,true
+/help,/reset,/reset,true
+/help,/reset,text,false
