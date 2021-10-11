@@ -23,6 +23,9 @@ telegram:
       getBufferStatusStrategy:
         priority: 3
         template: /get buffer status
+      getCurrentBufferDatumStrategy:
+        priority: 4
+        template: /get current buffer datum
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

@@ -45,4 +45,10 @@ public class StrategyMatcherConfig {
     public Function<String, Boolean> getBufferStatusStrategyMatcher(@Value("${telegram.tube.strategies.getBufferStatusStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
+
+    @Bean
+    @Qualifier("getCurrentBufferDatumStrategyMatcher")
+    public Function<String, Boolean> getCurrentBufferDatumStrategyMatcher(@Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.template}") String template){
+        return factory.create(MatcherType.REGEX, template);
+    }
 }

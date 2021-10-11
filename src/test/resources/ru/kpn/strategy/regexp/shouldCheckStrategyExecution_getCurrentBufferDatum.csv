@@ -1,0 +1,3 @@
+/get current buffer datum,true
+get current buffer datum,false
+get-current-buffer-datum,false
