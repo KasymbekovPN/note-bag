@@ -51,4 +51,10 @@ public class StrategyMatcherConfig {
     public Function<String, Boolean> getCurrentBufferDatumStrategyMatcher(@Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
+
+    @Bean
+    @Qualifier("skipBufferDatumStrategyMatcher")
+    public Function<String, Boolean> getSkipBufferDatumStrategyMatcher(@Value("${telegram.tube.strategies.skipBufferDatumStrategy.template}") String template){
+        return factory.create(MatcherType.REGEX, template);
+    }
 }

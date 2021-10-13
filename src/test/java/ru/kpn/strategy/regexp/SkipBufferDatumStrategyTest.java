@@ -1,5 +1,6 @@
 package ru.kpn.strategy.regexp;
 
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,22 +19,21 @@ import utils.UpdateInstanceBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class GetCurrentBufferDatumTest {
+public class SkipBufferDatumStrategyTest {
 
     private static final Long ID = 123L;
-    private static final String COMMAND = "/get current buffer datum";
-    private static final String TEXT = "some text";
+    private static final String COMMAND = "/skip buffer datum";
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
     @Autowired
-    private GetCurrentBufferDatum strategy;
+    private SkipBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
+    private BotStrategyCalculatorSource ifEmptyAnswer;
+    private BotStrategyCalculatorSource ifNotEmptyAnswer;
     private Decorator decorator;
-    private BotStrategyCalculatorSource ifExistAnswer;
-    private BotStrategyCalculatorSource ifNotExistAnswer;
 
     @BeforeEach
     void setUp() {
@@ -45,46 +45,41 @@ public class GetCurrentBufferDatumTest {
                 .from(user)
                 .text(COMMAND);
 
-        String sid = String.valueOf(ID);
-        ifExistAnswer = new BotStrategyCalculatorSource("strategy.message.getCurrentBufferDatum.exist");
-        ifExistAnswer.add(sid);
-        ifExistAnswer.add(sid);
-        ifExistAnswer.add(TEXT);
+        ifEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.skipBufferDatum.isEmpty");
+        ifEmptyAnswer.add(String.valueOf(ID));
 
-        ifNotExistAnswer = new BotStrategyCalculatorSource("strategy.message.getCurrentBufferDatum.notExist");
-        ifNotExistAnswer.add(sid);
-        ifNotExistAnswer.add(sid);
+        ifNotEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.skipBufferDatum.isNotEmpty");
+        ifNotEmptyAnswer.add(String.valueOf(ID));
+        ifNotEmptyAnswer.add(1);
 
         decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckStrategyExecution_getCurrentBufferDatum.csv")
+    @CsvFileSource(resources = "shouldCheckStrategyExecution_skipBufferDatum.csv")
     void shouldCheckStrategyExecution(String command, Boolean expectedIsPresent) {
         Update update = builder.text(command).build();
         assertThat(strategy.execute(update).isPresent()).isEqualTo(expectedIsPresent);
     }
 
     @Test
-    void shouldCheckAnswerIfCurrentDatumNotExist() {
+    void shouldCheckAnswerIfBufferEmpty() {
         StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifNotExistAnswer).isEqualTo(source);
+        assertThat(ifEmptyAnswer).isEqualTo(source);
     }
 
     @Test
-    void shouldCheckAnswerIfCurrentDatumExist() {
+    void shouldCheckAnswerIfBufferNotEmpty() {
+        botBuffer.add(ID, new TestBufferDatum());
         botBuffer.add(ID, new TestBufferDatum());
         StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifExistAnswer).isEqualTo(source);
+        assertThat(ifNotEmptyAnswer).isEqualTo(source);
     }
 
-    private static class Decorator extends GetCurrentBufferDatum{
+    @AllArgsConstructor
+    private static class Decorator extends SkipBufferDatumStrategy {
 
-        private final GetCurrentBufferDatum strategy;
-
-        public Decorator(GetCurrentBufferDatum strategy) {
-            this.strategy = strategy;
-        }
+        private final SkipBufferDatumStrategy strategy;
 
         @Override
         public StrategyCalculatorSource<String> getSource(Update value) {
@@ -92,7 +87,7 @@ public class GetCurrentBufferDatumTest {
         }
     }
 
-    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String>{
+    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String> {
         @Override
         public BufferDatumType getType() {
             return null;
@@ -100,7 +95,9 @@ public class GetCurrentBufferDatumTest {
 
         @Override
         public String getContent() {
-            return TEXT;
+            return null;
         }
     }
+
+
 }

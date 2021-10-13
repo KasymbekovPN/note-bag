@@ -11,44 +11,39 @@ import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Component
-public class GetCurrentBufferDatum extends BaseSubscriberStrategy {
+public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.priority}")
+    @Value("${telegram.tube.strategies.skipBufferDatumStrategy.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
     @Autowired
-    @Qualifier("getCurrentBufferDatumStrategyMatcher")
+    @Qualifier("skipBufferDatumStrategyMatcher")
     public void setMatcher(Function<String, Boolean> matcher) {
         this.matcher = matcher;
     }
 
     @Override
     protected StrategyCalculatorSource<String> getSource(Update value) {
-        String chatId = calculateChatId(value);
-        Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 
-        StrategyCalculatorSource<String> source = createSource(
-                maybeDatum.isPresent()
-                        ? "strategy.message.getCurrentBufferDatum.exist"
-                        : "strategy.message.getCurrentBufferDatum.notExist"
+        Long id = value.getMessage().getChatId();
+        int bufferSize = botBuffer.getSize(id);
+        StrategyCalculatorSource<String> source = createSource(bufferSize == 0
+                ? "strategy.message.skipBufferDatum.isEmpty"
+                : "strategy.message.skipBufferDatum.isNotEmpty"
         );
-        source.add(chatId);
-        source.add(chatId);
-        maybeDatum.ifPresent(datum -> source.add(datum.getContent()));
+        source.add(calculateChatId(value));
+        if (bufferSize > 0){
+            source.add(bufferSize - 1);
+        }
 
         return source;
-    }
-
-    private Optional<BufferDatum<BufferDatumType, String>> extractDatum(Update value) {
-        return botBuffer.peek(value.getMessage().getChatId());
     }
 }
