@@ -24,37 +24,50 @@ public class StrategyMatcherConfig {
 
     @Bean
     @Qualifier("helpStrategyMatcher")
-    public Function<String, Boolean> helpStrategyMatcher(@Value("${telegram.tube.strategies.helpSubscriberStrategy.template}") String template){
+    public Function<String, Boolean> helpStrategyMatcher(
+            @Value("${telegram.tube.strategies.helpSubscriberStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 
     @Bean
     @Qualifier("getStateStrategyMatcher")
-    public Function<String, Boolean> getStateStrategyMatcher(@Value("${telegram.tube.strategies.getStateSubscriberStrategy.template}") String template){
+    public Function<String, Boolean> getStateStrategyMatcher(
+            @Value("${telegram.tube.strategies.getStateSubscriberStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 
     @Bean
     @Qualifier("resetStrategyMatcher")
-    public Function<String, Boolean> resetStrategyMatcher(@Value("${telegram.tube.strategies.resetSubscriberStrategy.template}") String template){
+    public Function<String, Boolean> resetStrategyMatcher(
+            @Value("${telegram.tube.strategies.resetSubscriberStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 
     @Bean
     @Qualifier("getBufferStatusStrategyMatcher")
-    public Function<String, Boolean> getBufferStatusStrategyMatcher(@Value("${telegram.tube.strategies.getBufferStatusStrategy.template}") String template){
+    public Function<String, Boolean> getBufferStatusStrategyMatcher(
+            @Value("${telegram.tube.strategies.getBufferStatusStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 
     @Bean
     @Qualifier("getCurrentBufferDatumStrategyMatcher")
-    public Function<String, Boolean> getCurrentBufferDatumStrategyMatcher(@Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.template}") String template){
+    public Function<String, Boolean> getCurrentBufferDatumStrategyMatcher(
+            @Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 
     @Bean
     @Qualifier("skipBufferDatumStrategyMatcher")
-    public Function<String, Boolean> getSkipBufferDatumStrategyMatcher(@Value("${telegram.tube.strategies.skipBufferDatumStrategy.template}") String template){
+    public Function<String, Boolean> getSkipBufferDatumStrategyMatcher(
+            @Value("${telegram.tube.strategies.skipBufferDatumStrategy.template}") String template){
+        return factory.create(MatcherType.REGEX, template);
+    }
+
+    @Bean
+    @Qualifier("clearBufferStrategyMatcher")
+    public Function<String, Boolean> clearBufferStrategyMatcher(
+            @Value("${telegram.tube.strategies.clearBufferStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
     }
 }

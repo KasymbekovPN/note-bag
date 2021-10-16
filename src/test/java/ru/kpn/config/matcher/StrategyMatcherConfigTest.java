@@ -47,6 +47,10 @@ public class StrategyMatcherConfigTest {
     @Qualifier("skipBufferDatumStrategyMatcher")
     private Function<String, Boolean> skipBufferDatumStrategyMatcher;
 
+    @Autowired
+    @Qualifier("clearBufferStrategyMatcher")
+    private Function<String, Boolean> clearBufferStrategyMatcher;
+
     private final Random random = new Random();
 
     @RepeatedTest(100)
@@ -88,5 +92,11 @@ public class StrategyMatcherConfigTest {
     @CsvFileSource(resources = "shouldCheckSkipBufferDatumStrategyMatcher.csv")
     public void shouldCheckSkipBufferDatumStrategyMatcher(String text, Boolean expectedResult) {
         assertThat(skipBufferDatumStrategyMatcher.apply(text)).isEqualTo(expectedResult);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckClearBufferStrategyMatcher.csv")
+    public void shouldCheckClearBufferStrategyMatcher(String text, Boolean expectedResult){
+        assertThat(clearBufferStrategyMatcher.apply(text)).isEqualTo(expectedResult);
     }
 }

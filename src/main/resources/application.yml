@@ -29,6 +29,10 @@ telegram:
       skipBufferDatumStrategy:
         priority: 5
         template: /skip buffer datum
+      clearBufferStrategy:
+        priority: 6
+        template: /clr buffer
+
 
 
 mongo:
