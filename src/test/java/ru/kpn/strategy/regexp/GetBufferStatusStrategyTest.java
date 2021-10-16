@@ -13,6 +13,7 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +33,6 @@ public class GetBufferStatusStrategyTest {
     private UpdateInstanceBuilder builder;
     private BotStrategyCalculatorSource ifEmptyAnswer;
     private BotStrategyCalculatorSource ifNotEmptyAnswer;
-    private Decorator decorator;
 
     @BeforeEach
     void setUp() {
@@ -52,8 +52,6 @@ public class GetBufferStatusStrategyTest {
         ifNotEmptyAnswer.add(String.valueOf(CHAT_ID));
         ifNotEmptyAnswer.add(String.valueOf(CHAT_ID));
         ifNotEmptyAnswer.add(1);
-
-        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -65,40 +63,14 @@ public class GetBufferStatusStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifEmptyAnswer).isEqualTo(source);
+        final StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
         botBuffer.add(CHAT_ID, new TestBufferDatum());
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifNotEmptyAnswer).isEqualTo(source);
-    }
-
-    private static class Decorator extends GetBufferStatusStrategy{
-
-        private final GetBufferStatusStrategy strategy;
-
-        public Decorator(GetBufferStatusStrategy strategy) {
-            this.strategy = strategy;
-        }
-
-        @Override
-        public StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
-    }
-
-    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String>{
-        @Override
-        public BufferDatumType getType() {
-            return null;
-        }
-
-        @Override
-        public String getContent() {
-            return null;
-        }
+        final StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
 }

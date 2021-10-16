@@ -1,7 +1,5 @@
 package ru.kpn.strategy.regexp;
 
-
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +38,6 @@ public class ResetSubscriberStrategyTest {
 
     private User user;
     private UpdateInstanceBuilder builder;
-    private Decoder decoder;
 
     @BeforeEach
     void setUp() {
@@ -50,8 +47,6 @@ public class ResetSubscriberStrategyTest {
         builder = new UpdateInstanceBuilder()
                 .chatId(ID)
                 .from(user);
-
-        decoder = new Decoder(strategy);
     }
 
     @ParameterizedTest
@@ -67,8 +62,8 @@ public class ResetSubscriberStrategyTest {
         expectedSource.add(String.valueOf(ID));
         expectedSource.add(String.valueOf(ID));
 
-        StrategyCalculatorSource<String> source = decoder.getSource(builder.text(COMMAND).build());
-        assertThat(expectedSource).isEqualTo(source);
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
+        assertThat(expectedSource).isEqualTo(answer);
     }
 
     @Test
@@ -89,15 +84,5 @@ public class ResetSubscriberStrategyTest {
     @AfterEach
     void tearDown() {
         service.deleteAll();
-    }
-
-    @AllArgsConstructor
-    private static class Decoder extends ResetSubscriberStrategy{
-        private final ResetSubscriberStrategy strategy;
-
-        @Override
-        protected StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
     }
 }

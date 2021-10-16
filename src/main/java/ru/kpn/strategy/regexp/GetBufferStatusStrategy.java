@@ -31,7 +31,7 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         int bufferSize = getBufferSize(value);
         String chatId = calculateChatId(value);
         StrategyCalculatorSource<String> source = createSource(

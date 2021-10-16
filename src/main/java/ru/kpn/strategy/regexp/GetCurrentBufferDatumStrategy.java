@@ -32,7 +32,7 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         String chatId = calculateChatId(value);
         Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 

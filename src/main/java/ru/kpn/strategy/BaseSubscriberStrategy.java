@@ -60,7 +60,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
-        StrategyCalculatorSource<String> source = getSource(value);
+        StrategyCalculatorSource<String> source = runAndGetAnswer(value);
         return strategyCalculator.calculate(source);
     }
 
@@ -71,6 +71,4 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     protected StrategyCalculatorSource<String> createSource(String code){
         return new BotStrategyCalculatorSource(code);
     }
-
-    protected abstract StrategyCalculatorSource<String> getSource(Update value);
 }

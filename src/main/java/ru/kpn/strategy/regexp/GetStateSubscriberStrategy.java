@@ -31,7 +31,7 @@ public class GetStateSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         StrategyCalculatorSource<String> source = createSource("strategy.message.getstate");
         source.add(calculateChatId(value));
         source.add(calculateChatId(value));

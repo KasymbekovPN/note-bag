@@ -1,6 +1,5 @@
 package ru.kpn.strategy.regexp;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +13,7 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,6 @@ public class ClearBufferStrategyTest {
 
     private UpdateInstanceBuilder builder;
     private BotStrategyCalculatorSource expectedAnswer;
-    private Decorator decorator;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +45,6 @@ public class ClearBufferStrategyTest {
 
         expectedAnswer = new BotStrategyCalculatorSource("strategy.message.clearBuffer.isCleaned");
         expectedAnswer.add(String.valueOf(ID));
-
-        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -59,38 +56,15 @@ public class ClearBufferStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(expectedAnswer).isEqualTo(source);
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(expectedAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckClearing() {
         botBuffer.add(ID, new TestBufferDatum());
-        decorator.getSource(builder.build());
+        strategy.runAndGetAnswer(builder.build());
         int size = botBuffer.getSize(ID);
         assertThat(size).isZero();
     }
-
-    @AllArgsConstructor
-    private static class Decorator extends ClearBufferStrategy{
-        private ClearBufferStrategy strategy;
-
-        @Override
-        protected StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
-    }
-
-    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String>{
-        @Override
-        public BufferDatumType getType() {
-            return null;
-        }
-
-        @Override
-        public String getContent() {
-            return null;
-        }
-    }
-
 }

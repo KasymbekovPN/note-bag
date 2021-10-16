@@ -25,7 +25,7 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         StrategyCalculatorSource<String> source = createSource("strategy.message.help");
         source.add(calculateChatId(value));
 

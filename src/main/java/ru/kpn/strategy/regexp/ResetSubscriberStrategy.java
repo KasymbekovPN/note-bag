@@ -36,9 +36,8 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
         this.matcher = matcher;
     }
 
-    // TODO: 10.10.2021 rename method
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);
         StrategyCalculatorSource<String> source = createSource("strategy.message.reset");
@@ -55,12 +54,10 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
         resetInDB(user, resetState);
     }
 
-    // TODO: 10.10.2021 it maybe strategy
     private void resetInService(User user, NPBotState state) {
         stateService.set(user, NPBotState.RESET);
     }
 
-    // TODO: 10.10.2021 it maybe strategy
     private void resetInDB(User user, NPBotState state) {
         Optional<UserProfileEntity> maybeUser = service.getById(user.getId());
         UserProfileEntity userProfileEntity = maybeUser.orElseGet(() -> UserProfileEntity.create(user));

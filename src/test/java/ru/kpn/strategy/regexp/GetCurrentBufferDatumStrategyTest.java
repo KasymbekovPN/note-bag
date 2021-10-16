@@ -13,6 +13,7 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +32,6 @@ public class GetCurrentBufferDatumStrategyTest {
     private GetCurrentBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private Decorator decorator;
     private BotStrategyCalculatorSource ifExistAnswer;
     private BotStrategyCalculatorSource ifNotExistAnswer;
 
@@ -54,8 +54,6 @@ public class GetCurrentBufferDatumStrategyTest {
         ifNotExistAnswer = new BotStrategyCalculatorSource("strategy.message.getCurrentBufferDatum.notExist");
         ifNotExistAnswer.add(sid);
         ifNotExistAnswer.add(sid);
-
-        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -67,40 +65,14 @@ public class GetCurrentBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfCurrentDatumNotExist() {
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifNotExistAnswer).isEqualTo(source);
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifNotExistAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfCurrentDatumExist() {
-        botBuffer.add(ID, new TestBufferDatum());
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifExistAnswer).isEqualTo(source);
-    }
-
-    private static class Decorator extends GetCurrentBufferDatumStrategy {
-
-        private final GetCurrentBufferDatumStrategy strategy;
-
-        public Decorator(GetCurrentBufferDatumStrategy strategy) {
-            this.strategy = strategy;
-        }
-
-        @Override
-        public StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
-    }
-
-    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String>{
-        @Override
-        public BufferDatumType getType() {
-            return null;
-        }
-
-        @Override
-        public String getContent() {
-            return TEXT;
-        }
+        botBuffer.add(ID, new TestBufferDatum(TEXT));
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifExistAnswer).isEqualTo(answer);
     }
 }

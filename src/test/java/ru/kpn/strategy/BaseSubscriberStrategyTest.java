@@ -95,11 +95,6 @@ public class BaseSubscriberStrategyTest {
         public boolean matchTemplate(String text) {
             return matcher != null && matcher.apply(text);
         }
-
-        @Override
-        protected StrategyCalculatorSource<String> getSource(Update value) {
-            return null;
-        }
     }
 
     private static class TestMatcher implements Function<String, Boolean>{

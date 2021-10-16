@@ -31,8 +31,7 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
-
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         Long id = value.getMessage().getChatId();
         int bufferSize = botBuffer.getSize(id);
         StrategyCalculatorSource<String> source = createSource(bufferSize == 0

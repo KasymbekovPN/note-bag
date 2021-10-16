@@ -31,7 +31,7 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    protected StrategyCalculatorSource<String> getSource(Update value) {
+    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         botBuffer.clear(value.getMessage().getChatId());
         return calculateAnswer(value);
     }

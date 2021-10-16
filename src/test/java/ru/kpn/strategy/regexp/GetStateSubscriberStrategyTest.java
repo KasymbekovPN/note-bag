@@ -1,6 +1,5 @@
 package ru.kpn.strategy.regexp;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class GetStateSubscriberStrategyTest {
 
-    private static final Long CHAT_ID = 123L;
+    private static final Long ID = 123L;
     private static final String COMMAND = "/getstate";
 
     @Autowired
@@ -31,19 +30,16 @@ public class GetStateSubscriberStrategyTest {
 
     private User user;
     private UpdateInstanceBuilder builder;
-    private Decorator decorator;
 
     @BeforeEach
     void setUp() {
         user = new User();
-        user.setId(CHAT_ID);
+        user.setId(ID);
 
         builder = new UpdateInstanceBuilder()
-                .chatId(CHAT_ID)
+                .chatId(ID)
                 .from(user)
                 .text(COMMAND);
-
-        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -56,21 +52,11 @@ public class GetStateSubscriberStrategyTest {
     @Test
     void shouldCheckAnswer() {
         StrategyCalculatorSource<String> expectedSource = new BotStrategyCalculatorSource("strategy.message.getstate");
-        expectedSource.add(String.valueOf(CHAT_ID));
-        expectedSource.add(String.valueOf(CHAT_ID));
+        expectedSource.add(String.valueOf(ID));
+        expectedSource.add(String.valueOf(ID));
         expectedSource.add(stateService.get(user));
 
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(expectedSource).isEqualTo(source);
-    }
-
-    @AllArgsConstructor
-    private static class Decorator extends GetStateSubscriberStrategy{
-        private final GetStateSubscriberStrategy strategy;
-
-        @Override
-        protected StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(expectedSource).isEqualTo(answer);
     }
 }

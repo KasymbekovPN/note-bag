@@ -1,6 +1,5 @@
 package ru.kpn.strategy.regexp;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,19 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class HelpSubscriberStrategyTest {
 
-    private static final Long CHAT_ID = 123L;
+    private static final Long ID = 123L;
     private static final String COMMAND = "/help";
 
     @Autowired
     private HelpSubscriberStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private Decoder decoder;
 
     @BeforeEach
     void setUp() {
-        builder = new UpdateInstanceBuilder().chatId(CHAT_ID);
-        decoder = new Decoder(strategy);
+        builder = new UpdateInstanceBuilder().chatId(ID);
     }
 
     @ParameterizedTest
@@ -42,19 +39,9 @@ public class HelpSubscriberStrategyTest {
     @Test
     void shouldCheckAnswer() {
         BotStrategyCalculatorSource expectedSource = new BotStrategyCalculatorSource("strategy.message.help");
-        expectedSource.add(String.valueOf(CHAT_ID));
+        expectedSource.add(String.valueOf(ID));
 
-        StrategyCalculatorSource<String> source = decoder.getSource(builder.text(COMMAND).build());
-        assertThat(expectedSource).isEqualTo(source);
-    }
-
-    @AllArgsConstructor
-    private static class Decoder extends HelpSubscriberStrategy{
-        private final HelpSubscriberStrategy strategy;
-
-        @Override
-        protected StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
+        assertThat(expectedSource).isEqualTo(answer);
     }
 }

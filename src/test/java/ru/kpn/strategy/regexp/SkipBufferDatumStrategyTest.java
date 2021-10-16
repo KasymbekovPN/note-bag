@@ -1,6 +1,5 @@
 package ru.kpn.strategy.regexp;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +13,7 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +33,6 @@ public class SkipBufferDatumStrategyTest {
     private UpdateInstanceBuilder builder;
     private BotStrategyCalculatorSource ifEmptyAnswer;
     private BotStrategyCalculatorSource ifNotEmptyAnswer;
-    private Decorator decorator;
 
     @BeforeEach
     void setUp() {
@@ -51,8 +50,6 @@ public class SkipBufferDatumStrategyTest {
         ifNotEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.skipBufferDatum.isNotEmpty");
         ifNotEmptyAnswer.add(String.valueOf(ID));
         ifNotEmptyAnswer.add(1);
-
-        decorator = new Decorator(strategy);
     }
 
     @ParameterizedTest
@@ -64,40 +61,15 @@ public class SkipBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifEmptyAnswer).isEqualTo(source);
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
-        botBuffer.add(ID, new TestBufferDatum());
-        botBuffer.add(ID, new TestBufferDatum());
-        StrategyCalculatorSource<String> source = decorator.getSource(builder.build());
-        assertThat(ifNotEmptyAnswer).isEqualTo(source);
+        botBuffer.add(ID, new TestBufferDatum("1"));
+        botBuffer.add(ID, new TestBufferDatum("2"));
+        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
-
-    @AllArgsConstructor
-    private static class Decorator extends SkipBufferDatumStrategy {
-
-        private final SkipBufferDatumStrategy strategy;
-
-        @Override
-        public StrategyCalculatorSource<String> getSource(Update value) {
-            return strategy.getSource(value);
-        }
-    }
-
-    private static class TestBufferDatum implements BufferDatum<BufferDatumType, String> {
-        @Override
-        public BufferDatumType getType() {
-            return null;
-        }
-
-        @Override
-        public String getContent() {
-            return null;
-        }
-    }
-
-
 }
