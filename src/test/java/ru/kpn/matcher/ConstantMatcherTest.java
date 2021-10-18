@@ -1,6 +1,8 @@
 package ru.kpn.matcher;
 
 import org.junit.jupiter.api.RepeatedTest;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import utils.UpdateInstanceBuilder;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -9,18 +11,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstantMatcherTest {
 
-    private final Function<String, Boolean> falseMatcher = new ConstantMatcher(false);
-    private final Function<String, Boolean> trueMatcher = new ConstantMatcher(true);
+    private static final Random RANDOM = new Random();
+
+    private final Function<Update, Boolean> falseMatcher = new ConstantMatcher(false);
+    private final Function<Update, Boolean> trueMatcher = new ConstantMatcher(true);
 
     @RepeatedTest(100)
     void shouldCheckMatchingForFalse() {
-        Random random = new Random();
-        assertThat(falseMatcher.apply(String.valueOf(random.nextInt()))).isFalse();
+        Update update = new UpdateInstanceBuilder().text(String.valueOf(RANDOM.nextInt())).build();
+        assertThat(falseMatcher.apply(update)).isFalse();
     }
 
     @RepeatedTest(100)
     void shouldCheckMatchingForTrue() {
-        Random random = new Random();
-        assertThat(trueMatcher.apply(String.valueOf(random.nextInt()))).isTrue();
+        Update update = new UpdateInstanceBuilder().text(String.valueOf(RANDOM.nextInt())).build();
+        assertThat(trueMatcher.apply(update)).isTrue();
     }
 }

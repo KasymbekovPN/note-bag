@@ -1,9 +1,10 @@
 package ru.kpn.matcher;
 
+import org.telegram.telegrambots.meta.api.objects.Update;
+
 import java.util.function.Function;
 
-class ConstantMatcher implements Function<String, Boolean> {
-
+public class ConstantMatcher implements Function<Update, Boolean> {
     private final boolean result;
 
     public ConstantMatcher(boolean result) {
@@ -11,7 +12,7 @@ class ConstantMatcher implements Function<String, Boolean> {
     }
 
     @Override
-    public Boolean apply(String value) {
+    public Boolean apply(Update update) {
         return result;
     }
 }
