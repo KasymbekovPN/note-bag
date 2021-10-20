@@ -1,5 +1,6 @@
 package ru.kpn.matcher;
 
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashSet;
@@ -19,11 +20,24 @@ public class MultiRegexMatcher implements Function<Update, Boolean> {
 
     @Override
     public Boolean apply(Update update) {
-        for (Pattern pattern : patterns) {
-            if (pattern.matcher(update.getMessage().getText()).matches()){
-                return true;
+        if (checkUpdate(update)){
+            for (Pattern pattern : patterns) {
+                if (pattern.matcher(update.getMessage().getText()).matches()){
+                    return true;
+                }
             }
         }
+        return false;
+    }
+
+    // TODO: 20.10.2021 to super?
+    private Boolean checkUpdate(Update update) {
+        if (update.hasMessage()){
+            Message message = update.getMessage();
+            return message.getChat() != null && message.getChatId() != null &&
+                    message.getFrom() != null && message.getText() != null;
+        }
+
         return false;
     }
 }

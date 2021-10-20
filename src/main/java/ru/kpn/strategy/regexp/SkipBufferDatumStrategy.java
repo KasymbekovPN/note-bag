@@ -26,7 +26,7 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     @Qualifier("skipBufferDatumStrategyMatcher")
-    public void setMatcher(Function<String, Boolean> matcher) {
+    public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }
 

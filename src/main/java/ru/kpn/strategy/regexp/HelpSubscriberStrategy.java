@@ -20,7 +20,7 @@ public class HelpSubscriberStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     @Qualifier("helpStrategyMatcher")
-    public void setMatcher(Function<String, Boolean> matcher){
+    public void setMatcher(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }
 

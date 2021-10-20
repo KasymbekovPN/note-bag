@@ -1,6 +1,6 @@
 package ru.kpn.config.matcher;
 
-import lombok.SneakyThrows;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,14 +11,20 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-// TODO: 18.10.2021 test it by instance types 
 @Configuration
 public class MatcherFactoryConfig {
 
-    // TODO: 18.10.2021  throw bean creation exception
-    @SneakyThrows
     @Bean
     public MatcherFactory<Update, Boolean> matcherFactory(){
+        try {
+            return createFactory();
+        } catch (Exception e) {
+            // TODO: 20.10.2021 translate message ?
+            throw new BeanCreationException(e.getMessage());
+        }
+    }
+
+    private MatcherFactory<Update, Boolean> createFactory() throws Exception {
         return MatcherFactoryImpl.builder()
                 .creator(MatcherType.CONSTANT, new ConstantMatcherCreator())
                 .creator(MatcherType.REGEX, new RegexMatcherCreator())
