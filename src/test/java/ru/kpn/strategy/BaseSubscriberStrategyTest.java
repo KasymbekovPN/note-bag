@@ -5,6 +5,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Random;
@@ -68,6 +69,11 @@ public class BaseSubscriberStrategyTest {
 
         public boolean matchTemplate(Update text) {
             return matcher != null && matcher.apply(text);
+        }
+
+        @Override
+        public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+            return null;
         }
     }
 

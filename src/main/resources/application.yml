@@ -32,8 +32,9 @@ telegram:
       clearBufferStrategy:
         priority: 6
         template: /clr buffer
-
-
+      simpleNoteStrategy:
+        priority: 7
+        templates: /simple note .*,/sn .*
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

@@ -40,7 +40,6 @@ public class StrategyMatcherConfigTest {
     @Qualifier("getBufferStatusStrategyMatcher")
     private Function<Update, Boolean> getBufferStatusStrategyMatcher;
 
-
     @Autowired
     @Qualifier("getCurrentBufferDatumStrategyMatcher")
     private Function<Update, Boolean> getCurrentBufferDatumStrategyMatcher;
@@ -52,6 +51,10 @@ public class StrategyMatcherConfigTest {
     @Autowired
     @Qualifier("clearBufferStrategyMatcher")
     private Function<Update, Boolean> clearBufferStrategyMatcher;
+
+    @Autowired
+    @Qualifier("simpleNoteStrategyMatcher")
+    private Function<Update, Boolean> simpleNoteStrategyMatcher;
 
     private final Random random = new Random();
 
@@ -101,6 +104,12 @@ public class StrategyMatcherConfigTest {
     @CsvFileSource(resources = "shouldCheckClearBufferStrategyMatcher.csv")
     public void shouldCheckClearBufferStrategyMatcher(String text, Boolean expectedResult){
         assertThat(clearBufferStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "shouldCheckSimpleNoteStrategyMatcher.csv")
+    public void shouldCheckSimpleNoteStrategyMatcher(String text, Boolean expectedResult){
+        assertThat(simpleNoteStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
     }
 
     private Update createUpdate(String text) {

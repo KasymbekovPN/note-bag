@@ -1,0 +1,6 @@
+/simple note text,text,true
+/simple note text,other text,false
+/sn text,text,true
+/sn text,other text,false
+sn,"",true
+sn,other text,false

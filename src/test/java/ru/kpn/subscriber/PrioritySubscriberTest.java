@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.Strategy;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import utils.UpdateInstanceBuilder;
 
 import java.util.*;
@@ -67,6 +68,11 @@ public class PrioritySubscriberTest {
                 return Optional.of(new SendMessage("123", "text"));
             }
             return Optional.empty();
+        }
+
+        @Override
+        public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+            return null;
         }
     }
 

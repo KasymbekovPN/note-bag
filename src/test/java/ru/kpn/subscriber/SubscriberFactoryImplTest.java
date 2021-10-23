@@ -9,6 +9,7 @@ import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.Strategy;
+import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;
@@ -76,6 +77,11 @@ public class SubscriberFactoryImplTest {
         @Override
         public Integer getPriority() {
             return Strategy.super.getPriority();
+        }
+
+        @Override
+        public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+            return null;
         }
     }
 

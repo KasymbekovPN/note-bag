@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.MatcherType;
 import ru.kpn.matcher.MatcherFactory;
 
+import java.util.List;
 import java.util.function.Function;
 
 @Configuration
@@ -70,5 +71,12 @@ public class StrategyMatcherConfig {
     public Function<Update, Boolean> clearBufferStrategyMatcher(
             @Value("${telegram.tube.strategies.clearBufferStrategy.template}") String template){
         return factory.create(MatcherType.REGEX, template);
+    }
+
+    @Bean
+    @Qualifier("simpleNoteStrategyMatcher")
+    public Function<Update, Boolean> simpleNoteStrategyMartcher(
+            @Value("${telegram.tube.strategies.simpleNoteStrategy.templates}") List<String> templates){
+        return  factory.create(MatcherType.MULTI_REGEX, templates.toArray());
     }
 }

@@ -1,0 +1,9 @@
+/simple note note0,true
+/simple note note1,true
+/simple note note2,true
+/sn note0,true
+/sn note1,true
+/sn note2,true
+simple note note0,false
+simple note note1,false
+simple note note2,false
