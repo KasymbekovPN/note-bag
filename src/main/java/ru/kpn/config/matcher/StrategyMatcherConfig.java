@@ -79,4 +79,11 @@ public class StrategyMatcherConfig {
             @Value("${telegram.tube.strategies.simpleNoteStrategy.templates}") List<String> templates){
         return  factory.create(MatcherType.MULTI_REGEX, templates.toArray());
     }
+
+    @Bean
+    @Qualifier("linkStrategyMatcher")
+    public Function<Update, Boolean> linkStrategyMartcher(
+            @Value("${telegram.tube.strategies.linkStrategy.template}") String template){
+        return  factory.create(MatcherType.REGEX, template);
+    }
 }

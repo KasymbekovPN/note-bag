@@ -35,6 +35,9 @@ telegram:
       simpleNoteStrategy:
         priority: 7
         templates: /simple note .*,/sn .*
+      linkStrategy:
+        priority: 8
+        template: ^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

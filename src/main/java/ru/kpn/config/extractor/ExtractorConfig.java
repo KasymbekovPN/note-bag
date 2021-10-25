@@ -9,12 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ByPrefixExtractor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 
-// TODO: 23.10.2021 create extractors through factory
 @Configuration
 public class ExtractorConfig {
 

@@ -13,6 +13,7 @@ import java.util.function.Function;
 @ToString
 public class ByPrefixExtractor implements Function<Update, String> {
 
+    // TODO: 25.10.2021 must be set
     private final List<String> prefixes;
 
     @Override

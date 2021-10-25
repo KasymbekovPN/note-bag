@@ -1,19 +1,26 @@
 package ru.kpn.config.matcher;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.matcher.MatcherType;
+import ru.kpn.matcher.MultiRegexMatcher;
+import ru.kpn.matcher.RegexMatcher;
 import utils.UpdateInstanceBuilder;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,6 +62,10 @@ public class StrategyMatcherConfigTest {
     @Autowired
     @Qualifier("simpleNoteStrategyMatcher")
     private Function<Update, Boolean> simpleNoteStrategyMatcher;
+
+    @Autowired
+    @Qualifier("linkStrategyMatcher")
+    private Function<Update, Boolean> linkStrategyMatcher;
 
     private final Random random = new Random();
 
@@ -110,6 +121,27 @@ public class StrategyMatcherConfigTest {
     @CsvFileSource(resources = "shouldCheckSimpleNoteStrategyMatcher.csv")
     public void shouldCheckSimpleNoteStrategyMatcher(String text, Boolean expectedResult){
         assertThat(simpleNoteStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void shouldCheckLinkMatcherCreation() {
+        Pattern pattern = getPattern(linkStrategyMatcher);
+        assertThat("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").isEqualTo(pattern.pattern());
+    }
+
+    @SneakyThrows
+    private Pattern getPattern(Function<Update, Boolean> instance) {
+        Field field = RegexMatcher.class.getDeclaredField("pattern");
+        field.setAccessible(true);
+        return (Pattern) ReflectionUtils.getField(field, instance);
+    }
+
+    @SneakyThrows
+    private Set<String> getTemplatesFromMultiRegexMatcher(Function<Update, Boolean> instance) {
+        Field field = MultiRegexMatcher.class.getDeclaredField("patterns");
+        field.setAccessible(true);
+        Set<Pattern> patterns = (Set<Pattern>) ReflectionUtils.getField(field, instance);
+        return patterns != null ? patterns.stream().map(Pattern::pattern).collect(Collectors.toSet()) : new HashSet<>();
     }
 
     private Update createUpdate(String text) {

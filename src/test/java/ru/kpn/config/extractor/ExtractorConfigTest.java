@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 25.10.2021 get prefixes through reflection mechanism
 @SpringBootTest
 public class ExtractorConfigTest {
 
@@ -20,7 +21,7 @@ public class ExtractorConfigTest {
     private Function<Update, String> simpleNoteExtractor;
 
     @Test
-    void shouldCheckSimpleNodeExtractor() {
+    void shouldCheckSimpleNoteExtractor() {
         ByPrefixExtractor expectedExtractor = new ByPrefixExtractor(List.of("/simple note ", "/sn "));
         assertThat(expectedExtractor).isEqualTo(simpleNoteExtractor);
     }
