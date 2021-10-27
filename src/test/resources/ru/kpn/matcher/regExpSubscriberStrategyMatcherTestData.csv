@@ -9,3 +9,4 @@
 ^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|] http//ya.ru false
 /help /help true
 /help help false
+/help  false

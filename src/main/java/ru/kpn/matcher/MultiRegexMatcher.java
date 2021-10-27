@@ -1,15 +1,12 @@
 package ru.kpn.matcher;
 
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
-public class MultiRegexMatcher implements Function<Update, Boolean> {
+public class MultiRegexMatcher extends BaseRegexMatcher {
 
     private final Set<Pattern> patterns = new HashSet<>();
 
@@ -20,24 +17,12 @@ public class MultiRegexMatcher implements Function<Update, Boolean> {
     }
 
     @Override
-    public Boolean apply(Update update) {
-        if (checkUpdate(update)){
-            for (Pattern pattern : patterns) {
-                if (pattern.matcher(update.getMessage().getText()).matches()){
-                    return true;
-                }
+    protected boolean match(Update update) {
+        for (Pattern pattern : patterns) {
+            if (pattern.matcher(update.getMessage().getText()).matches()){
+                return true;
             }
         }
-        return false;
-    }
-
-    private Boolean checkUpdate(Update update) {
-        if (update.hasMessage()){
-            Message message = update.getMessage();
-            return message.getChat() != null && message.getChatId() != null &&
-                    message.getFrom() != null && message.getText() != null;
-        }
-
         return false;
     }
 }
