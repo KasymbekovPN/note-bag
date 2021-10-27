@@ -1,23 +1,18 @@
 package ru.kpn.config.matcher;
 
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.matcher.MatcherType;
+import ru.kpn.matcher.ConstantMatcher;
 import ru.kpn.matcher.MultiRegexMatcher;
 import ru.kpn.matcher.RegexMatcher;
-import utils.UpdateInstanceBuilder;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -68,66 +63,71 @@ public class StrategyMatcherConfigTest {
     @Qualifier("linkStrategyMatcher")
     private Function<Update, Boolean> linkStrategyMatcher;
 
-    private final Random random = new Random();
-
-    @RepeatedTest(100)
+    @Test
     void shouldCheckAlwaysTrueStrategyMatcher() {
-        Update update = createUpdate(String.valueOf(random.nextInt()));
-        assertThat(alwaysTrueStrategyMatcher.apply(update)).isTrue();
+        Boolean matchingResult = getMatchingResult(alwaysTrueStrategyMatcher);
+        assertThat(matchingResult).isTrue();
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckHelpStrategyMatcher.csv")
-    public void shouldCheckHelpStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(helpStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckHelpStrategyMatcher(){
+        Pattern pattern = getPattern(helpStrategyMatcher);
+        assertThat("/help").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckGetStateStrategyMatcher.csv")
-    public void shouldCheckGetStateStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(getStateStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckGetStateStrategyMatcher(){
+        Pattern pattern = getPattern(getStateStrategyMatcher);
+        assertThat("/getstate").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckResetStrategyMatcher.csv")
-    public void shouldCheckResetStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(resetStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckResetStrategyMatcher(){
+        Pattern pattern = getPattern(resetStrategyMatcher);
+        assertThat("/reset").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckGetBufferStatusStrategyMatcher.csv")
-    public void shouldCheckGetBufferStatusStrategyMatcher(String text, Boolean expectedResult) {
-        assertThat(getBufferStatusStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckGetBufferStatusStrategyMatcher() {
+        Pattern pattern = getPattern(getBufferStatusStrategyMatcher);
+        assertThat("/get buffer status").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckGetCurrentBufferDatumStrategyMatcher.csv")
-    public void shouldCheckGetCurrentBufferDatumStrategyMatcher(String text, Boolean expectedResult) {
-        assertThat(getCurrentBufferDatumStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckGetCurrentBufferDatumStrategyMatcher() {
+        Pattern pattern = getPattern(getCurrentBufferDatumStrategyMatcher);
+        assertThat("/get current buffer datum").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckSkipBufferDatumStrategyMatcher.csv")
-    public void shouldCheckSkipBufferDatumStrategyMatcher(String text, Boolean expectedResult) {
-        assertThat(skipBufferDatumStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckSkipBufferDatumStrategyMatcher() {
+        Pattern pattern = getPattern(skipBufferDatumStrategyMatcher);
+        assertThat("/skip buffer datum").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckClearBufferStrategyMatcher.csv")
-    public void shouldCheckClearBufferStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(clearBufferStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckClearBufferStrategyMatcher(){
+        Pattern pattern = getPattern(clearBufferStrategyMatcher);
+        assertThat("/clr buffer").isEqualTo(pattern.pattern());
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckSimpleNoteStrategyMatcher.csv")
-    public void shouldCheckSimpleNoteStrategyMatcher(String text, Boolean expectedResult){
-        assertThat(simpleNoteStrategyMatcher.apply(createUpdate(text))).isEqualTo(expectedResult);
+    @Test
+    public void shouldCheckSimpleNoteStrategyMatcher(){
+        Set<String> templates = getTemplatesFromMultiRegexMatcher(simpleNoteStrategyMatcher);
+        assertThat(Set.of("/simple note .*","/sn .*")).isEqualTo(templates);
     }
 
     @Test
     void shouldCheckLinkMatcherCreation() {
         Pattern pattern = getPattern(linkStrategyMatcher);
         assertThat("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").isEqualTo(pattern.pattern());
+    }
+
+    @SneakyThrows
+    private Boolean getMatchingResult(Function<Update, Boolean> instance) {
+        Field field = ConstantMatcher.class.getDeclaredField("matchingResult");
+        field.setAccessible(true);
+        return (Boolean) ReflectionUtils.getField(field, instance);
     }
 
     @SneakyThrows
@@ -143,9 +143,5 @@ public class StrategyMatcherConfigTest {
         field.setAccessible(true);
         Set<Pattern> patterns = (Set<Pattern>) ReflectionUtils.getField(field, instance);
         return patterns != null ? patterns.stream().map(Pattern::pattern).collect(Collectors.toSet()) : new HashSet<>();
-    }
-
-    private Update createUpdate(String text) {
-        return new UpdateInstanceBuilder().text(text).build();
     }
 }
