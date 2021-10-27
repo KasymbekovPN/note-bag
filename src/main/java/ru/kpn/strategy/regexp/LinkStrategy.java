@@ -37,7 +37,6 @@ public class LinkStrategy extends BaseSubscriberStrategy {
         return getAnswer(value);
     }
 
-    // TODO: 23.10.2021 create datum through botBuffer
     private void putIntoBuffer(Update value) {
         botBuffer.add(value.getMessage().getChatId(), new BotBufferDatum(BufferDatumType.LINK, value.getMessage().getText()));
     }

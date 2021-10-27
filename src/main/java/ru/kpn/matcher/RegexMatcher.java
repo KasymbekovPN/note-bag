@@ -19,7 +19,6 @@ public class RegexMatcher implements Function<Update, Boolean> {
         return checkUpdate(update) && pattern.matcher(update.getMessage().getText()).matches();
     }
 
-    // TODO: 20.10.2021 to super?
     private Boolean checkUpdate(Update update) {
         if (update.hasMessage()){
             Message message = update.getMessage();

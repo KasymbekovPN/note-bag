@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.matcher.MatcherType;
 import ru.kpn.matcher.MultiRegexMatcher;
 import ru.kpn.matcher.RegexMatcher;
 import utils.UpdateInstanceBuilder;

@@ -31,7 +31,6 @@ public class MultiRegexMatcher implements Function<Update, Boolean> {
         return false;
     }
 
-    // TODO: 20.10.2021 to super?
     private Boolean checkUpdate(Update update) {
         if (update.hasMessage()){
             Message message = update.getMessage();

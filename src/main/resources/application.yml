@@ -14,30 +14,39 @@ telegram:
       helpSubscriberStrategy:
         priority: 0
         template: /help
+        type: REGEX
       getStateSubscriberStrategy:
         priority: 1
         template: /getstate
+        type: REGEX
       resetSubscriberStrategy:
         priority: 2
         template: /reset
+        type: REGEX
       getBufferStatusStrategy:
         priority: 3
         template: /get buffer status
+        type: REGEX
       getCurrentBufferDatumStrategy:
         priority: 4
         template: /get current buffer datum
+        type: REGEX
       skipBufferDatumStrategy:
         priority: 5
         template: /skip buffer datum
+        type: REGEX
       clearBufferStrategy:
         priority: 6
         template: /clr buffer
+        type: REGEX
       simpleNoteStrategy:
         priority: 7
         templates: /simple note .*,/sn .*
+        type: MULTI_REGEX
       linkStrategy:
         priority: 8
         template: ^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]
+        type: REGEX
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s

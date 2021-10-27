@@ -41,7 +41,6 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         return getAnswer(value);
     }
 
-    // TODO: 23.10.2021 create datum through botBuffer 
     private void putIntoBuffer(Update value) {
         Long chatId = value.getMessage().getChatId();
         String text = extractor.apply(value);
