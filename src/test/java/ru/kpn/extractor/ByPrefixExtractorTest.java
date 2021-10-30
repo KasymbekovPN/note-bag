@@ -5,13 +5,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import utils.UpdateInstanceBuilder;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ByPrefixExtractorTest {
 
-    private static final List<String> PREFIXES = List.of("/sn ", "/simple note ");
+    private static final Set<String> PREFIXES = Set.of("/sn ", "/simple note ");
 
     private ByPrefixExtractor extractor;
 

@@ -1,20 +1,15 @@
 package ru.kpn.extractor;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 public class ByPrefixExtractor implements Function<Update, String> {
 
-    // TODO: 25.10.2021 must be set
-    private final List<String> prefixes;
+    private final Set<String> prefixes;
 
     @Override
     public String apply(Update update) {

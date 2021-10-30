@@ -47,6 +47,9 @@ telegram:
         priority: 8
         template: ^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]
         type: REGEX
+    contentExtractors:
+      simpleNote:
+        prefixes: /simple note,/sn
 
 mongo:
   uriTemplate: mongodb+srv://%s:%s@%s/%s?%s
