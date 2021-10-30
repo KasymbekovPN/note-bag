@@ -8,4 +8,5 @@ public interface Buffer<K, V> {
     Optional<V> peek(K key);
     Optional<V> poll(K key);
     void clear(K key);
+    V createDatum(Object... args);
 }

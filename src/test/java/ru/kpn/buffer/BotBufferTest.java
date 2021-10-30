@@ -72,6 +72,17 @@ public class BotBufferTest {
         assertThat(buffer.getSize(USER_ID)).isZero();
     }
 
+    @Test
+    void shouldCheckDatumCreation() {
+        final BufferDatumType type = BufferDatumType.SIMPLE_TEXT;
+        final String text = "some text";
+        final BufferDatum<BufferDatumType, String> datum = buffer.createDatum(type, text);
+        final BotBufferDatum expectedDatum = new BotBufferDatum(type, text);
+        assertThat(expectedDatum.getClass()).isEqualTo(datum.getClass());
+        assertThat(expectedDatum.getType()).isEqualTo(datum.getType());
+        assertThat(expectedDatum.getContent()).isEqualTo(datum.getContent());
+    }
+
     private int fillBuffer(BotBuffer buffer){
         int size = 0;
         for (int i = CONTENT_BEGIN; i < CONTENT_END; i++) {

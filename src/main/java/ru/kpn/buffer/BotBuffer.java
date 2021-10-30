@@ -52,4 +52,9 @@ public class BotBuffer implements Buffer<Long, BufferDatum<BufferDatumType, Stri
             queues.get(key).clear();
         }
     }
+
+    @Override
+    public BufferDatum<BufferDatumType, String> createDatum(Object... args) {
+        return new BotBufferDatum((BufferDatumType) args[0], String.valueOf(args[1]));
+    }
 }

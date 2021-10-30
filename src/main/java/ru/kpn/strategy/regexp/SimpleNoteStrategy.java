@@ -44,7 +44,8 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     private void putIntoBuffer(Update value) {
         Long chatId = value.getMessage().getChatId();
         String text = extractor.apply(value);
-        botBuffer.add(chatId, new BotBufferDatum(BufferDatumType.SIMPLE_TEXT, text));
+        final BufferDatum<BufferDatumType, String> datum = botBuffer.createDatum(BufferDatumType.SIMPLE_TEXT, text);
+        botBuffer.add(chatId, datum);
     }
 
     private StrategyCalculatorSource<String> getAnswer(Update value) {

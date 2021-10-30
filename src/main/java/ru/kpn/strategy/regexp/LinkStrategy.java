@@ -38,7 +38,8 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     private void putIntoBuffer(Update value) {
-        botBuffer.add(value.getMessage().getChatId(), new BotBufferDatum(BufferDatumType.LINK, value.getMessage().getText()));
+        BufferDatum<BufferDatumType, String> datum = botBuffer.createDatum(BufferDatumType.LINK, value.getMessage().getText());
+        botBuffer.add(value.getMessage().getChatId(), datum);
     }
 
     private StrategyCalculatorSource<String> getAnswer(Update value) {
