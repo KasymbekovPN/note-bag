@@ -31,7 +31,7 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("resetStrategyMatcher")
+    @Qualifier("resetMatcher")
     public void setMatcher(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }

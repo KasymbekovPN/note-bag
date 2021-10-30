@@ -25,7 +25,7 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("clearBufferStrategyMatcher")
+    @Qualifier("clearBufferMatcher")
     public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }

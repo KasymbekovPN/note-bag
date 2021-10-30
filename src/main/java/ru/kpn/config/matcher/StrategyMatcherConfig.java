@@ -26,83 +26,83 @@ public class StrategyMatcherConfig {
     }
 
     @Bean
-    @Qualifier("helpStrategyMatcher")
-    public Function<Update, Boolean> helpStrategyMatcher(
-            @Value("${telegram.tube.strategies.helpSubscriberStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.helpSubscriberStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "helpStrategyMatcher");
+    @Qualifier("helpMatcher")
+    public Function<Update, Boolean> helpMatcher(
+            @Value("${telegram.tube.contentMatchers.help.template}") String template,
+            @Value("${telegram.tube.contentMatchers.help.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "helpMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("getStateStrategyMatcher")
-    public Function<Update, Boolean> getStateStrategyMatcher(
-            @Value("${telegram.tube.strategies.getStateSubscriberStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.getStateSubscriberStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getStateStrategyMatcher");
+    @Qualifier("getStateMatcher")
+    public Function<Update, Boolean> getStateMatcher(
+            @Value("${telegram.tube.contentMatchers.getState.template}") String template,
+            @Value("${telegram.tube.contentMatchers.getState.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "getStateMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("resetStrategyMatcher")
-    public Function<Update, Boolean> resetStrategyMatcher(
-            @Value("${telegram.tube.strategies.resetSubscriberStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.resetSubscriberStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "resetStrategyMatcher");
+    @Qualifier("resetMatcher")
+    public Function<Update, Boolean> resetMatcher(
+            @Value("${telegram.tube.contentMatchers.reset.template}") String template,
+            @Value("${telegram.tube.contentMatchers.reset.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "resetMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("getBufferStatusStrategyMatcher")
-    public Function<Update, Boolean> getBufferStatusStrategyMatcher(
-            @Value("${telegram.tube.strategies.getBufferStatusStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.getBufferStatusStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getBufferStatusStrategyMatcher");
+    @Qualifier("getBufferStatusMatcher")
+    public Function<Update, Boolean> getBufferStatusMatcher(
+            @Value("${telegram.tube.contentMatchers.getBufferStatus.template}") String template,
+            @Value("${telegram.tube.contentMatchers.getBufferStatus.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "getBufferStatusMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("getCurrentBufferDatumStrategyMatcher")
-    public Function<Update, Boolean> getCurrentBufferDatumStrategyMatcher(
-            @Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getCurrentBufferDatumStrategyMatcher");
+    @Qualifier("getCurrentBufferDatumMatcher")
+    public Function<Update, Boolean> getCurrentBufferDatumMatcher(
+            @Value("${telegram.tube.contentMatchers.getCurrentBufferDatum.template}") String template,
+            @Value("${telegram.tube.contentMatchers.getCurrentBufferDatum.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "getCurrentBufferDatumMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("skipBufferDatumStrategyMatcher")
-    public Function<Update, Boolean> getSkipBufferDatumStrategyMatcher(
-            @Value("${telegram.tube.strategies.skipBufferDatumStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.skipBufferDatumStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "skipBufferDatumStrategyMatcher");
+    @Qualifier("skipBufferDatumMatcher")
+    public Function<Update, Boolean> getSkipBufferDatumMatcher(
+            @Value("${telegram.tube.contentMatchers.skipBufferDatum.template}") String template,
+            @Value("${telegram.tube.contentMatchers.skipBufferDatum.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "skipBufferDatumMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("clearBufferStrategyMatcher")
-    public Function<Update, Boolean> clearBufferStrategyMatcher(
-            @Value("${telegram.tube.strategies.clearBufferStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.clearBufferStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "clearBufferStrategyMatcher");
+    @Qualifier("clearBufferMatcher")
+    public Function<Update, Boolean> clearBufferMatcher(
+            @Value("${telegram.tube.contentMatchers.clearBuffer.template}") String template,
+            @Value("${telegram.tube.contentMatchers.clearBuffer.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "clearBufferMatcher");
         return factory.create(matcherType, template);
     }
 
     @Bean
-    @Qualifier("simpleNoteStrategyMatcher")
-    public Function<Update, Boolean> simpleNoteStrategyMartcher(
-            @Value("${telegram.tube.strategies.simpleNoteStrategy.templates}") List<String> templates,
-            @Value("${telegram.tube.strategies.simpleNoteStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "simpleNoteStrategyMatcher");
+    @Qualifier("simpleNoteMatcher")
+    public Function<Update, Boolean> simpleNoteMartcher(
+            @Value("${telegram.tube.contentMatchers.simpleNote.templates}") List<String> templates,
+            @Value("${telegram.tube.contentMatchers.simpleNote.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "simpleNoteMatcher");
         return  factory.create(matcherType, templates.toArray());
     }
 
     @Bean
-    @Qualifier("linkStrategyMatcher")
-    public Function<Update, Boolean> linkStrategyMartcher(
-            @Value("${telegram.tube.strategies.linkStrategy.template}") String template,
-            @Value("${telegram.tube.strategies.linkStrategy.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "linkStrategyMatcher");
+    @Qualifier("linkMatcher")
+    public Function<Update, Boolean> linkMartcher(
+            @Value("${telegram.tube.contentMatchers.link.template}") String template,
+            @Value("${telegram.tube.contentMatchers.link.type}") String type){
+        MatcherType matcherType = calculateMatcherType(type, "linkMatcher");
         return  factory.create(matcherType, template);
     }
 

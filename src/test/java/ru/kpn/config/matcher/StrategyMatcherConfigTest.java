@@ -28,40 +28,40 @@ public class StrategyMatcherConfigTest {
     private Function<Update, Boolean> alwaysTrueStrategyMatcher;
 
     @Autowired
-    @Qualifier("helpStrategyMatcher")
-    private Function<Update, Boolean> helpStrategyMatcher;
+    @Qualifier("helpMatcher")
+    private Function<Update, Boolean> helpMatcher;
 
     @Autowired
-    @Qualifier("getStateStrategyMatcher")
-    private Function<Update, Boolean> getStateStrategyMatcher;
+    @Qualifier("getStateMatcher")
+    private Function<Update, Boolean> getStateMatcher;
 
     @Autowired
-    @Qualifier("resetStrategyMatcher")
-    private Function<Update, Boolean> resetStrategyMatcher;
+    @Qualifier("resetMatcher")
+    private Function<Update, Boolean> resetMatcher;
 
     @Autowired
-    @Qualifier("getBufferStatusStrategyMatcher")
-    private Function<Update, Boolean> getBufferStatusStrategyMatcher;
+    @Qualifier("getBufferStatusMatcher")
+    private Function<Update, Boolean> getBufferStatusMatcher;
 
     @Autowired
-    @Qualifier("getCurrentBufferDatumStrategyMatcher")
-    private Function<Update, Boolean> getCurrentBufferDatumStrategyMatcher;
+    @Qualifier("getCurrentBufferDatumMatcher")
+    private Function<Update, Boolean> getCurrentBufferDatumMatcher;
 
     @Autowired
-    @Qualifier("skipBufferDatumStrategyMatcher")
-    private Function<Update, Boolean> skipBufferDatumStrategyMatcher;
+    @Qualifier("skipBufferDatumMatcher")
+    private Function<Update, Boolean> skipBufferDatumMatcher;
 
     @Autowired
-    @Qualifier("clearBufferStrategyMatcher")
-    private Function<Update, Boolean> clearBufferStrategyMatcher;
+    @Qualifier("clearBufferMatcher")
+    private Function<Update, Boolean> clearBufferMatcher;
 
     @Autowired
-    @Qualifier("simpleNoteStrategyMatcher")
-    private Function<Update, Boolean> simpleNoteStrategyMatcher;
+    @Qualifier("simpleNoteMatcher")
+    private Function<Update, Boolean> simpleNoteMatcher;
 
     @Autowired
-    @Qualifier("linkStrategyMatcher")
-    private Function<Update, Boolean> linkStrategyMatcher;
+    @Qualifier("linkMatcher")
+    private Function<Update, Boolean> linkMatcher;
 
     @Test
     void shouldCheckAlwaysTrueStrategyMatcher() {
@@ -70,56 +70,56 @@ public class StrategyMatcherConfigTest {
     }
 
     @Test
-    public void shouldCheckHelpStrategyMatcher(){
-        Pattern pattern = getPattern(helpStrategyMatcher);
+    public void shouldCheckHelpMatcher(){
+        Pattern pattern = getPattern(helpMatcher);
         assertThat("/help").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckGetStateStrategyMatcher(){
-        Pattern pattern = getPattern(getStateStrategyMatcher);
+    public void shouldCheckGetStateMatcher(){
+        Pattern pattern = getPattern(getStateMatcher);
         assertThat("/getstate").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckResetStrategyMatcher(){
-        Pattern pattern = getPattern(resetStrategyMatcher);
+    public void shouldCheckResetMatcher(){
+        Pattern pattern = getPattern(resetMatcher);
         assertThat("/reset").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckGetBufferStatusStrategyMatcher() {
-        Pattern pattern = getPattern(getBufferStatusStrategyMatcher);
+    public void shouldCheckGetBufferStatusMatcher() {
+        Pattern pattern = getPattern(getBufferStatusMatcher);
         assertThat("/get buffer status").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckGetCurrentBufferDatumStrategyMatcher() {
-        Pattern pattern = getPattern(getCurrentBufferDatumStrategyMatcher);
+    public void shouldCheckGetCurrentBufferDatumMatcher() {
+        Pattern pattern = getPattern(getCurrentBufferDatumMatcher);
         assertThat("/get current buffer datum").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckSkipBufferDatumStrategyMatcher() {
-        Pattern pattern = getPattern(skipBufferDatumStrategyMatcher);
+    public void shouldCheckSkipBufferDatumMatcher() {
+        Pattern pattern = getPattern(skipBufferDatumMatcher);
         assertThat("/skip buffer datum").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckClearBufferStrategyMatcher(){
-        Pattern pattern = getPattern(clearBufferStrategyMatcher);
+    public void shouldCheckClearBufferMatcher(){
+        Pattern pattern = getPattern(clearBufferMatcher);
         assertThat("/clr buffer").isEqualTo(pattern.pattern());
     }
 
     @Test
-    public void shouldCheckSimpleNoteStrategyMatcher(){
-        Set<String> templates = getTemplatesFromMultiRegexMatcher(simpleNoteStrategyMatcher);
+    public void shouldCheckSimpleNoteMatcher(){
+        Set<String> templates = getTemplatesFromMultiRegexMatcher(simpleNoteMatcher);
         assertThat(Set.of("/simple note .*","/sn .*")).isEqualTo(templates);
     }
 
     @Test
     void shouldCheckLinkMatcherCreation() {
-        Pattern pattern = getPattern(linkStrategyMatcher);
+        Pattern pattern = getPattern(linkMatcher);
         assertThat("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").isEqualTo(pattern.pattern());
     }
 

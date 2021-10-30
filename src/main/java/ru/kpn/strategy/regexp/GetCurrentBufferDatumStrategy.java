@@ -26,7 +26,7 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("getCurrentBufferDatumStrategyMatcher")
+    @Qualifier("getCurrentBufferDatumMatcher")
     public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }

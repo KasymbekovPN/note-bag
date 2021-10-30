@@ -25,7 +25,7 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("getBufferStatusStrategyMatcher")
+    @Qualifier("getBufferStatusMatcher")
     public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }

@@ -30,7 +30,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("simpleNoteStrategyMatcher")
+    @Qualifier("simpleNoteMatcher")
     public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }

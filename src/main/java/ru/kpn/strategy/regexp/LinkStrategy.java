@@ -26,7 +26,7 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("linkStrategyMatcher")
+    @Qualifier("linkMatcher")
     public void setMatcher(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }

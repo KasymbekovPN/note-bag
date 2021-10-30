@@ -25,7 +25,7 @@ public class GetStateSubscriberStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("getStateStrategyMatcher")
+    @Qualifier("getStateMatcher")
     public void setMatcher(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }
