@@ -14,13 +14,13 @@ import utils.UpdateInstanceBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class HelpSubscriberStrategyTest {
+public class HelpStrategyTest {
 
     private static final Long ID = 123L;
     private static final String COMMAND = "/help";
 
     @Autowired
-    private HelpSubscriberStrategy strategy;
+    private HelpStrategy strategy;
 
     private UpdateInstanceBuilder builder;
 

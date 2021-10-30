@@ -22,13 +22,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class ResetSubscriberStrategyTest {
+public class ResetStrategyTest {
 
     private static final Long ID = 123L;
     private static final String COMMAND = "/reset";
 
     @Autowired
-    private ResetSubscriberStrategy strategy;
+    private ResetStrategy strategy;
 
     @Autowired
     private UserProfileService service;

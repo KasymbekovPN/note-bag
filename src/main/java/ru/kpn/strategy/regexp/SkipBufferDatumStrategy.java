@@ -19,7 +19,7 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.skipBufferDatumStrategy.priority}")
+    @Value("${telegram.tube.strategies.skipBufferDatum.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }

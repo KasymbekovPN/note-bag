@@ -20,7 +20,7 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.linkStrategy.priority}")
+    @Value("${telegram.tube.strategies.link.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }

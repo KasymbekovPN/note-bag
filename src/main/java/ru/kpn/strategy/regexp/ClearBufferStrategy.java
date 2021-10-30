@@ -19,7 +19,7 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.clearBufferStrategy.priority}")
+    @Value("${telegram.tube.strategies.clearBuffer.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }

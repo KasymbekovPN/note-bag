@@ -15,12 +15,12 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Component
-public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
+public class GetCurrentBufferStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.getCurrentBufferDatumStrategy.priority}")
+    @Value("${telegram.tube.strategies.getCurrentBufferDatum.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }

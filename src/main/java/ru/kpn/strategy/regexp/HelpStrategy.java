@@ -5,42 +5,30 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import ru.kpn.bot.state.BotStateService;
-import ru.kpn.bot.state.NPBotState;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
 @Component
-public class GetStateSubscriberStrategy extends BaseSubscriberStrategy {
+public class HelpStrategy extends BaseSubscriberStrategy {
 
-    @Autowired
-    private BotStateService<User, NPBotState> stateService;
-
-    @Value("${telegram.tube.strategies.getStateSubscriberStrategy.priority}")
+    @Value("${telegram.tube.strategies.help.priority}")
     public void setPriority(Integer priority){
         this.priority = priority;
     }
 
     @Autowired
-    @Qualifier("getStateMatcher")
+    @Qualifier("helpMatcher")
     public void setMatcher(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }
 
     @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.getstate");
+        StrategyCalculatorSource<String> source = createSource("strategy.message.help");
         source.add(calculateChatId(value));
-        source.add(calculateChatId(value));
-        source.add(stateService.get(getUser(value)));
 
         return source;
-    }
-
-    private User getUser(Update value) {
-        return value.getMessage().getFrom();
     }
 }

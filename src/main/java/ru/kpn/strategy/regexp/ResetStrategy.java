@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Component
-public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
+public class ResetStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     private BotStateService<User, NPBotState> stateService;
@@ -25,7 +25,7 @@ public class ResetSubscriberStrategy extends BaseSubscriberStrategy {
     @Autowired
     private UserProfileService service;
 
-    @Value("${telegram.tube.strategies.resetSubscriberStrategy.priority}")
+    @Value("${telegram.tube.strategies.reset.priority}")
     public void setPriority(Integer priority){
         this.priority = priority;
     }

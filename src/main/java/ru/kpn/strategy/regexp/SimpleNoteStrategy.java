@@ -24,7 +24,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.simpleNoteStrategy.priority}")
+    @Value("${telegram.tube.strategies.simpleNote.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }

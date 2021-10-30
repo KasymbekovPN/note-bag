@@ -19,7 +19,7 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
-    @Value("${telegram.tube.strategies.getBufferStatusStrategy.priority}")
+    @Value("${telegram.tube.strategies.getBufferStatus.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
     }
