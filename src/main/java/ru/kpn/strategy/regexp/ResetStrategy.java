@@ -16,6 +16,7 @@ import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 import java.util.Optional;
 import java.util.function.Function;
 
+// TODO: 02.11.2021 rename: name without 'Strategy' suffix
 @Component
 public class ResetStrategy extends BaseSubscriberStrategy {
 
@@ -31,8 +32,8 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("resetMatcher")
-    public void setMatcher(Function<Update, Boolean> matcher){
+    @Qualifier("resetMatcherOld")
+    public void setMatcherOld(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }
 

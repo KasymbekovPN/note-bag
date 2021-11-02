@@ -14,6 +14,7 @@ import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
+// TODO: 02.11.2021 rename: name without 'Strategy' suffix
 @Component
 public class SimpleNoteStrategy extends BaseSubscriberStrategy {
 
@@ -30,8 +31,8 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("simpleNoteMatcher")
-    public void setMatcher(Function<Update, Boolean> matcher) {
+    @Qualifier("simpleNoteMatcherOld")
+    public void setMatcherOld(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }
 

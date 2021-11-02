@@ -13,6 +13,7 @@ import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
+// TODO: 02.11.2021 rename: name without 'Strategy' suffix 
 @Component
 public class ClearBufferStrategy extends BaseSubscriberStrategy {
 
@@ -25,8 +26,8 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("clearBufferMatcher")
-    public void setMatcher(Function<Update, Boolean> matcher) {
+    @Qualifier("clearBufferMatcherOld")
+    public void setMatcherOld(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }
 

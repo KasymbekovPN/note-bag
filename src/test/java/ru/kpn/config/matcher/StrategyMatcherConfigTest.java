@@ -23,103 +23,123 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class StrategyMatcherConfigTest {
 
+    // TODO: 02.11.2021 del 
     @Autowired
-    @Qualifier("alwaysTrueStrategyMatcher")
-    private Function<Update, Boolean> alwaysTrueStrategyMatcher;
+    @Qualifier("alwaysTrueStrategyMatcherOld")
+    private Function<Update, Boolean> alwaysTrueStrategyMatcherOld;
 
+    // TODO: 02.11.2021 del 
     @Autowired
-    @Qualifier("helpMatcher")
-    private Function<Update, Boolean> helpMatcher;
+    @Qualifier("helpMatcherOld")
+    private Function<Update, Boolean> helpMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("getStateMatcher")
-    private Function<Update, Boolean> getStateMatcher;
+    @Qualifier("getStateMatcherOld")
+    private Function<Update, Boolean> getStateMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("resetMatcher")
-    private Function<Update, Boolean> resetMatcher;
+    @Qualifier("resetMatcherOld")
+    private Function<Update, Boolean> resetMatcherOld;
 
+    // TODO: 02.11.2021 del 
     @Autowired
-    @Qualifier("getBufferStatusMatcher")
-    private Function<Update, Boolean> getBufferStatusMatcher;
+    @Qualifier("getBufferStatusMatcherOld")
+    private Function<Update, Boolean> getBufferStatusMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("getCurrentBufferDatumMatcher")
-    private Function<Update, Boolean> getCurrentBufferDatumMatcher;
+    @Qualifier("getCurrentBufferDatumMatcherOld")
+    private Function<Update, Boolean> getCurrentBufferDatumMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("skipBufferDatumMatcher")
-    private Function<Update, Boolean> skipBufferDatumMatcher;
+    @Qualifier("skipBufferDatumMatcherOld")
+    private Function<Update, Boolean> skipBufferDatumMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("clearBufferMatcher")
-    private Function<Update, Boolean> clearBufferMatcher;
+    @Qualifier("clearBufferMatcherOld")
+    private Function<Update, Boolean> clearBufferMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("simpleNoteMatcher")
-    private Function<Update, Boolean> simpleNoteMatcher;
+    @Qualifier("simpleNoteMatcherOld")
+    private Function<Update, Boolean> simpleNoteMatcherOld;
 
+    // TODO: 02.11.2021 del
     @Autowired
-    @Qualifier("linkMatcher")
-    private Function<Update, Boolean> linkMatcher;
+    @Qualifier("linkMatcherOld")
+    private Function<Update, Boolean> linkMatcherOld;
 
+    // TODO: 02.11.2021 del 
     @Test
-    void shouldCheckAlwaysTrueStrategyMatcher() {
-        Boolean matchingResult = getMatchingResult(alwaysTrueStrategyMatcher);
+    void shouldCheckAlwaysTrueStrategyMatcherOld() {
+        Boolean matchingResult = getMatchingResult(alwaysTrueStrategyMatcherOld);
         assertThat(matchingResult).isTrue();
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckHelpMatcher(){
-        Pattern pattern = getPattern(helpMatcher);
+    public void shouldCheckHelpMatcherOld(){
+        Pattern pattern = getPattern(helpMatcherOld);
         assertThat("/help").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckGetStateMatcher(){
-        Pattern pattern = getPattern(getStateMatcher);
+    public void shouldCheckGetStateMatcherOld(){
+        Pattern pattern = getPattern(getStateMatcherOld);
         assertThat("/getstate").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckResetMatcher(){
-        Pattern pattern = getPattern(resetMatcher);
+    public void shouldCheckResetMatcherOld(){
+        Pattern pattern = getPattern(resetMatcherOld);
         assertThat("/reset").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckGetBufferStatusMatcher() {
-        Pattern pattern = getPattern(getBufferStatusMatcher);
+    public void shouldCheckGetBufferStatusMatcherOld() {
+        Pattern pattern = getPattern(getBufferStatusMatcherOld);
         assertThat("/get buffer status").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckGetCurrentBufferDatumMatcher() {
-        Pattern pattern = getPattern(getCurrentBufferDatumMatcher);
+    public void shouldCheckGetCurrentBufferDatumMatcherOld() {
+        Pattern pattern = getPattern(getCurrentBufferDatumMatcherOld);
         assertThat("/get current buffer datum").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021
     @Test
-    public void shouldCheckSkipBufferDatumMatcher() {
-        Pattern pattern = getPattern(skipBufferDatumMatcher);
+    public void shouldCheckSkipBufferDatumMatcherOld() {
+        Pattern pattern = getPattern(skipBufferDatumMatcherOld);
         assertThat("/skip buffer datum").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckClearBufferMatcher(){
-        Pattern pattern = getPattern(clearBufferMatcher);
+    public void shouldCheckClearBufferMatcherOld(){
+        Pattern pattern = getPattern(clearBufferMatcherOld);
         assertThat("/clr buffer").isEqualTo(pattern.pattern());
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    public void shouldCheckSimpleNoteMatcher(){
-        Set<String> templates = getTemplatesFromMultiRegexMatcher(simpleNoteMatcher);
+    public void shouldCheckSimpleNoteMatcherOld(){
+        Set<String> templates = getTemplatesFromMultiRegexMatcher(simpleNoteMatcherOld);
         assertThat(Set.of("/simple note .*","/sn .*")).isEqualTo(templates);
     }
 
+    // TODO: 02.11.2021 del
     @Test
-    void shouldCheckLinkMatcherCreation() {
-        Pattern pattern = getPattern(linkMatcher);
+    void shouldCheckLinkMatcherCreationOld() {
+        Pattern pattern = getPattern(linkMatcherOld);
         assertThat("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").isEqualTo(pattern.pattern());
     }
 

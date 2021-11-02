@@ -10,6 +10,7 @@ import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
+// TODO: 02.11.2021 rename: name without 'Strategy' suffix
 @Component
 public class HelpStrategy extends BaseSubscriberStrategy {
 
@@ -19,8 +20,8 @@ public class HelpStrategy extends BaseSubscriberStrategy {
     }
 
     @Autowired
-    @Qualifier("helpMatcher")
-    public void setMatcher(Function<Update, Boolean> matcher){
+    @Qualifier("helpMatcherOld")
+    public void setMatcherOld(Function<Update, Boolean> matcher){
         this.matcher = matcher;
     }
 

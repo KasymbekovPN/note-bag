@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.creator.StrategyMatcherCreator;
 import ru.kpn.strategy.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
@@ -20,6 +21,9 @@ import java.lang.reflect.Type;
 public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @Autowired
+    private StrategyMatcherCreator matcherAutocreator;
+
+    @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
 
     @Autowired
@@ -27,7 +31,11 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (isBeanTubeStrategy(bean)){
+        if (isBeanStrategy(bean)){
+            //<
+            System.out.println(beanName);
+            System.out.println(matcherAutocreator);
+            //<
             subscriptionManager.subscribe(createSubscriber(bean));
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
@@ -41,7 +49,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                 .build();
     }
 
-    private boolean isBeanTubeStrategy(Object bean) {
+    private boolean isBeanStrategy(Object bean) {
         boolean success = false;
         Type[] genericInterfaces = bean.getClass().getSuperclass().getGenericInterfaces();
         for (Type genericInterface : genericInterfaces) {

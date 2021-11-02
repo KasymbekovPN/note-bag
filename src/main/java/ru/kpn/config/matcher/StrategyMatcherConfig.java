@@ -13,96 +13,107 @@ import ru.kpn.matcher.MatcherFactory;
 import java.util.List;
 import java.util.function.Function;
 
+// TODO: 02.11.2021 del
 @Configuration
 public class StrategyMatcherConfig {
 
     @Autowired
     private MatcherFactory<Update, Boolean> factory;
 
+    // TODO: 02.11.2021 del 
     @Bean
-    @Qualifier("alwaysTrueStrategyMatcher")
-    public Function<Update, Boolean> alwaysTrueStrategyMatcher(){
+    @Qualifier("alwaysTrueStrategyMatcherOld")
+    public Function<Update, Boolean> alwaysTrueStrategyMatcherOld(){
         return factory.create(MatcherType.CONSTANT, true);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("helpMatcher")
-    public Function<Update, Boolean> helpMatcher(
+    @Qualifier("helpMatcherOld")
+    public Function<Update, Boolean> helpMatcherOld(
             @Value("${telegram.tube.contentMatchers.help.template}") String template,
             @Value("${telegram.tube.contentMatchers.help.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "helpMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "helpMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("getStateMatcher")
-    public Function<Update, Boolean> getStateMatcher(
+    @Qualifier("getStateMatcherOld")
+    public Function<Update, Boolean> getStateMatcherOld(
             @Value("${telegram.tube.contentMatchers.getState.template}") String template,
             @Value("${telegram.tube.contentMatchers.getState.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getStateMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "getStateMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("resetMatcher")
-    public Function<Update, Boolean> resetMatcher(
+    @Qualifier("resetMatcherOld")
+    public Function<Update, Boolean> resetMatcherOld(
             @Value("${telegram.tube.contentMatchers.reset.template}") String template,
             @Value("${telegram.tube.contentMatchers.reset.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "resetMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "resetMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("getBufferStatusMatcher")
-    public Function<Update, Boolean> getBufferStatusMatcher(
+    @Qualifier("getBufferStatusMatcherOld")
+    public Function<Update, Boolean> getBufferStatusMatcherOld(
             @Value("${telegram.tube.contentMatchers.getBufferStatus.template}") String template,
             @Value("${telegram.tube.contentMatchers.getBufferStatus.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getBufferStatusMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "getBufferStatusMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 de;
     @Bean
-    @Qualifier("getCurrentBufferDatumMatcher")
-    public Function<Update, Boolean> getCurrentBufferDatumMatcher(
+    @Qualifier("getCurrentBufferDatumMatcherOld")
+    public Function<Update, Boolean> getCurrentBufferDatumMatcherOld(
             @Value("${telegram.tube.contentMatchers.getCurrentBufferDatum.template}") String template,
             @Value("${telegram.tube.contentMatchers.getCurrentBufferDatum.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "getCurrentBufferDatumMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "getCurrentBufferDatumMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("skipBufferDatumMatcher")
-    public Function<Update, Boolean> getSkipBufferDatumMatcher(
+    @Qualifier("skipBufferDatumMatcherOld")
+    public Function<Update, Boolean> getSkipBufferDatumMatcherOld(
             @Value("${telegram.tube.contentMatchers.skipBufferDatum.template}") String template,
             @Value("${telegram.tube.contentMatchers.skipBufferDatum.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "skipBufferDatumMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "skipBufferDatumMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("clearBufferMatcher")
-    public Function<Update, Boolean> clearBufferMatcher(
+    @Qualifier("clearBufferMatcherOld")
+    public Function<Update, Boolean> clearBufferMatcherOld(
             @Value("${telegram.tube.contentMatchers.clearBuffer.template}") String template,
             @Value("${telegram.tube.contentMatchers.clearBuffer.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "clearBufferMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "clearBufferMatcherOld");
         return factory.create(matcherType, template);
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("simpleNoteMatcher")
-    public Function<Update, Boolean> simpleNoteMartcher(
+    @Qualifier("simpleNoteMatcherOld")
+    public Function<Update, Boolean> simpleNoteMartcherOld(
             @Value("${telegram.tube.contentMatchers.simpleNote.templates}") List<String> templates,
             @Value("${telegram.tube.contentMatchers.simpleNote.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "simpleNoteMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "simpleNoteMatcherOld");
         return  factory.create(matcherType, templates.toArray());
     }
 
+    // TODO: 02.11.2021 del
     @Bean
-    @Qualifier("linkMatcher")
-    public Function<Update, Boolean> linkMartcher(
+    @Qualifier("linkMatcherOld")
+    public Function<Update, Boolean> linkMartcherOld(
             @Value("${telegram.tube.contentMatchers.link.template}") String template,
             @Value("${telegram.tube.contentMatchers.link.type}") String type){
-        MatcherType matcherType = calculateMatcherType(type, "linkMatcher");
+        MatcherType matcherType = calculateMatcherType(type, "linkMatcherOld");
         return  factory.create(matcherType, template);
     }
 

@@ -47,7 +47,7 @@ public class BaseSubscriberStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckMatcher.csv")
     void shouldCheckMatcher(String template, Boolean expectedResult) {
-        strategy.setMatcher(new TestMatcher());
+        strategy.setMatcherOld(new TestMatcher());
         Update update = new UpdateInstanceBuilder().text(template).build();
         assertThat(strategy.matchTemplate(update)).isEqualTo(expectedResult);
     }
@@ -63,7 +63,7 @@ public class BaseSubscriberStrategyTest {
         }
 
         @Override
-        public void setMatcher(Function<Update, Boolean> matcher) {
+        public void setMatcherOld(Function<Update, Boolean> matcher) {
             this.matcher = matcher;
         }
 
