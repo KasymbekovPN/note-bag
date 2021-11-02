@@ -2,7 +2,7 @@ package ru.kpn.creator;
 
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.MatcherFactory;
@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 @Service
+@ConfigurationProperties(prefix = "telegram.tube")
 public class StrategyMatcherCreator {
 
     private final Map<String, Result> results = new HashMap<>();
@@ -26,7 +27,6 @@ public class StrategyMatcherCreator {
         this.factory = factory;
     }
 
-    @Value("${telegram.tube.contentMatchers}")
     public void setContentMatchers(Map<String, MatcherData> contentMatchers) {
         this.contentMatchers = contentMatchers;
     }
@@ -63,6 +63,7 @@ public class StrategyMatcherCreator {
         private Set<String> templates;
     }
 
+    @ToString // TODO: 02.11.2021 del
     @Builder
     @Getter
     public static class Result{

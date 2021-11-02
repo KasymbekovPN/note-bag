@@ -13,7 +13,6 @@ import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.function.Function;
 
-// TODO: 02.11.2021 rename: name without 'Strategy' suffix
 @Component
 public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
 
@@ -25,11 +24,17 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
         this.priority = priority;
     }
 
-    @Autowired
-    @Qualifier("skipBufferDatumMatcherOld")
-    public void setMatcherOld(Function<Update, Boolean> matcher) {
-        this.matcher = matcher;
+    @Override
+    public String getName() {
+        return "skipBufferDatum";
     }
+
+    // TODO: 02.11.2021 del
+//    @Autowired
+//    @Qualifier("skipBufferDatumMatcherOld")
+//    public void setMatcherOld(Function<Update, Boolean> matcher) {
+//        this.matcher = matcher;
+//    }
 
     @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {

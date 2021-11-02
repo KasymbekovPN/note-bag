@@ -8,8 +8,9 @@ import java.util.function.Function;
 
 public interface Strategy<T, R> {
     StrategyCalculatorSource<String> runAndGetAnswer(T value);
-    default Integer getPriority(){return -1;}
     Optional<R> execute(T value);
+    default Integer getPriority(){return -1;}
+    default String getName(){return "";}
 
     // TODO: 30.10.2021 del NPB-100
     default void setMatcher(Function<Update, Boolean> matcher){}

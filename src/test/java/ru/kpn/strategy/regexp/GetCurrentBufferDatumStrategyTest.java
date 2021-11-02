@@ -19,7 +19,7 @@ import utils.UpdateInstanceBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class GetCurrentBufferStrategyTest {
+public class GetCurrentBufferDatumStrategyTest {
 
     private static final Long ID = 123L;
     private static final String COMMAND = "/get current buffer datum";
@@ -29,7 +29,7 @@ public class GetCurrentBufferStrategyTest {
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
 
     @Autowired
-    private GetCurrentBufferStrategy strategy;
+    private GetCurrentBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
     private BotStrategyCalculatorSource ifExistAnswer;

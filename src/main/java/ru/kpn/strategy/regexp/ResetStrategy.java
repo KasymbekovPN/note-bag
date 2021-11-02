@@ -1,7 +1,6 @@
 package ru.kpn.strategy.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,9 +13,7 @@ import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.StrategyCalculatorSource;
 
 import java.util.Optional;
-import java.util.function.Function;
 
-// TODO: 02.11.2021 rename: name without 'Strategy' suffix
 @Component
 public class ResetStrategy extends BaseSubscriberStrategy {
 
@@ -31,11 +28,17 @@ public class ResetStrategy extends BaseSubscriberStrategy {
         this.priority = priority;
     }
 
-    @Autowired
-    @Qualifier("resetMatcherOld")
-    public void setMatcherOld(Function<Update, Boolean> matcher){
-        this.matcher = matcher;
+    @Override
+    public String getName() {
+        return "reset";
     }
+
+    // TODO: 02.11.2021 del
+//    @Autowired
+//    @Qualifier("resetMatcherOld")
+//    public void setMatcherOld(Function<Update, Boolean> matcher){
+//        this.matcher = matcher;
+//    }
 
     @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
