@@ -1,5 +1,6 @@
 package ru.kpn.strategy.regexp;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,5 +67,10 @@ public class ClearBufferStrategyTest {
         strategy.runAndGetAnswer(builder.build());
         int size = botBuffer.getSize(ID);
         assertThat(size).isZero();
+    }
+
+    @AfterEach
+    void tearDown() {
+        botBuffer.clear(ID);
     }
 }

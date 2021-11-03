@@ -1,5 +1,6 @@
 package ru.kpn.strategy.regexp;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class GetBufferStatusStrategyTest {
 
-    private static final Long CHAT_ID = 123L;
+    private static final Long ID = 123L;
     private static final String COMMAND = "/get buffer status";
 
     @Autowired
@@ -37,20 +38,20 @@ public class GetBufferStatusStrategyTest {
     @BeforeEach
     void setUp() {
         User user = new User();
-        user.setId(CHAT_ID);
+        user.setId(ID);
 
         builder = new UpdateInstanceBuilder()
-                .chatId(CHAT_ID)
+                .chatId(ID)
                 .from(user)
                 .text(COMMAND);
 
         ifEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.getBufferStatus.empty");
-        ifEmptyAnswer.add(String.valueOf(CHAT_ID));
-        ifEmptyAnswer.add(String.valueOf(CHAT_ID));
+        ifEmptyAnswer.add(String.valueOf(ID));
+        ifEmptyAnswer.add(String.valueOf(ID));
 
         ifNotEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.getBufferStatus.contains");
-        ifNotEmptyAnswer.add(String.valueOf(CHAT_ID));
-        ifNotEmptyAnswer.add(String.valueOf(CHAT_ID));
+        ifNotEmptyAnswer.add(String.valueOf(ID));
+        ifNotEmptyAnswer.add(String.valueOf(ID));
         ifNotEmptyAnswer.add(1);
     }
 
@@ -69,8 +70,13 @@ public class GetBufferStatusStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
-        botBuffer.add(CHAT_ID, new TestBufferDatum());
+        botBuffer.add(ID, new TestBufferDatum());
         final StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
+    }
+
+    @AfterEach
+    void tearDown() {
+        botBuffer.clear(ID);
     }
 }

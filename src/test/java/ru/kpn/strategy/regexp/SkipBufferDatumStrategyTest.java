@@ -1,5 +1,6 @@
 package ru.kpn.strategy.regexp;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,5 +72,10 @@ public class SkipBufferDatumStrategyTest {
         botBuffer.add(ID, new TestBufferDatum("2"));
         StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
+    }
+
+    @AfterEach
+    void tearDown() {
+        botBuffer.clear(ID);
     }
 }

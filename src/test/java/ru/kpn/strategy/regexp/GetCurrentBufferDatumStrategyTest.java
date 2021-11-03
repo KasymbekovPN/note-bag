@@ -1,5 +1,6 @@
 package ru.kpn.strategy.regexp;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,5 +75,10 @@ public class GetCurrentBufferDatumStrategyTest {
         botBuffer.add(ID, new TestBufferDatum(TEXT));
         StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifExistAnswer).isEqualTo(answer);
+    }
+
+    @AfterEach
+    void tearDown() {
+        botBuffer.clear(ID);
     }
 }
