@@ -63,7 +63,6 @@ public class StrategyMatcherCreator {
         private Set<String> templates;
     }
 
-    @ToString // TODO: 02.11.2021 del
     @Builder
     @Getter
     public static class Result{

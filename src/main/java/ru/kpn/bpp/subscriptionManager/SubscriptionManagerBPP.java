@@ -37,13 +37,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         if (maybeStrategy.isPresent()){
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
             String strategyName = strategy.getName();
-            //<
-            System.out.println(" --- " + strategyName);
-            //<
             StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
-            //<
-            System.out.println(result);
-            //<
             if (result.getSuccess()){
                 strategy.setMatcher(result.getMatcher());
                 subscriptionManager.subscribe(createSubscriber(strategy));
@@ -78,20 +72,4 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                 .strategy(strategy)
                 .build();
     }
-
-    // TODO: 02.11.2021 del
-//    private boolean isBeanStrategy(Object bean) {
-//        boolean success = false;
-//        Type[] genericInterfaces = bean.getClass().getSuperclass().getGenericInterfaces();
-//        for (Type genericInterface : genericInterfaces) {
-//            if (!(genericInterface instanceof ParameterizedType)){
-//                continue;
-//            }
-//            ParameterizedType pt = (ParameterizedType) genericInterface;
-//            Type rawType = pt.getRawType();
-//            success = rawType.getTypeName().equals(Strategy.class.getTypeName());
-//        }
-//
-//        return success;
-//    }
 }
