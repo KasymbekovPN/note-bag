@@ -37,6 +37,7 @@ public class MatcherFactoryImpl implements MatcherFactory<Update, Boolean> {
 
         private void checkCreatorsAmount() throws Exception {
             if (creators.size() != MatcherType.values().length){
+                // TODO: 03.11.2021 return exception with source of message
                 throw new Exception("Matcher creators aren't set completely");
             }
         }
