@@ -22,6 +22,9 @@ import java.util.Optional;
 @Component
 public class SubscriptionManagerBPP implements BeanPostProcessor {
 
+    // TODO: 03.11.2021 how it set?
+    private static final String STRATEGY_BEAN_SUFFIX = "Strategy";
+
     @Autowired
     private StrategyMatcherCreator matcherCreator;
 
@@ -36,7 +39,8 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         Optional<Strategy<Update, BotApiMethod<?>>> maybeStrategy = checkBean(bean);
         if (maybeStrategy.isPresent()){
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
-            String strategyName = strategy.getName();
+            String strategyName = calculateStrategyName(strategy);
+
             StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
             if (result.getSuccess()){
                 strategy.setMatcher(result.getMatcher());
@@ -48,6 +52,24 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 
+    // TODO: 03.11.2021 it must be bean 
+    private String calculateStrategyName(Strategy<Update, BotApiMethod<?>> strategy) {
+        String simpleName = strategy.getClass().getSimpleName();
+        int simpleNameLen = simpleName.length();
+        int suffixLen = STRATEGY_BEAN_SUFFIX.length();
+        if (simpleNameLen > suffixLen){
+            int borderIndex = simpleNameLen - suffixLen;
+            String suffix = simpleName.substring(borderIndex, simpleNameLen);
+            if (STRATEGY_BEAN_SUFFIX.equals(suffix)){
+                char[] chars = simpleName.substring(0, borderIndex).toCharArray();
+                chars[0] = Character.toLowerCase(chars[0]);
+                return String.valueOf(chars);
+            }
+        }
+        throw new BeanCreationException(String.format("Strategy bean '%s' isn't ended on '%s'", simpleName, STRATEGY_BEAN_SUFFIX));
+    }
+
+    // TODO: 03.11.2021 it must be bean 
     private Optional<Strategy<Update, BotApiMethod<?>>> checkBean(Object bean) {
         boolean success = false;
         Type[] genericInterfaces = bean.getClass().getSuperclass().getGenericInterfaces();

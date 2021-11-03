@@ -29,18 +29,6 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public String getName() {
-        return "reset";
-    }
-
-    // TODO: 02.11.2021 del
-//    @Autowired
-//    @Qualifier("resetMatcherOld")
-//    public void setMatcherOld(Function<Update, Boolean> matcher){
-//        this.matcher = matcher;
-//    }
-
-    @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);

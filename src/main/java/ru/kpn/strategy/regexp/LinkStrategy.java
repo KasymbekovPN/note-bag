@@ -22,18 +22,6 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public String getName() {
-        return "link";
-    }
-
-    // TODO: 02.11.2021 del
-//    @Autowired
-//    @Qualifier("linkMatcherOld")
-//    public void setMatcherOld(Function<Update, Boolean> matcher) {
-//        this.matcher = matcher;
-//    }
-
-    @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);

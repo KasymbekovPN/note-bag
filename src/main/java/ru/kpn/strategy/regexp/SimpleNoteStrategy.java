@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.buffer.BotBufferDatum;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
@@ -28,18 +27,6 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     public void setPriority(Integer priority) {
         this.priority = priority;
     }
-
-    @Override
-    public String getName() {
-        return "simpleNote";
-    }
-
-    // TODO: 02.11.2021 del
-//    @Autowired
-//    @Qualifier("simpleNoteMatcherOld")
-//    public void setMatcherOld(Function<Update, Boolean> matcher) {
-//        this.matcher = matcher;
-//    }
 
     @Override
     public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
