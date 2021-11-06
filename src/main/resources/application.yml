@@ -20,7 +20,7 @@ telegram:
       clearBuffer.priority: 6
       simpleNote.priority: 7
       link.priority: 8
-    contentMatchers:
+    matcherInitData:
       help:
         template: /help
         type: REGEX

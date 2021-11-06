@@ -56,7 +56,9 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
                 subscriptionManager.subscribe(createSubscriber(strategy));
             } else {
-                throw new BeanCreationException(result.getErrorMessage());
+                throw new BeanCreationException(beanName);
+                // TODO: 06.11.2021 del
+//                throw new BeanCreationException(result.getErrorMessage());
             }
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);

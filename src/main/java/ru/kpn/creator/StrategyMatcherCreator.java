@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.MatcherFactory;
 import ru.kpn.matcher.MatcherType;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -21,16 +21,15 @@ public class StrategyMatcherCreator {
 
     private MatcherFactory<Update, Boolean> factory;
 
-    // TODO: 06.11.2021 rename 
-    private Map<String, MatcherData> contentMatchers;
+    private Map<String, Datum> matcherInitData;
 
     @Autowired
     public void setFactory(MatcherFactory<Update, Boolean> factory) {
         this.factory = factory;
     }
 
-    public void setContentMatchers(Map<String, MatcherData> contentMatchers) {
-        this.contentMatchers = contentMatchers;
+    public void setMatcherInitData(Map<String, Datum> matcherInitData) {
+        this.matcherInitData = matcherInitData;
     }
 
     public Result getOrCreate(String name){
@@ -45,10 +44,10 @@ public class StrategyMatcherCreator {
     }
 
     private Result attemptCreateNewMatcher(String name) {
-        MatcherBuilder matcherBuilder = new MatcherBuilder();
-        return matcherBuilder
+        Builder builder = new Builder();
+        return builder
                 .name(name)
-                .matcherData(contentMatchers.getOrDefault(name, null))
+                .matcherData(matcherInitData.getOrDefault(name, null))
                 .factory(factory)
                 .checkMatcherDataExistence()
                 .prepareMatcherType()
@@ -56,113 +55,124 @@ public class StrategyMatcherCreator {
                 .build();
     }
 
-    // TODO: 06.11.2021 rename
     @Setter
     @Getter
-    public static class MatcherData {
+    public static class Datum {
         private String type;
         private Boolean constant;
         private String template;
         private Set<String> templates;
     }
 
-    @Builder
+    @lombok.Builder
     @Getter
     public static class Result{
         private Boolean success;
         private Function<Update, Boolean> matcher;
-        private String errorMessage;
+        private RawMessage<String> rawMessage;
     }
 
     @Getter
-    private static class MatcherBuilder {
-        private MatcherData matcherData;
+    public static class Builder {
+
+        private static final EnumMap<MatcherType, Function<Datum, Optional<Object[]>>> CHECK_AND_PREPARE = new EnumMap<>(MatcherType.class){{
+            put(MatcherType.CONSTANT, Builder::checkAndPrepareConstant);
+            put(MatcherType.REGEX, Builder::checkAndPrepareRegex);
+            put(MatcherType.MULTI_REGEX, Builder::checkAndPrepareMultiRegex);
+        }};
+
+        private Datum datum;
         private String name;
         private MatcherFactory<Update, Boolean> factory;
 
         private Boolean success = true;
-        private MatcherType matcherType;
+        private MatcherType type;
         private Object[] args;
+        private RawMessage<String> rawMessage;
 
-        // TODO: 02.11.2021 StrategyCalculatorSource!!!
-        private String errorMessage = "";
-
-        public MatcherBuilder name(String name){
+        public Builder name(String name){
             this.name = name;
             return this;
         }
 
-        public MatcherBuilder matcherData(MatcherData matcherData){
-            this.matcherData = matcherData;
+        public Builder matcherData(Datum datum){
+            this.datum = datum;
             return this;
         }
 
-        public MatcherBuilder factory(MatcherFactory<Update, Boolean> factory){
+        public Builder factory(MatcherFactory<Update, Boolean> factory){
             this.factory = factory;
             return this;
         }
 
-        public MatcherBuilder checkMatcherDataExistence(){
-            if (success && matcherData == null){
+        public Builder checkMatcherDataExistence(){
+            if (success && datum == null){
                 success = false;
-                errorMessage = String.format("Matcher data for '%s' doesn't exist", name);
+                rawMessage = new BotRawMessage("data.notExist.forSth").add(name);
             }
 
             return this;
         }
 
-        public MatcherBuilder prepareMatcherType(){
+        public Builder prepareMatcherType(){
             if (success){
-                if (matcherData.getType() != null){
+                final String datumType = datum.getType();
+                if (datumType != null){
                     try{
-                        matcherType = MatcherType.valueOf(matcherData.getType());
+                        type = MatcherType.valueOf(datumType);
                     } catch (IllegalArgumentException ex){
                         success = false;
-                        errorMessage = String.format("Type '%s' is invalid [%s]", matcherData.getType(), name);
+                        rawMessage = new BotRawMessage("type.invalid.where").add(datumType).add(name);
                     }
                 } else {
                     success = false;
-                    errorMessage = String.format("Type for '%s' is null", name);
+                    rawMessage = new BotRawMessage("type.isNull").add(name);
                 }
             }
             return this;
         }
 
-        // TODO: 02.11.2021 make according ExtractorCreator
-        public MatcherBuilder checkAndPrepareArgs(){
+        public Builder checkAndPrepareArgs(){
             if (success){
-                if (matcherType.equals(MatcherType.CONSTANT)){
-                    if (matcherData.getConstant() != null){
-                        args = new Object[]{matcherData.getConstant()};
-                    } else {
-                        success = false;
-                        errorMessage = String.format("Invalid arg 'constant' [%s]", name);
-                    }
-                } else if (matcherType.equals(MatcherType.REGEX)){
-                    if (matcherData.getTemplate() != null){
-                        args = new Object[]{matcherData.getTemplate()};
-                    } else {
-                        success = false;
-                        errorMessage = String.format("Invalid arg 'template' [%s]", name);
-                    }
-                } else if (matcherType.equals(MatcherType.MULTI_REGEX)){
-                    if (matcherData.getTemplates() != null){
-                        args = matcherData.getTemplates().toArray();
-                    } else {
-                        success = false;
-                        errorMessage = String.format("Invalid arg 'templates' [%s]", name);
-                    }
+                Optional<Object[]> maybeArgs = CHECK_AND_PREPARE.get(type).apply(datum);
+                if (maybeArgs.isPresent()){
+                    args = maybeArgs.get();
+                } else {
+                    success = false;
+                    rawMessage = new BotRawMessage("arguments.isInvalid.forSth").add(name);
                 }
             }
             return this;
         }
 
         public Result build(){
-            Result.ResultBuilder builder = Result.builder().success(this.success).errorMessage(errorMessage);
+            Result.ResultBuilder builder = Result.builder().success(this.success).rawMessage(rawMessage);
             if (success){
-                builder.matcher(factory.create(matcherType, args));
+                builder.matcher(factory.create(type, args));
             }
             return builder.build();
+        }
+
+        private static Optional<Object[]> checkAndPrepareConstant(Datum datum){
+            if (datum.getConstant() != null){
+                return Optional.of(new Object[]{datum.getConstant()});
+            }
+            return Optional.empty();
+        }
+
+        private static Optional<Object[]> checkAndPrepareRegex(Datum datum){
+            if (datum.getTemplate() != null){
+                return Optional.of(new Object[]{datum.getTemplate()});
+            }
+            return Optional.empty();
+        }
+
+        private static Optional<Object[]> checkAndPrepareMultiRegex(Datum datum){
+            final Set<String> templates = datum.getTemplates();
+            if (templates != null && templates.size() != 0){
+                return Optional.of(templates.toArray());
+            }
+            return Optional.empty();
         }
     }
 }
