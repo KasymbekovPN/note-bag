@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -32,8 +32,8 @@ public class SkipBufferDatumStrategyTest {
     private SkipBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private BotStrategyCalculatorSource ifEmptyAnswer;
-    private BotStrategyCalculatorSource ifNotEmptyAnswer;
+    private BotRawMessage ifEmptyAnswer;
+    private BotRawMessage ifNotEmptyAnswer;
 
     @BeforeEach
     void setUp() {
@@ -45,10 +45,10 @@ public class SkipBufferDatumStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.skipBufferDatum.isEmpty");
+        ifEmptyAnswer = new BotRawMessage("strategy.message.skipBufferDatum.isEmpty");
         ifEmptyAnswer.add(String.valueOf(ID));
 
-        ifNotEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.skipBufferDatum.isNotEmpty");
+        ifNotEmptyAnswer = new BotRawMessage("strategy.message.skipBufferDatum.isNotEmpty");
         ifNotEmptyAnswer.add(String.valueOf(ID));
         ifNotEmptyAnswer.add(1);
     }
@@ -62,7 +62,7 @@ public class SkipBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
@@ -70,7 +70,7 @@ public class SkipBufferDatumStrategyTest {
     void shouldCheckAnswerIfBufferNotEmpty() {
         botBuffer.add(ID, new TestBufferDatum("1"));
         botBuffer.add(ID, new TestBufferDatum("2"));
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
 

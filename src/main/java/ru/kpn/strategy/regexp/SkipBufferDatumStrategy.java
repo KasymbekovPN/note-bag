@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
@@ -22,10 +22,10 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         Long id = value.getMessage().getChatId();
         int bufferSize = botBuffer.getSize(id);
-        StrategyCalculatorSource<String> source = createSource(bufferSize == 0
+        RawMessage<String> source = createSource(bufferSize == 0
                 ? "strategy.message.skipBufferDatum.isEmpty"
                 : "strategy.message.skipBufferDatum.isNotEmpty"
         );

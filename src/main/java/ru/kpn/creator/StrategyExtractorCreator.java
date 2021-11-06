@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ExtractorFactory;
 import ru.kpn.extractor.ExtractorType;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.*;
 import java.util.function.Function;
@@ -65,7 +67,7 @@ public class StrategyExtractorCreator {
     public static class Result {
         private Boolean success;
         private Function<Update, String> extractor;
-        private String errorMessage;
+        private RawMessage<String> rawMessage;
     }
 
     public static class Builder {
@@ -81,8 +83,7 @@ public class StrategyExtractorCreator {
         private Boolean success = true;
         private ExtractorType type;
         private Object[] args;
-        // TODO: 06.11.2021  StrategyCalculatorSource!!!
-        private String errorMessage = "";
+        private RawMessage<String> rawMessage;
 
         public Builder name(String name){
             this.name = name;
@@ -102,7 +103,7 @@ public class StrategyExtractorCreator {
         public Builder checkDatumExistence(){
             if (success && datum == null){
                 success = false;
-                errorMessage = String.format("Extractor data for '%s' doesn't exist", name);
+                rawMessage = new BotRawMessage("data.notExist.forSth").add(name);
             }
             return this;
         }
@@ -115,11 +116,11 @@ public class StrategyExtractorCreator {
                         this.type = ExtractorType.valueOf(datumType);
                     } catch (IllegalArgumentException ex){
                         success = false;
-                        errorMessage = String.format("Type '%s' is invalid [%s]", datum.getType(), name);
+                        rawMessage = new BotRawMessage("type.invalid.where").add(datumType).add(name);
                     }
                 } else {
                     success = false;
-                    errorMessage = String.format("Type for '%s' is null", name);
+                    rawMessage = new BotRawMessage("type.isNull").add(name);
                 }
             }
             return this;
@@ -132,14 +133,14 @@ public class StrategyExtractorCreator {
                     args = maybeArgs.get();
                 } else {
                     success = false;
-                    errorMessage = String.format("Invalid args for [%s]", name);
+                    rawMessage = new BotRawMessage("arguments.isInvalid.forSth").add(name);
                 }
             }
             return this;
         }
 
         public Result build(){
-            Result.ResultBuilder builder = Result.builder().success(success).errorMessage(errorMessage);
+            Result.ResultBuilder builder = Result.builder().success(success).rawMessage(rawMessage);
             if (success){
                 builder.extractor(factory.create(type, args));
             }

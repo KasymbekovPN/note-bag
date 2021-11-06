@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -32,8 +32,8 @@ public class GetBufferStatusStrategyTest {
     private GetBufferStatusStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private BotStrategyCalculatorSource ifEmptyAnswer;
-    private BotStrategyCalculatorSource ifNotEmptyAnswer;
+    private BotRawMessage ifEmptyAnswer;
+    private BotRawMessage ifNotEmptyAnswer;
 
     @BeforeEach
     void setUp() {
@@ -45,11 +45,11 @@ public class GetBufferStatusStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.getBufferStatus.empty");
+        ifEmptyAnswer = new BotRawMessage("strategy.message.getBufferStatus.empty");
         ifEmptyAnswer.add(String.valueOf(ID));
         ifEmptyAnswer.add(String.valueOf(ID));
 
-        ifNotEmptyAnswer = new BotStrategyCalculatorSource("strategy.message.getBufferStatus.contains");
+        ifNotEmptyAnswer = new BotRawMessage("strategy.message.getBufferStatus.contains");
         ifNotEmptyAnswer.add(String.valueOf(ID));
         ifNotEmptyAnswer.add(String.valueOf(ID));
         ifNotEmptyAnswer.add(1);
@@ -64,14 +64,14 @@ public class GetBufferStatusStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        final StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        final RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
         botBuffer.add(ID, new TestBufferDatum());
-        final StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        final RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
 

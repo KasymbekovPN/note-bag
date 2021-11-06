@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class LinkStrategy extends BaseSubscriberStrategy {
@@ -22,7 +22,7 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);
     }
@@ -32,8 +32,8 @@ public class LinkStrategy extends BaseSubscriberStrategy {
         botBuffer.add(value.getMessage().getChatId(), datum);
     }
 
-    private StrategyCalculatorSource<String> getAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.link");
+    private RawMessage<String> getAnswer(Update value) {
+        RawMessage<String> source = createSource("strategy.message.link");
         source.add(calculateChatId(value));
         source.add(value.getMessage().getText());
 

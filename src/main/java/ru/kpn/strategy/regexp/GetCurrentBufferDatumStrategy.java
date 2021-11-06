@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.Optional;
 
@@ -24,11 +24,11 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         String chatId = calculateChatId(value);
         Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 
-        StrategyCalculatorSource<String> source = createSource(
+        RawMessage<String> source = createSource(
                 maybeDatum.isPresent()
                         ? "strategy.message.getCurrentBufferDatum.exist"
                         : "strategy.message.getCurrentBufferDatum.notExist"

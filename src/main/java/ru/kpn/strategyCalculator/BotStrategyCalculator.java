@@ -18,7 +18,7 @@ public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>
     }
 
     @Override
-    public synchronized BotApiMethod<?> calculate(StrategyCalculatorSource<String> source) {
+    public synchronized BotApiMethod<?> calculate(RawMessage<String> source) {
         String chatId = String.valueOf(source.getArgs()[0]);
         MessageBuilder builder = messageBuilderFactory.create(source.getCode());
         for (int i = 0; i < source.getArgs().length; i++) {

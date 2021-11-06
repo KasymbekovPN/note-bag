@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.Strategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.*;
@@ -71,7 +71,7 @@ public class PrioritySubscriberTest {
         }
 
         @Override
-        public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+        public RawMessage<String> runAndGetAnswer(Update value) {
             return null;
         }
     }

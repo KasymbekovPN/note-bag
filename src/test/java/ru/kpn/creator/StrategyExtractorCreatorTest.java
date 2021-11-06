@@ -6,11 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ByPrefixExtractor;
 import ru.kpn.extractor.ExtractorFactory;
 import ru.kpn.extractor.ExtractorType;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StrategyExtractorCreatorTest {
 
     private final Map<String, StrategyExtractorCreator.Datum> extractorInitData = new HashMap<>();
+    private final HashMap<String, RawMessage<String>> expectedRawMessages = new HashMap<>();
 
     private StrategyExtractorCreator creator;
 
@@ -44,27 +44,31 @@ public class StrategyExtractorCreatorTest {
         extractorInitData.put("byPrefixDatum", byPrefixDatum);
 
         creator.setExtractorInitData(extractorInitData);
+
+        expectedRawMessages.put("withoutTypeDatum",new BotRawMessage("type.isNull").add("withoutTypeDatum"));
+        expectedRawMessages.put("wrongTypeDatum", new BotRawMessage("type.invalid.where").add("WRONG").add("wrongTypeDatum"));
+        expectedRawMessages.put("wrongArgsByPrefixDatum", new BotRawMessage("arguments.isInvalid.forSth").add("wrongArgsByPrefixDatum"));
     }
 
     @Test
     void shouldCheckWithoutTypeCreation() {
         StrategyExtractorCreator.Result result = creator.getOrCreate("withoutTypeDatum");
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getErrorMessage()).isEqualTo("Type for 'withoutTypeDatum' is null");
+        assertThat(result.getRawMessage()).isEqualTo(expectedRawMessages.get("withoutTypeDatum"));
     }
 
     @Test
     void shouldCheckWrongTypeDatumCreation() {
         StrategyExtractorCreator.Result result = creator.getOrCreate("wrongTypeDatum");
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getErrorMessage()).isEqualTo("Type 'WRONG' is invalid [wrongTypeDatum]");
+        assertThat(result.getRawMessage()).isEqualTo(expectedRawMessages.get("wrongTypeDatum"));
     }
 
     @Test
     void shouldCheckWrongArgsByPrefixDatum() {
         StrategyExtractorCreator.Result result = creator.getOrCreate("wrongArgsByPrefixDatum");
         assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getErrorMessage()).isEqualTo("Invalid args for [wrongArgsByPrefixDatum]");
+        assertThat(result.getRawMessage()).isEqualTo(expectedRawMessages.get("wrongArgsByPrefixDatum"));
     }
 
     @Test

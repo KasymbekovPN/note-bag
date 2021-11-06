@@ -13,8 +13,8 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -58,11 +58,11 @@ public class ResetStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        BotStrategyCalculatorSource expectedSource = new BotStrategyCalculatorSource("strategy.message.reset");
+        BotRawMessage expectedSource = new BotRawMessage("strategy.message.reset");
         expectedSource.add(String.valueOf(ID));
         expectedSource.add(String.valueOf(ID));
 
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
         assertThat(expectedSource).isEqualTo(answer);
     }
 

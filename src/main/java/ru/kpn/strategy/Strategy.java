@@ -1,13 +1,13 @@
 package ru.kpn.strategy;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 public interface Strategy<T, R> {
-    StrategyCalculatorSource<String> runAndGetAnswer(T value);
+    RawMessage<String> runAndGetAnswer(T value);
     Optional<R> execute(T value);
     default Integer getPriority(){return -1;}
 

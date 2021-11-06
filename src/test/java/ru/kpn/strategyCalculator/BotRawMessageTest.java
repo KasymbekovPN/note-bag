@@ -8,16 +8,16 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotStrategyCalculatorSourceTest {
+public class BotRawMessageTest {
 
     private static final Random RANDOM = new Random();
     private static final String CODE = "some code";
 
-    private BotStrategyCalculatorSource source;
+    private BotRawMessage source;
 
     @BeforeEach
     void setUp() {
-        source = new BotStrategyCalculatorSource(CODE);
+        source = new BotRawMessage(CODE);
     }
 
     @Test

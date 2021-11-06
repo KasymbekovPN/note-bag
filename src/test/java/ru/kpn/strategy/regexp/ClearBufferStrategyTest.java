@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -32,7 +32,7 @@ public class ClearBufferStrategyTest {
     private ClearBufferStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private BotStrategyCalculatorSource expectedAnswer;
+    private BotRawMessage expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +44,7 @@ public class ClearBufferStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        expectedAnswer = new BotStrategyCalculatorSource("strategy.message.clearBuffer.isCleaned");
+        expectedAnswer = new BotRawMessage("strategy.message.clearBuffer.isCleaned");
         expectedAnswer.add(String.valueOf(ID));
     }
 
@@ -57,7 +57,7 @@ public class ClearBufferStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 

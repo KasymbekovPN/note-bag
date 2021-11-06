@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);
     }
@@ -43,8 +43,8 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         botBuffer.add(chatId, datum);
     }
 
-    private StrategyCalculatorSource<String> getAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.simpleNode");
+    private RawMessage<String> getAnswer(Update value) {
+        RawMessage<String> source = createSource("strategy.message.simpleNode");
         source.add(calculateChatId(value));
 
         return source;

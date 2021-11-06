@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,10 +38,10 @@ public class HelpStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        BotStrategyCalculatorSource expectedSource = new BotStrategyCalculatorSource("strategy.message.help");
+        BotRawMessage expectedSource = new BotRawMessage("strategy.message.help");
         expectedSource.add(String.valueOf(ID));
 
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
         assertThat(expectedSource).isEqualTo(answer);
     }
 }

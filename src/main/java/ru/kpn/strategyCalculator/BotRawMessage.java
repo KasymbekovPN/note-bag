@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class BotStrategyCalculatorSource implements StrategyCalculatorSource<String> {
+public class BotRawMessage implements RawMessage<String> {
     private final String code;
     private final List<Object> args = new ArrayList<>();
 
@@ -20,8 +20,9 @@ public class BotStrategyCalculatorSource implements StrategyCalculatorSource<Str
     }
 
     @Override
-    public void add(Object o) {
+    public RawMessage<String> add(Object o) {
         args.add(o);
+        return this;
     }
 
     @Override

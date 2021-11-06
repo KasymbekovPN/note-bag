@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -33,8 +33,8 @@ public class GetCurrentBufferDatumStrategyTest {
     private GetCurrentBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private BotStrategyCalculatorSource ifExistAnswer;
-    private BotStrategyCalculatorSource ifNotExistAnswer;
+    private BotRawMessage ifExistAnswer;
+    private BotRawMessage ifNotExistAnswer;
 
     @BeforeEach
     void setUp() {
@@ -47,12 +47,12 @@ public class GetCurrentBufferDatumStrategyTest {
                 .text(COMMAND);
 
         String sid = String.valueOf(ID);
-        ifExistAnswer = new BotStrategyCalculatorSource("strategy.message.getCurrentBufferDatum.exist");
+        ifExistAnswer = new BotRawMessage("strategy.message.getCurrentBufferDatum.exist");
         ifExistAnswer.add(sid);
         ifExistAnswer.add(sid);
         ifExistAnswer.add(TEXT);
 
-        ifNotExistAnswer = new BotStrategyCalculatorSource("strategy.message.getCurrentBufferDatum.notExist");
+        ifNotExistAnswer = new BotRawMessage("strategy.message.getCurrentBufferDatum.notExist");
         ifNotExistAnswer.add(sid);
         ifNotExistAnswer.add(sid);
     }
@@ -66,14 +66,14 @@ public class GetCurrentBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfCurrentDatumNotExist() {
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotExistAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfCurrentDatumExist() {
         botBuffer.add(ID, new TestBufferDatum(TEXT));
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifExistAnswer).isEqualTo(answer);
     }
 

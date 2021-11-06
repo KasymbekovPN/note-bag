@@ -5,7 +5,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Random;
@@ -72,7 +72,7 @@ public class BaseSubscriberStrategyTest {
         }
 
         @Override
-        public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+        public RawMessage<String> runAndGetAnswer(Update value) {
             return null;
         }
     }

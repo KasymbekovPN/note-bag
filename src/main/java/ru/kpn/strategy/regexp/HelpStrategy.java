@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class HelpStrategy extends BaseSubscriberStrategy {
@@ -15,8 +15,8 @@ public class HelpStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.help");
+    public RawMessage<String> runAndGetAnswer(Update value) {
+        RawMessage<String> source = createSource("strategy.message.help");
         source.add(calculateChatId(value));
 
         return source;

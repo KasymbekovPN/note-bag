@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
  
 @Component
 public class ClearBufferStrategy extends BaseSubscriberStrategy {
@@ -22,13 +22,13 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         botBuffer.clear(value.getMessage().getChatId());
         return calculateAnswer(value);
     }
 
-    private StrategyCalculatorSource<String> calculateAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.clearBuffer.isCleaned");
+    private RawMessage<String> calculateAnswer(Update value) {
+        RawMessage<String> source = createSource("strategy.message.clearBuffer.isCleaned");
         source.add(calculateChatId(value));
 
         return source;

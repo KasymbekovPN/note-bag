@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class LinkStrategyTest {
     private LinkStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private BotStrategyCalculatorSource expectedAnswer;
+    private BotRawMessage expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ public class LinkStrategyTest {
                 .chatId(ID)
                 .from(user);
 
-        expectedAnswer = new BotStrategyCalculatorSource("strategy.message.link");
+        expectedAnswer = new BotRawMessage("strategy.message.link");
         expectedAnswer.add(String.valueOf(ID));
     }
 
@@ -57,7 +57,7 @@ public class LinkStrategyTest {
     @CsvFileSource(resources = "shouldCheckAnswer_link.csv")
     void shouldCheckAnswer(String command) {
         expectedAnswer.add(command);
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.text(command).build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(command).build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 

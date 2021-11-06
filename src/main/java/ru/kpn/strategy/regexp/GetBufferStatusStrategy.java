@@ -8,7 +8,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
@@ -22,10 +22,10 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         int bufferSize = getBufferSize(value);
         String chatId = calculateChatId(value);
-        StrategyCalculatorSource<String> source = createSource(
+        RawMessage<String> source = createSource(
                 bufferSize == 0
                         ? "strategy.message.getBufferStatus.empty"
                         : "strategy.message.getBufferStatus.contains"

@@ -28,13 +28,13 @@ public class BotStrategyCalculatorTest {
     void shouldCheckCalculation() {
         Update update = createUpdate();
         SendMessage expectedCalcResult = createExpectedCalcResult(update);
-        SendMessage calcResult = (SendMessage) strategyCalculator.calculate(new TextSource());
+        SendMessage calcResult = (SendMessage) strategyCalculator.calculate(new TextRawMessage());
 
         assertThat(expectedCalcResult.getChatId()).isEqualTo(calcResult.getChatId());
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
-    private static class TextSource implements StrategyCalculatorSource<String>{
+    private static class TextRawMessage implements RawMessage<String> {
 
 
         @Override
@@ -43,7 +43,7 @@ public class BotStrategyCalculatorTest {
         }
 
         @Override
-        public void add(Object o) {}
+        public RawMessage<String> add(Object o) {return this;}
 
         @Override
         public Object[] getArgs() {

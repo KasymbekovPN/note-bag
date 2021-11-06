@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -43,14 +43,14 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        StrategyCalculatorSource<String> source = new StrategyCalculatorSource<>() {
+        RawMessage<String> rawMessage = new RawMessage<>() {
             @Override
             public String getCode() {
                 return "noneSubscriberStrategy.unknownInput";
             }
 
             @Override
-            public void add(Object o) {}
+            public RawMessage<String> add(Object o) {return this;}
 
             @Override
             public Object[] getArgs() {
@@ -58,6 +58,6 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
             }
         };
 
-        return defaultStrategyCalculator.calculate(source);
+        return defaultStrategyCalculator.calculate(rawMessage);
     }
 }

@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class GetStateStrategy extends BaseSubscriberStrategy {
@@ -22,8 +22,8 @@ public class GetStateStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
-        StrategyCalculatorSource<String> source = createSource("strategy.message.getstate");
+    public RawMessage<String> runAndGetAnswer(Update value) {
+        RawMessage<String> source = createSource("strategy.message.getstate");
         source.add(calculateChatId(value));
         source.add(calculateChatId(value));
         source.add(stateService.get(getUser(value)));

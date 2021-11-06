@@ -10,7 +10,7 @@ import ru.kpn.bot.state.NPBotState;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.Optional;
 
@@ -29,10 +29,10 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public StrategyCalculatorSource<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetAnswer(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);
-        StrategyCalculatorSource<String> source = createSource("strategy.message.reset");
+        RawMessage<String> source = createSource("strategy.message.reset");
         source.add(chatId);
         source.add(chatId);
 

@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,12 +51,12 @@ public class GetStateStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        StrategyCalculatorSource<String> expectedSource = new BotStrategyCalculatorSource("strategy.message.getstate");
+        RawMessage<String> expectedSource = new BotRawMessage("strategy.message.getstate");
         expectedSource.add(String.valueOf(ID));
         expectedSource.add(String.valueOf(ID));
         expectedSource.add(stateService.get(user));
 
-        StrategyCalculatorSource<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(expectedSource).isEqualTo(answer);
     }
 }

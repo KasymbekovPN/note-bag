@@ -3,9 +3,9 @@ package ru.kpn.strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategyCalculator.BotStrategyCalculatorSource;
+import ru.kpn.strategyCalculator.BotRawMessage;
 import ru.kpn.strategyCalculator.StrategyCalculator;
-import ru.kpn.strategyCalculator.StrategyCalculatorSource;
+import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -44,7 +44,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
-        StrategyCalculatorSource<String> source = runAndGetAnswer(value);
+        RawMessage<String> source = runAndGetAnswer(value);
         return strategyCalculator.calculate(source);
     }
 
@@ -52,7 +52,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         return value.getMessage().getChatId().toString();
     }
 
-    protected StrategyCalculatorSource<String> createSource(String code){
-        return new BotStrategyCalculatorSource(code);
+    protected RawMessage<String> createSource(String code){
+        return new BotRawMessage(code);
     }
 }
