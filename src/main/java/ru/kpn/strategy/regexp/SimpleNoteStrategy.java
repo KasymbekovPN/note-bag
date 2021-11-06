@@ -1,7 +1,6 @@
 package ru.kpn.strategy.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,9 +15,6 @@ import java.util.function.Function;
 @Component
 public class SimpleNoteStrategy extends BaseSubscriberStrategy {
 
-    // TODO: 06.11.2021 del
-    @Autowired
-    @Qualifier("simpleNoteExtractorOld")
     public Function<Update, String> extractor;
 
     @Autowired
@@ -27,6 +23,11 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     @Value("${telegram.tube.strategies.simpleNote.priority}")
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public void setExtractor(Function<Update, String> extractor) {
+        this.extractor = extractor;
     }
 
     @Override

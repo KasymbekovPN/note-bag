@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.creator.StrategyExtractorCreator;
 import ru.kpn.creator.StrategyMatcherCreator;
 import ru.kpn.strategy.Strategy;
 import ru.kpn.subscriber.Subscriber;
@@ -29,6 +30,9 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     private StrategyMatcherCreator matcherCreator;
 
     @Autowired
+    private StrategyExtractorCreator extractorCreator;
+
+    @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
 
     @Autowired
@@ -44,6 +48,12 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
             StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
             if (result.getSuccess()){
                 strategy.setMatcher(result.getMatcher());
+
+                StrategyExtractorCreator.Result extractorResult = extractorCreator.getOrCreate(strategyName);
+                if (extractorResult.getSuccess()){
+                    strategy.setExtractor(extractorResult.getExtractor());
+                }
+
                 subscriptionManager.subscribe(createSubscriber(strategy));
             } else {
                 throw new BeanCreationException(result.getErrorMessage());

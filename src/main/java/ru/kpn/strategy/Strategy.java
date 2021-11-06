@@ -13,4 +13,5 @@ public interface Strategy<T, R> {
 
     // TODO: 30.10.2021 del NPB-100
     default void setMatcher(Function<Update, Boolean> matcher){}
+    default void setExtractor(Function<Update, String> extractor){}
 }
