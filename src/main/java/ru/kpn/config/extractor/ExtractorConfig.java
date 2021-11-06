@@ -19,10 +19,11 @@ public class ExtractorConfig {
     @Autowired
     private ExtractorFactory<Update, String> factory;
 
+    // TODO: 03.11.2021 del
     @Bean
-    @Qualifier("simpleNoteExtractor")
-    public Function<Update, String> simpleNodeExtractor(
-            @Value("${telegram.tube.contentExtractors.simpleNote.prefixes}") Set<String> prefixes){
+    @Qualifier("simpleNoteExtractorOld")
+    public Function<Update, String> simpleNodeExtractorOld(
+            @Value("${telegram.tube.extractorInitData.simpleNote.prefixes}") Set<String> prefixes){
         Set<String> preparedPrefixes = preparePrefixes(prefixes);
         return factory.create(ExtractorType.BY_PREFIX, preparedPrefixes.toArray());
     }

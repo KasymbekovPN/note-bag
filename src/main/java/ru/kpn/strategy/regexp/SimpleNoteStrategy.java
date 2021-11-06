@@ -16,8 +16,9 @@ import java.util.function.Function;
 @Component
 public class SimpleNoteStrategy extends BaseSubscriberStrategy {
 
+    // TODO: 06.11.2021 del
     @Autowired
-    @Qualifier("simpleNoteExtractor")
+    @Qualifier("simpleNoteExtractorOld")
     public Function<Update, String> extractor;
 
     @Autowired

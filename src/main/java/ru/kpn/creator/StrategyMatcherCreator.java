@@ -20,6 +20,8 @@ public class StrategyMatcherCreator {
     private final Map<String, Result> results = new HashMap<>();
 
     private MatcherFactory<Update, Boolean> factory;
+
+    // TODO: 06.11.2021 rename 
     private Map<String, MatcherData> contentMatchers;
 
     @Autowired
@@ -54,6 +56,7 @@ public class StrategyMatcherCreator {
                 .build();
     }
 
+    // TODO: 06.11.2021 rename
     @Setter
     @Getter
     public static class MatcherData {
@@ -110,7 +113,6 @@ public class StrategyMatcherCreator {
 
         public MatcherBuilder prepareMatcherType(){
             if (success){
-                // TODO: 02.11.2021 move to enum
                 if (matcherData.getType() != null){
                     try{
                         matcherType = MatcherType.valueOf(matcherData.getType());
@@ -126,7 +128,7 @@ public class StrategyMatcherCreator {
             return this;
         }
 
-        // TODO: 02.11.2021 move to enum MatcherType 
+        // TODO: 02.11.2021 make according ExtractorCreator
         public MatcherBuilder checkAndPrepareArgs(){
             if (success){
                 if (matcherType.equals(MatcherType.CONSTANT)){

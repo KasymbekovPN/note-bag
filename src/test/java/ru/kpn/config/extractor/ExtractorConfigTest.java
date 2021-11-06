@@ -18,14 +18,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class ExtractorConfigTest {
 
+    // TODO: 06.11.2021 del 
     @Autowired
-    @Qualifier("simpleNoteExtractor")
-    private Function<Update, String> simpleNoteExtractor;
+    @Qualifier("simpleNoteExtractorOld")
+    private Function<Update, String> simpleNoteExtractorOld;
 
+    // TODO: 06.11.2021 del
     @Test
-    void shouldCheckSimpleNoteExtractor() {
+    void shouldCheckSimpleNoteExtractorOld() {
         final Set<String> expectedPrefixes = Set.of("/sn ", "/simple note ");
-        final Set<String> prefixes = getPrefixes(simpleNoteExtractor);
+        final Set<String> prefixes = getPrefixes(simpleNoteExtractorOld);
         assertThat(expectedPrefixes).isEqualTo(prefixes);
     }
 

@@ -48,8 +48,9 @@ telegram:
       link:
         template: ^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]
         type: REGEX
-    contentExtractors:
+    extractorInitData:
       simpleNote:
+        type: BY_PREFIX
         prefixes: /simple note,/sn
 
 mongo:
