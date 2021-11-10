@@ -28,10 +28,8 @@ public class ClearBufferStrategyTest {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
-
     @Autowired
     private StrategyInitCreator strategyInitCreator;
-
     @Autowired
     private ClearBufferStrategy strategy;
 

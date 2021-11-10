@@ -12,6 +12,7 @@ import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.RawMessage;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Component
 public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
@@ -22,6 +23,11 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     @Inject(InjectionType.PRIORITY)
     public void setPriority(Integer priority){
         this.priority = priority;
+    }
+
+    @Inject(InjectionType.MATCHER)
+    public void setMatcher(Function<Update, Boolean> matcher){
+        this.matcher = matcher;
     }
 
     @Override

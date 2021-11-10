@@ -40,6 +40,8 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     @Autowired
     private StrategyExtractorCreator strategyExtractorCreator;
     @Autowired
+    private StrategyMatcherCreator strategyMatcherCreator;
+    @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
     @Autowired
     private SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager;
@@ -51,10 +53,6 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
             String strategyName = calculateStrategyName(strategy);
 
-            //<
-            System.out.println("-----");
-            System.out.println(strategyName);
-            //<
             Optional<Method> maybePriorityInjectionMethod = getMethodForInjection(strategy, InjectionType.PRIORITY);
             if (maybePriorityInjectionMethod.isPresent()){
                 StrategyInitCreator.Result result = strategyInitCreator.getDatum(strategyName);
@@ -65,6 +63,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                     throw new BeanCreationException(String.format("Priority for '%s' doesn't exist", strategyName));
                 }
             }
+
             Optional<Method> maybeExtractorInjectionMethod = getMethodForInjection(strategy, InjectionType.EXTRACTOR);
             if (maybeExtractorInjectionMethod.isPresent()){
                 StrategyExtractorCreator.Result result = strategyExtractorCreator.getOrCreate(strategyName);
@@ -76,26 +75,16 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                 }
             }
 
-            // TODO: 08.11.2021 impl
-//            injectMatcher(strategy, strategyName);
-//            injectExtractor(strategy, strategyName);
-
-            // TODO: 08.11.2021 del
-//            StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
-//            if (result.getSuccess()){
-//                strategy.setMatcherOld(result.getMatcher());
-//
-//                StrategyExtractorCreator.Result extractorResult = extractorCreator.getOrCreate(strategyName);
-//                if (extractorResult.getSuccess()){
-//                    strategy.setExtractorOld(extractorResult.getExtractor());
-//                }
-//
-//                subscriptionManager.subscribe(createSubscriber(strategy));
-//            } else {
-//                throw new BeanCreationException(beanName);
-//                // TODO: 06.11.2021 del
-////                throw new BeanCreationException(result.getErrorMessage());
-//            }
+            Optional<Method> maybeMatcherInjectionMethod = getMethodForInjection(strategy, InjectionType.MATCHER);
+            if (maybeMatcherInjectionMethod.isPresent()){
+                StrategyMatcherCreator.Result result = strategyMatcherCreator.getOrCreate(strategyName);
+                if (result.getSuccess()){
+                    inject(strategy, maybeMatcherInjectionMethod.get(), result.getMatcher());
+                } else {
+                    // TODO: 10.11.2021 use exception with rawMessage
+                    throw new BeanCreationException(String.format("Matcher for '%s' doesn't exist", strategyName));
+                }
+            }
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
@@ -115,10 +104,6 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @SneakyThrows // TODO: 08.11.2021 ???
     private void inject(Strategy<Update, BotApiMethod<?>> strategy, Method method, Object value) {
-        //<
-        System.out.println("inject <> " + method.getName());
-        System.out.println(strategyInitCreator);
-        //<
         method.invoke(strategy, value);
     }
 

@@ -37,23 +37,10 @@ public class BaseSubscriberStrategyTest {
         assertThat(strategy.matchTemplate(new UpdateInstanceBuilder().text(text).build())).isFalse();
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckMatcher.csv")
-    void shouldCheckMatcher(String template, Boolean expectedResult) {
-        strategy.setMatcherOld(new TestMatcher());
-        Update update = new UpdateInstanceBuilder().text(template).build();
-        assertThat(strategy.matchTemplate(update)).isEqualTo(expectedResult);
-    }
-
     private static class TestSubscriberStrategy extends BaseSubscriberStrategy{
 
         public String calculateChatId(Update value) {
             return super.calculateChatId(value);
-        }
-
-        @Override
-        public void setMatcherOld(Function<Update, Boolean> matcher) {
-            this.matcher = matcher;
         }
 
         public boolean matchTemplate(Update text) {

@@ -31,6 +31,11 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         this.extractor = extractor;
     }
 
+    @Inject(InjectionType.MATCHER)
+    public void setMatcher(Function<Update, Boolean> matcher){
+        this.matcher = matcher;
+    }
+
     @Override
     public RawMessage<String> runAndGetAnswer(Update value) {
         putIntoBuffer(value);

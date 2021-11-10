@@ -11,6 +11,8 @@ import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.RawMessage;
 
+import java.util.function.Function;
+
 @Component
 public class LinkStrategy extends BaseSubscriberStrategy {
 
@@ -20,6 +22,11 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     @Inject(InjectionType.PRIORITY)
     public void setPriority(Integer priority){
         this.priority = priority;
+    }
+
+    @Inject(InjectionType.MATCHER)
+    public void setMatcher(Function<Update, Boolean> matcher){
+        this.matcher = matcher;
     }
 
     @Override
