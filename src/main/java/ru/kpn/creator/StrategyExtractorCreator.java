@@ -14,6 +14,7 @@ import ru.kpn.strategyCalculator.RawMessage;
 import java.util.*;
 import java.util.function.Function;
 
+// TODO: 08.11.2021 rename
 @Service
 @ConfigurationProperties(prefix = "telegram.tube")
 public class StrategyExtractorCreator {

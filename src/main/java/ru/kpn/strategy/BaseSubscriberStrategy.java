@@ -23,11 +23,9 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     @Override
-    public void setMatcher(Function<Update, Boolean> matcher) {
+    public void setMatcherOld(Function<Update, Boolean> matcher) {
         this.matcher = matcher;
     }
-
-    public abstract void setPriority(Integer priority);
 
     @Override
     public Integer getPriority() {

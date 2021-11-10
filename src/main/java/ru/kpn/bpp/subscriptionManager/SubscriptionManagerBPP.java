@@ -1,5 +1,6 @@
 package ru.kpn.bpp.subscriptionManager;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
@@ -9,12 +10,16 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.creator.StrategyExtractorCreator;
+import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.creator.StrategyMatcherCreator;
+import ru.kpn.injection.Inject;
+import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
 import ru.kpn.subscriptionManager.SubscriptionManager;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -33,6 +38,9 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     private StrategyExtractorCreator extractorCreator;
 
     @Autowired
+    private StrategyInitCreator strategyInitCreator;
+
+    @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
 
     @Autowired
@@ -45,23 +53,64 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
             String strategyName = calculateStrategyName(strategy);
 
-            StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
-            if (result.getSuccess()){
-                strategy.setMatcher(result.getMatcher());
-
-                StrategyExtractorCreator.Result extractorResult = extractorCreator.getOrCreate(strategyName);
-                if (extractorResult.getSuccess()){
-                    strategy.setExtractor(extractorResult.getExtractor());
+            //<
+            System.out.println("-----");
+            System.out.println(strategyName);
+            //<
+            Optional<Method> maybePriorityInjectionMethod = getMethodForInjection(strategy, InjectionType.PRIORITY);
+            if (maybePriorityInjectionMethod.isPresent()){
+                StrategyInitCreator.Result result = strategyInitCreator.getDatum(strategyName);
+                if (result.getSuccess()){
+                    inject(strategy, maybePriorityInjectionMethod.get(), result.getPriority());
+                } else {
+                    // TODO: 08.11.2021 use rawMessage
+                    throw new BeanCreationException(String.format("Priority for %s doesn't exist", strategy));
                 }
-
-                subscriptionManager.subscribe(createSubscriber(strategy));
-            } else {
-                throw new BeanCreationException(beanName);
-                // TODO: 06.11.2021 del
-//                throw new BeanCreationException(result.getErrorMessage());
             }
+
+            // TODO: 08.11.2021 impl
+//            injectMatcher(strategy, strategyName);
+//            injectExtractor(strategy, strategyName);
+
+            // TODO: 08.11.2021 del
+//            StrategyMatcherCreator.Result result = matcherCreator.getOrCreate(strategyName);
+//            if (result.getSuccess()){
+//                strategy.setMatcherOld(result.getMatcher());
+//
+//                StrategyExtractorCreator.Result extractorResult = extractorCreator.getOrCreate(strategyName);
+//                if (extractorResult.getSuccess()){
+//                    strategy.setExtractorOld(extractorResult.getExtractor());
+//                }
+//
+//                subscriptionManager.subscribe(createSubscriber(strategy));
+//            } else {
+//                throw new BeanCreationException(beanName);
+//                // TODO: 06.11.2021 del
+////                throw new BeanCreationException(result.getErrorMessage());
+//            }
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+    }
+
+    private Optional<Method> getMethodForInjection(Strategy<Update, BotApiMethod<?>> strategy, InjectionType type){
+        for (Method declaredMethod : strategy.getClass().getDeclaredMethods()) {
+            if (declaredMethod.isAnnotationPresent(Inject.class)){
+                Inject annotation = declaredMethod.getAnnotation(Inject.class);
+                if (type.equals(annotation.value())){
+                    return Optional.of(declaredMethod);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    @SneakyThrows // TODO: 08.11.2021 ???
+    private void inject(Strategy<Update, BotApiMethod<?>> strategy, Method method, Object value) {
+        //<
+        System.out.println("inject <> " + method.getName());
+        System.out.println(strategyInitCreator);
+        //<
+        method.invoke(strategy, value);
     }
 
     // TODO: 03.11.2021 it must be bean 

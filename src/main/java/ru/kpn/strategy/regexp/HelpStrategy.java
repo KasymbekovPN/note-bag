@@ -1,15 +1,16 @@
 package ru.kpn.strategy.regexp;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.injection.Inject;
+import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
 import ru.kpn.strategyCalculator.RawMessage;
 
 @Component
 public class HelpStrategy extends BaseSubscriberStrategy {
 
-    @Value("${telegram.tube.strategies.help.priority}")
+    @Inject(InjectionType.PRIORITY)
     public void setPriority(Integer priority){
         this.priority = priority;
     }

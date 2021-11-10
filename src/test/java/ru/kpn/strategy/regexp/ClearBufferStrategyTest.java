@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
+import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.strategyCalculator.BotRawMessage;
 import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
@@ -27,6 +28,9 @@ public class ClearBufferStrategyTest {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
+
+    @Autowired
+    private StrategyInitCreator strategyInitCreator;
 
     @Autowired
     private ClearBufferStrategy strategy;
@@ -67,6 +71,11 @@ public class ClearBufferStrategyTest {
         strategy.runAndGetAnswer(builder.build());
         int size = botBuffer.getSize(ID);
         assertThat(size).isZero();
+    }
+
+    @Test
+    void shouldCheckPriority() {
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("clearBuffer").getPriority());
     }
 
     @AfterEach

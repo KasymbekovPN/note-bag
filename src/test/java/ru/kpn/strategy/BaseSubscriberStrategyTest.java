@@ -25,13 +25,6 @@ public class BaseSubscriberStrategyTest {
     }
 
     @RepeatedTest(100)
-    void shouldCheckPrioritySettingAndGetting() {
-        int expectedPriority = RANDOM.nextInt();
-        strategy.setPriority(expectedPriority);
-        assertThat(expectedPriority).isEqualTo(strategy.getPriority());
-    }
-
-    @RepeatedTest(100)
     void shouldCheckChatIdCalculation(){
         Long expectedChatId = ((Integer) RANDOM.nextInt()).longValue();
         Update update = new UpdateInstanceBuilder().chatId(expectedChatId).build();
@@ -47,23 +40,19 @@ public class BaseSubscriberStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckMatcher.csv")
     void shouldCheckMatcher(String template, Boolean expectedResult) {
-        strategy.setMatcher(new TestMatcher());
+        strategy.setMatcherOld(new TestMatcher());
         Update update = new UpdateInstanceBuilder().text(template).build();
         assertThat(strategy.matchTemplate(update)).isEqualTo(expectedResult);
     }
 
     private static class TestSubscriberStrategy extends BaseSubscriberStrategy{
-        @Override
-        public void setPriority(Integer priority) {
-            this.priority = priority;
-        }
 
         public String calculateChatId(Update value) {
             return super.calculateChatId(value);
         }
 
         @Override
-        public void setMatcher(Function<Update, Boolean> matcher) {
+        public void setMatcherOld(Function<Update, Boolean> matcher) {
             this.matcher = matcher;
         }
 

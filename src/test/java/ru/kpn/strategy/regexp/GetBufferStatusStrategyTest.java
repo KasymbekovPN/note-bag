@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
+import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.strategyCalculator.BotRawMessage;
 import ru.kpn.strategyCalculator.RawMessage;
 import utils.TestBufferDatum;
@@ -27,7 +28,8 @@ public class GetBufferStatusStrategyTest {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
-
+    @Autowired
+    private StrategyInitCreator strategyInitCreator;
     @Autowired
     private GetBufferStatusStrategy strategy;
 
@@ -73,6 +75,11 @@ public class GetBufferStatusStrategyTest {
         botBuffer.add(ID, new TestBufferDatum());
         final RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
+    }
+
+    @Test
+    void shouldCheckPriority() {
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("getBufferStatus").getPriority());
     }
 
     @AfterEach

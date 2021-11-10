@@ -12,6 +12,6 @@ public interface Strategy<T, R> {
     default Integer getPriority(){return -1;}
 
     // TODO: 30.10.2021 del NPB-100
-    default void setMatcher(Function<Update, Boolean> matcher){}
-    default void setExtractor(Function<Update, String> extractor){}
+    default void setMatcherOld(Function<Update, Boolean> matcher){}
+    default void setExtractorOld(Function<Update, String> extractor){}
 }

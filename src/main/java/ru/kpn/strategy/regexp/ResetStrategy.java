@@ -1,12 +1,13 @@
 package ru.kpn.strategy.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
+import ru.kpn.injection.Inject;
+import ru.kpn.injection.InjectionType;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
 import ru.kpn.strategy.BaseSubscriberStrategy;
@@ -23,7 +24,7 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     @Autowired
     private UserProfileService service;
 
-    @Value("${telegram.tube.strategies.reset.priority}")
+    @Inject(InjectionType.PRIORITY)
     public void setPriority(Integer priority){
         this.priority = priority;
     }

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.strategyCalculator.BotRawMessage;
 import ru.kpn.strategyCalculator.RawMessage;
 import utils.UpdateInstanceBuilder;
@@ -21,6 +22,8 @@ public class HelpStrategyTest {
 
     @Autowired
     private HelpStrategy strategy;
+    @Autowired
+    private StrategyInitCreator strategyInitCreator;
 
     private UpdateInstanceBuilder builder;
 
@@ -43,5 +46,10 @@ public class HelpStrategyTest {
 
         RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
         assertThat(expectedSource).isEqualTo(answer);
+    }
+
+    @Test
+    void shouldCheckPriority() {
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("help").getPriority());
     }
 }
