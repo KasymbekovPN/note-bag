@@ -26,8 +26,8 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         this.priority = priority;
     }
 
-    @Override
-    public void setExtractorOld(Function<Update, String> extractor) {
+    @Inject(InjectionType.EXTRACTOR)
+    public void setExtractor(Function<Update, String> extractor){
         this.extractor = extractor;
     }
 

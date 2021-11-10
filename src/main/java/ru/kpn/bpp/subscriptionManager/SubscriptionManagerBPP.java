@@ -33,16 +33,14 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @Autowired
     private StrategyMatcherCreator matcherCreator;
-
     @Autowired
     private StrategyExtractorCreator extractorCreator;
-
     @Autowired
     private StrategyInitCreator strategyInitCreator;
-
+    @Autowired
+    private StrategyExtractorCreator strategyExtractorCreator;
     @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
-
     @Autowired
     private SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager;
 
@@ -64,7 +62,17 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                     inject(strategy, maybePriorityInjectionMethod.get(), result.getPriority());
                 } else {
                     // TODO: 08.11.2021 use rawMessage
-                    throw new BeanCreationException(String.format("Priority for %s doesn't exist", strategy));
+                    throw new BeanCreationException(String.format("Priority for '%s' doesn't exist", strategyName));
+                }
+            }
+            Optional<Method> maybeExtractorInjectionMethod = getMethodForInjection(strategy, InjectionType.EXTRACTOR);
+            if (maybeExtractorInjectionMethod.isPresent()){
+                StrategyExtractorCreator.Result result = strategyExtractorCreator.getOrCreate(strategyName);
+                if (result.getSuccess()){
+                    inject(strategy, maybeExtractorInjectionMethod.get(), result.getExtractor());
+                } else {
+                    // TODO: 10.11.2021 use exception with rawMessage
+                    throw new BeanCreationException(String.format("Extractor for '%s' doesn't exist", strategyName));
                 }
             }
 
@@ -92,6 +100,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 
+    // TODO: 10.11.2021 into bean ??? 
     private Optional<Method> getMethodForInjection(Strategy<Update, BotApiMethod<?>> strategy, InjectionType type){
         for (Method declaredMethod : strategy.getClass().getDeclaredMethods()) {
             if (declaredMethod.isAnnotationPresent(Inject.class)){

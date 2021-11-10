@@ -22,6 +22,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         this.strategyCalculator = strategyCalculator;
     }
 
+    // TODO: 10.11.2021 del
     @Override
     public void setMatcherOld(Function<Update, Boolean> matcher) {
         this.matcher = matcher;

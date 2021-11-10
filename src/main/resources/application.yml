@@ -12,16 +12,16 @@ telegram:
     runner-init-value: false
 
 #   //< del
-    strategies:
-      help.priority: 0
-      getState.priority: 1
-      reset.priority: 2
-      getBufferStatus.priority: 3
-      getCurrentBufferDatum.priority: 4
-      skipBufferDatum.priority: 5
-      clearBuffer.priority: 6
-      simpleNote.priority: 7
-      link.priority: 8
+#    strategies:
+#      help.priority: 0
+#      getState.priority: 1
+#      reset.priority: 2
+#      getBufferStatus.priority: 3
+#      getCurrentBufferDatum.priority: 4
+#      skipBufferDatum.priority: 5
+#      clearBuffer.priority: 6
+#      simpleNote.priority: 7
+#      link.priority: 8
 
     strategyInitData:
       help.priority: 0
