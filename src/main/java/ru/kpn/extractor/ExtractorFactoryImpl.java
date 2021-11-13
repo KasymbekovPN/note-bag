@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.EnumMap;
 import java.util.function.Function;
 
+// TODO: 13.11.2021 del??
 @AllArgsConstructor
 public class ExtractorFactoryImpl implements ExtractorFactory<Update, String> {
 

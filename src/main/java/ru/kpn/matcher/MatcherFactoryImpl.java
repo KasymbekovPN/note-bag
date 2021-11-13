@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.EnumMap;
 import java.util.function.Function;
 
+// TODO: 13.11.2021 del
 public class MatcherFactoryImpl implements MatcherFactory<Update, Boolean> {
 
     private final EnumMap<MatcherType, Function<Object[], Function<Update, Boolean>>> creators;
