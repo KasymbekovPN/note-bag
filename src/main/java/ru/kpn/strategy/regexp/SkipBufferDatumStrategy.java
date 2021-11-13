@@ -30,18 +30,15 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         Long id = value.getMessage().getChatId();
         int bufferSize = botBuffer.getSize(id);
-        RawMessage<String> source = createSource(bufferSize == 0
-                ? "strategy.message.skipBufferDatum.isEmpty"
-                : "strategy.message.skipBufferDatum.isNotEmpty"
-        );
-        source.add(calculateChatId(value));
-        if (bufferSize > 0){
-            source.add(bufferSize - 1);
-        }
-
-        return source;
+        RawMessage<String> rawMessage = createRawMessage(
+                bufferSize == 0
+                        ? "strategy.message.skipBufferDatum.isEmpty"
+                        : "strategy.message.skipBufferDatum.isNotEmpty"
+        )
+                .add(calculateChatId(value));
+        return bufferSize != 0 ? rawMessage.add(bufferSize - 1) : rawMessage;
     }
 }

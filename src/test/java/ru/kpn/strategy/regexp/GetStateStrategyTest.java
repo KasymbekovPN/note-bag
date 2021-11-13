@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +29,8 @@ public class GetStateStrategyTest {
     private BotStateService<User, NPBotState> stateService;
     @Autowired
     private StrategyInitCreator strategyInitCreator;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private User user;
     private UpdateInstanceBuilder builder;
@@ -53,13 +55,13 @@ public class GetStateStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessage<String> expectedSource = new BotRawMessage("strategy.message.getstate");
-        expectedSource.add(String.valueOf(ID));
-        expectedSource.add(String.valueOf(ID));
-        expectedSource.add(stateService.get(user));
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("strategy.message.getstate")
+                .add(String.valueOf(ID))
+                .add(String.valueOf(ID))
+                .add(stateService.get(user));
 
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
-        assertThat(expectedSource).isEqualTo(answer);
+        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.build());
+        assertThat(expectedRawMessage).isEqualTo(rawMessage);
     }
 
     @Test

@@ -30,20 +30,18 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         int bufferSize = getBufferSize(value);
         String chatId = calculateChatId(value);
-        RawMessage<String> source = createSource(
+
+        RawMessage<String> rawMessage = createRawMessage(
                 bufferSize == 0
                         ? "strategy.message.getBufferStatus.empty"
                         : "strategy.message.getBufferStatus.contains"
-        );
-        source.add(chatId);
-        source.add(chatId);
-        if (bufferSize != 0){
-            source.add(bufferSize);
-        }
-        return source;
+        )
+                .add(chatId)
+                .add(chatId);
+        return bufferSize != 0 ? rawMessage.add(bufferSize) : rawMessage;
     }
 
     private int getBufferSize(Update value) {

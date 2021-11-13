@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +24,8 @@ public class HelpStrategyTest {
     private HelpStrategy strategy;
     @Autowired
     private StrategyInitCreator strategyInitCreator;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
 
@@ -41,11 +43,9 @@ public class HelpStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        BotRawMessage expectedSource = new BotRawMessage("strategy.message.help");
-        expectedSource.add(String.valueOf(ID));
-
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
-        assertThat(expectedSource).isEqualTo(answer);
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("strategy.message.help").add(String.valueOf(ID));
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
+        assertThat(expectedRawMessage).isEqualTo(answer);
     }
 
     @Test

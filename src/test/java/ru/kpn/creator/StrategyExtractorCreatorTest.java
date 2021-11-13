@@ -6,8 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ByPrefixExtractor;
 import ru.kpn.extractor.ExtractorFactory;
 import ru.kpn.extractor.ExtractorType;
-import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.*;
 import java.util.function.Function;
@@ -19,6 +20,7 @@ public class StrategyExtractorCreatorTest {
 
     private final Map<String, StrategyExtractorCreator.Datum> extractorInitData = new HashMap<>();
     private final HashMap<String, RawMessage<String>> expectedRawMessages = new HashMap<>();
+    private final RawMessageFactory<String> rawMessageFactory = new BotRawMessageFactory();
 
     private StrategyExtractorCreator creator;
 
@@ -26,6 +28,7 @@ public class StrategyExtractorCreatorTest {
     void setUp() {
         creator = new StrategyExtractorCreator();
         creator.setFactory(new TestExtractorFactory());
+        creator.setRawMessageFactory(rawMessageFactory);
 
         StrategyExtractorCreator.Datum withoutTypeDatum = new StrategyExtractorCreator.Datum();
         extractorInitData.put("withoutTypeDatum", withoutTypeDatum);
@@ -45,9 +48,9 @@ public class StrategyExtractorCreatorTest {
 
         creator.setExtractorInitData(extractorInitData);
 
-        expectedRawMessages.put("withoutTypeDatum",new BotRawMessage("type.isNull").add("withoutTypeDatum"));
-        expectedRawMessages.put("wrongTypeDatum", new BotRawMessage("type.invalid.where").add("WRONG").add("wrongTypeDatum"));
-        expectedRawMessages.put("wrongArgsByPrefixDatum", new BotRawMessage("arguments.isInvalid.forSth").add("wrongArgsByPrefixDatum"));
+        expectedRawMessages.put("withoutTypeDatum", rawMessageFactory.create("type.isNull").add("withoutTypeDatum"));
+        expectedRawMessages.put("wrongTypeDatum", rawMessageFactory.create("type.invalid.where").add("WRONG").add("wrongTypeDatum"));
+        expectedRawMessages.put("wrongArgsByPrefixDatum", rawMessageFactory.create("arguments.isInvalid.forSth").add("wrongArgsByPrefixDatum"));
     }
 
     @Test

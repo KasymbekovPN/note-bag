@@ -30,7 +30,7 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);
     }
@@ -41,10 +41,8 @@ public class LinkStrategy extends BaseSubscriberStrategy {
     }
 
     private RawMessage<String> getAnswer(Update value) {
-        RawMessage<String> source = createSource("strategy.message.link");
-        source.add(calculateChatId(value));
-        source.add(value.getMessage().getText());
-
-        return source;
+        return createRawMessage("strategy.message.link")
+                .add(calculateChatId(value))
+                .add(value.getMessage().getText());
     }
 }

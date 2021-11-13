@@ -13,8 +13,8 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.model.userProfile.UserProfileEntity;
+import ru.kpn.rawMessage.RawMessageFactory;
 import ru.kpn.service.userProfile.UserProfileService;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 
@@ -36,6 +36,8 @@ public class ResetStrategyTest {
     private BotStateService<User, NPBotState> stateService;
     @Autowired
     private StrategyInitCreator strategyInitCreator;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private User user;
     private UpdateInstanceBuilder builder;
@@ -59,12 +61,11 @@ public class ResetStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        BotRawMessage expectedSource = new BotRawMessage("strategy.message.reset");
-        expectedSource.add(String.valueOf(ID));
-        expectedSource.add(String.valueOf(ID));
-
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(COMMAND).build());
-        assertThat(expectedSource).isEqualTo(answer);
+        RawMessage<String> expectedSource = rawMessageFactory.create("strategy.message.reset")
+                .add(String.valueOf(ID))
+                .add(String.valueOf(ID));
+        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
+        assertThat(expectedSource).isEqualTo(rawMessage);
     }
 
     @Test

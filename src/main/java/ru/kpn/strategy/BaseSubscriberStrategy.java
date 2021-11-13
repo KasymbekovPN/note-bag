@@ -3,7 +3,7 @@ package ru.kpn.strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.rawMessage.RawMessage;
 
@@ -16,6 +16,12 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
 
     protected Function<Update, Boolean> matcher;
     protected Integer priority;
+    private RawMessageFactory<String> rawMessageFactory;
+
+    @Autowired
+    public void setRawMessageFactory(RawMessageFactory<String> rawMessageFactory){
+        this.rawMessageFactory = rawMessageFactory;
+    }
 
     @Autowired
     public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>, String> strategyCalculator) {
@@ -37,7 +43,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
-        RawMessage<String> source = runAndGetAnswer(value);
+        RawMessage<String> source = runAndGetRawMessage(value);
         return strategyCalculator.calculate(source);
     }
 
@@ -45,7 +51,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         return value.getMessage().getChatId().toString();
     }
 
-    protected RawMessage<String> createSource(String code){
-        return new BotRawMessage(code);
+    protected RawMessage<String> createRawMessage(String code){
+        return rawMessageFactory.create(code);
     }
 }

@@ -2,8 +2,9 @@ package ru.kpn.creator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,9 @@ class StrategyInitCreatorTest {
     private static final String STRATEGY_NAME = "strategyName";
     private static final String WRONG_STRATEGY_NAME = "wrongStrategyName";
 
-    private StrategyInitCreator creator;
+    private final RawMessageFactory<String> rawMessageFactory = new BotRawMessageFactory();
+    private final StrategyInitCreator creator = new StrategyInitCreator();
+
     private RawMessage<String> expectedRawMessage;
 
     @BeforeEach
@@ -26,10 +29,10 @@ class StrategyInitCreatorTest {
         Map<String, StrategyInitCreator.Datum> strategyInitData = new HashMap<>(){{
             put(STRATEGY_NAME, datum);
         }};
-        creator = new StrategyInitCreator();
         creator.setStrategyInitData(strategyInitData);
+        creator.setRawMessageFactory(rawMessageFactory);
 
-        expectedRawMessage = new BotRawMessage("priority.notSet.for").add(WRONG_STRATEGY_NAME);
+        expectedRawMessage = rawMessageFactory.create("priority.notSet.for").add(WRONG_STRATEGY_NAME);
     }
 
     @Test

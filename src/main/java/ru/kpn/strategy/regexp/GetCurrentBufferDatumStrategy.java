@@ -31,20 +31,19 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         String chatId = calculateChatId(value);
         Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 
-        RawMessage<String> source = createSource(
+        RawMessage<String> rawMessage = createRawMessage(
                 maybeDatum.isPresent()
                         ? "strategy.message.getCurrentBufferDatum.exist"
                         : "strategy.message.getCurrentBufferDatum.notExist"
-        );
-        source.add(chatId);
-        source.add(chatId);
-        maybeDatum.ifPresent(datum -> source.add(datum.getContent()));
+        )
+                .add(chatId)
+                .add(chatId);
 
-        return source;
+        return maybeDatum.isPresent() ? rawMessage.add(maybeDatum.get().getContent()) : rawMessage;
     }
 
     private Optional<BufferDatum<BufferDatumType, String>> extractDatum(Update value) {

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.MatcherFactory;
 import ru.kpn.matcher.MatcherType;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.*;
 import java.util.function.Function;
@@ -21,8 +21,13 @@ public class StrategyMatcherCreator {
     private final Map<String, Result> results = new HashMap<>();
 
     private MatcherFactory<Update, Boolean> factory;
-
     private Map<String, Datum> matcherInitData;
+    private RawMessageFactory<String> rawMessageFactory;
+
+    @Autowired
+    public void setRawMessageFactory(RawMessageFactory<String> rawMessageFactory) {
+        this.rawMessageFactory = rawMessageFactory;
+    }
 
     @Autowired
     public void setFactory(MatcherFactory<Update, Boolean> factory) {
@@ -50,6 +55,7 @@ public class StrategyMatcherCreator {
                 .name(name)
                 .matcherData(matcherInitData.getOrDefault(name, null))
                 .factory(factory)
+                .rawMessageFactory(rawMessageFactory)
                 .checkMatcherDataExistence()
                 .prepareMatcherType()
                 .checkAndPrepareArgs()
@@ -90,6 +96,7 @@ public class StrategyMatcherCreator {
         private MatcherType type;
         private Object[] args;
         private RawMessage<String> rawMessage;
+        private RawMessageFactory<String> rawMessageFactory;
 
         public Builder name(String name){
             this.name = name;
@@ -106,10 +113,15 @@ public class StrategyMatcherCreator {
             return this;
         }
 
+        public Builder rawMessageFactory(RawMessageFactory<String> rawMessageFactory){
+            this.rawMessageFactory = rawMessageFactory;
+            return this;
+        }
+
         public Builder checkMatcherDataExistence(){
             if (success && datum == null){
                 success = false;
-                rawMessage = new BotRawMessage("data.notExist.forSth").add(name);
+                rawMessage = rawMessageFactory.create("data.notExist.forSth").add(name);
             }
 
             return this;
@@ -123,11 +135,11 @@ public class StrategyMatcherCreator {
                         type = MatcherType.valueOf(datumType);
                     } catch (IllegalArgumentException ex){
                         success = false;
-                        rawMessage = new BotRawMessage("type.invalid.where").add(datumType).add(name);
+                        rawMessage = rawMessageFactory.create("type.invalid.where").add(datumType).add(name);
                     }
                 } else {
                     success = false;
-                    rawMessage = new BotRawMessage("type.isNull").add(name);
+                    rawMessage = rawMessageFactory.create("type.isNull").add(name);
                 }
             }
             return this;
@@ -140,7 +152,7 @@ public class StrategyMatcherCreator {
                     args = maybeArgs.get();
                 } else {
                     success = false;
-                    rawMessage = new BotRawMessage("arguments.isInvalid.forSth").add(name);
+                    rawMessage = rawMessageFactory.create("arguments.isInvalid.forSth").add(name);
                 }
             }
             return this;

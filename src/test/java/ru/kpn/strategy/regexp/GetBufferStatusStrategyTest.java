@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -32,10 +32,12 @@ public class GetBufferStatusStrategyTest {
     private StrategyInitCreator strategyInitCreator;
     @Autowired
     private GetBufferStatusStrategy strategy;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private BotRawMessage ifEmptyAnswer;
-    private BotRawMessage ifNotEmptyAnswer;
+    private RawMessage<String> ifEmptyAnswer;
+    private RawMessage<String> ifNotEmptyAnswer;
 
     @BeforeEach
     void setUp() {
@@ -47,14 +49,14 @@ public class GetBufferStatusStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyAnswer = new BotRawMessage("strategy.message.getBufferStatus.empty");
-        ifEmptyAnswer.add(String.valueOf(ID));
-        ifEmptyAnswer.add(String.valueOf(ID));
+        ifEmptyAnswer = rawMessageFactory.create("strategy.message.getBufferStatus.empty")
+                .add(String.valueOf(ID))
+                .add(String.valueOf(ID));
 
-        ifNotEmptyAnswer = new BotRawMessage("strategy.message.getBufferStatus.contains");
-        ifNotEmptyAnswer.add(String.valueOf(ID));
-        ifNotEmptyAnswer.add(String.valueOf(ID));
-        ifNotEmptyAnswer.add(1);
+        ifNotEmptyAnswer = rawMessageFactory.create("strategy.message.getBufferStatus.contains")
+                .add(String.valueOf(ID))
+                .add(String.valueOf(ID))
+                .add(1);
     }
 
     @ParameterizedTest
@@ -66,14 +68,14 @@ public class GetBufferStatusStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        final RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
+        final RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
         botBuffer.add(ID, new TestBufferDatum());
-        final RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
+        final RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
 

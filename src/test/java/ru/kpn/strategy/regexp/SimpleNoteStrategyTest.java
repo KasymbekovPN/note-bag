@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -32,9 +32,11 @@ public class SimpleNoteStrategyTest {
     private SimpleNoteStrategy strategy;
     @Autowired
     private StrategyInitCreator strategyInitCreator;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private BotRawMessage expectedAnswer;
+    private RawMessage<String> expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -45,8 +47,7 @@ public class SimpleNoteStrategyTest {
                 .chatId(ID)
                 .from(user);
 
-        expectedAnswer = new BotRawMessage("strategy.message.simpleNode");
-        expectedAnswer.add(String.valueOf(ID));
+        expectedAnswer = rawMessageFactory.create("strategy.message.simpleNode").add(String.valueOf(ID));
     }
 
     @ParameterizedTest
@@ -59,7 +60,7 @@ public class SimpleNoteStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAnswer_simpleNote.csv")
     void shouldCheckAnswer(String command) {
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(command).build());
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.text(command).build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 

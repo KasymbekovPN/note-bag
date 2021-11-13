@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ExtractorFactory;
 import ru.kpn.extractor.ExtractorType;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.*;
 import java.util.function.Function;
@@ -22,8 +22,13 @@ public class StrategyExtractorCreator {
     private final Map<String, Result> results = new HashMap<>();
 
     private ExtractorFactory<Update, String> factory;
-
     private Map<String, Datum> extractorInitData;
+    private RawMessageFactory<String> rawMessageFactory;
+
+    @Autowired
+    public void setRawMessageFactory(RawMessageFactory<String> rawMessageFactory) {
+        this.rawMessageFactory = rawMessageFactory;
+    }
 
     @Autowired
     public void setFactory(ExtractorFactory<Update, String> factory) {
@@ -50,6 +55,7 @@ public class StrategyExtractorCreator {
                 .name(name)
                 .datum(extractorInitData.getOrDefault(name, null))
                 .factory(factory)
+                .rawMessageFactory(rawMessageFactory)
                 .checkDatumExistence()
                 .prepareType()
                 .checkAndPrepareArgs()
@@ -85,6 +91,7 @@ public class StrategyExtractorCreator {
         private ExtractorType type;
         private Object[] args;
         private RawMessage<String> rawMessage;
+        private RawMessageFactory<String> rawMessageFactory;
 
         public Builder name(String name){
             this.name = name;
@@ -101,10 +108,15 @@ public class StrategyExtractorCreator {
             return this;
         }
 
+        public Builder rawMessageFactory(RawMessageFactory<String> rawMessageFactory){
+            this.rawMessageFactory = rawMessageFactory;
+            return this;
+        }
+
         public Builder checkDatumExistence(){
             if (success && datum == null){
                 success = false;
-                rawMessage = new BotRawMessage("data.notExist.forSth").add(name);
+                rawMessage = rawMessageFactory.create("data.notExist.forSth").add(name);
             }
             return this;
         }
@@ -117,11 +129,11 @@ public class StrategyExtractorCreator {
                         this.type = ExtractorType.valueOf(datumType);
                     } catch (IllegalArgumentException ex){
                         success = false;
-                        rawMessage = new BotRawMessage("type.invalid.where").add(datumType).add(name);
+                        rawMessage = rawMessageFactory.create("type.invalid.where").add(datumType).add(name);
                     }
                 } else {
                     success = false;
-                    rawMessage = new BotRawMessage("type.isNull").add(name);
+                    rawMessage = rawMessageFactory.create("type.isNull").add(name);
                 }
             }
             return this;
@@ -134,7 +146,7 @@ public class StrategyExtractorCreator {
                     args = maybeArgs.get();
                 } else {
                     success = false;
-                    rawMessage = new BotRawMessage("arguments.isInvalid.forSth").add(name);
+                    rawMessage = rawMessageFactory.create("arguments.isInvalid.forSth").add(name);
                 }
             }
             return this;

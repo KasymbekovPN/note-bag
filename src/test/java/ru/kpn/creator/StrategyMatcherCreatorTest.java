@@ -4,8 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.*;
-import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,14 +19,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StrategyMatcherCreatorTest {
 
-    private StrategyMatcherCreator creator;
     private final Map<String, StrategyMatcherCreator.Datum> contentMatchers = new HashMap<>();
+    private final RawMessageFactory<String> rawMessageFactory = new BotRawMessageFactory();
+    private final StrategyMatcherCreator creator = new StrategyMatcherCreator();
 
     @BeforeEach
     void setUp() {
         TestMatcherFactory factory = new TestMatcherFactory();
-        creator = new StrategyMatcherCreator();
         creator.setFactory(factory);
+        creator.setRawMessageFactory(rawMessageFactory);
 
         StrategyMatcherCreator.Datum withoutTypeDatum = new StrategyMatcherCreator.Datum();
         contentMatchers.put("withoutTypeMatcherData", withoutTypeDatum);
@@ -67,7 +69,7 @@ class StrategyMatcherCreatorTest {
     @Test
     void shouldCheckWithoutTypeCreation() {
         StrategyMatcherCreator.Result result = creator.getOrCreate("withoutTypeMatcherData");
-        RawMessage<String> expectedRawMessage = new BotRawMessage("type.isNull").add("withoutTypeMatcherData");
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("type.isNull").add("withoutTypeMatcherData");
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }
@@ -75,7 +77,7 @@ class StrategyMatcherCreatorTest {
     @Test
     void shouldCheckWrongTypeCreation() {
         StrategyMatcherCreator.Result result = creator.getOrCreate("wrongTypeMatcherData");
-        RawMessage<String> expectedRawMessage = new BotRawMessage("type.invalid.where").add("WRONG").add("wrongTypeMatcherData");
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("type.invalid.where").add("WRONG").add("wrongTypeMatcherData");
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }
@@ -90,7 +92,7 @@ class StrategyMatcherCreatorTest {
     @Test
     void shouldCheckWrongConstantMatcherCreation() {
         StrategyMatcherCreator.Result result = creator.getOrCreate("wrongConstantMatcherData");
-        RawMessage<String> expectedRawMessage = new BotRawMessage("arguments.isInvalid.forSth").add("wrongConstantMatcherData");
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("arguments.isInvalid.forSth").add("wrongConstantMatcherData");
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }
@@ -105,7 +107,7 @@ class StrategyMatcherCreatorTest {
     @Test
     void shouldCheckWrongRegexMatcherCreation() {
         StrategyMatcherCreator.Result result = creator.getOrCreate("wrongRegexMatcherData");
-        RawMessage<String> expectedRawMessage = new BotRawMessage("arguments.isInvalid.forSth").add("wrongRegexMatcherData");
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("arguments.isInvalid.forSth").add("wrongRegexMatcherData");
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }
@@ -120,7 +122,7 @@ class StrategyMatcherCreatorTest {
     @Test
     void shouldCheckWrongMultiRegexMatcherCreation() {
         StrategyMatcherCreator.Result result = creator.getOrCreate("wrongMultiRegexMatcherData");
-        RawMessage<String> expectedRawMessage = new BotRawMessage("arguments.isInvalid.forSth").add("wrongMultiRegexMatcherData");
+        RawMessage<String> expectedRawMessage = rawMessageFactory.create("arguments.isInvalid.forSth").add("wrongMultiRegexMatcherData");
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }

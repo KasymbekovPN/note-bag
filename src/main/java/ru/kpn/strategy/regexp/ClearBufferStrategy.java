@@ -30,15 +30,12 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         botBuffer.clear(value.getMessage().getChatId());
         return calculateAnswer(value);
     }
 
     private RawMessage<String> calculateAnswer(Update value) {
-        RawMessage<String> source = createSource("strategy.message.clearBuffer.isCleaned");
-        source.add(calculateChatId(value));
-
-        return source;
+        return createRawMessage("strategy.message.clearBuffer.isCleaned").add(calculateChatId(value));
     }
 }

@@ -4,20 +4,30 @@ package ru.kpn.creator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.Map;
 
 // TODO: 08.11.2021 rename
 @Service
-@Setter
 @ConfigurationProperties(prefix = "telegram.tube")
 public class StrategyInitCreator {
 
     private Map<String, Datum> strategyInitData;
+    private RawMessageFactory<String> rawMessageFactory;
+
+    public void setStrategyInitData(Map<String, Datum> strategyInitData) {
+        this.strategyInitData = strategyInitData;
+    }
+
+    @Autowired
+    public void setRawMessageFactory(RawMessageFactory<String> rawMessageFactory) {
+        this.rawMessageFactory = rawMessageFactory;
+    }
 
     public Result getDatum(String name){
         Result.ResultBuilder builder = Result.builder();
@@ -28,7 +38,7 @@ public class StrategyInitCreator {
         } else {
             builder
                     .success(false)
-                    .rawMessage(new BotRawMessage("priority.notSet.for").add(name));
+                    .rawMessage(rawMessageFactory.create("priority.notSet.for").add(name));
         }
 
         return builder.build();

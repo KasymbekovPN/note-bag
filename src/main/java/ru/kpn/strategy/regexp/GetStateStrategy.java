@@ -30,13 +30,11 @@ public class GetStateStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
-        RawMessage<String> source = createSource("strategy.message.getstate");
-        source.add(calculateChatId(value));
-        source.add(calculateChatId(value));
-        source.add(stateService.get(getUser(value)));
-
-        return source;
+    public RawMessage<String> runAndGetRawMessage(Update value) {
+        return createRawMessage("strategy.message.getstate")
+                .add(calculateChatId(value))
+                .add(calculateChatId(value))
+                .add(stateService.get(getUser(value)));
     }
 
     private User getUser(Update value) {

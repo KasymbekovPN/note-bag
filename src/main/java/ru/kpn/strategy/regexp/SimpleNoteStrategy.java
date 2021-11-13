@@ -37,7 +37,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);
     }
@@ -50,9 +50,6 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     private RawMessage<String> getAnswer(Update value) {
-        RawMessage<String> source = createSource("strategy.message.simpleNode");
-        source.add(calculateChatId(value));
-
-        return source;
+        return createRawMessage("strategy.message.simpleNode").add(calculateChatId(value));
     }
 }

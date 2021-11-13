@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -32,10 +32,11 @@ public class LinkStrategyTest {
     private LinkStrategy strategy;
     @Autowired
     private StrategyInitCreator strategyInitCreator;
-
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private BotRawMessage expectedAnswer;
+    private RawMessage<String> expectedRawMessage;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +47,7 @@ public class LinkStrategyTest {
                 .chatId(ID)
                 .from(user);
 
-        expectedAnswer = new BotRawMessage("strategy.message.link");
-        expectedAnswer.add(String.valueOf(ID));
+        expectedRawMessage = rawMessageFactory.create("strategy.message.link").add(String.valueOf(ID));
     }
 
     @ParameterizedTest
@@ -60,9 +60,9 @@ public class LinkStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAnswer_link.csv")
     void shouldCheckAnswer(String command) {
-        expectedAnswer.add(command);
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.text(command).build());
-        assertThat(expectedAnswer).isEqualTo(answer);
+        expectedRawMessage.add(command);
+        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.text(command).build());
+        assertThat(expectedRawMessage).isEqualTo(rawMessage);
     }
 
     @ParameterizedTest

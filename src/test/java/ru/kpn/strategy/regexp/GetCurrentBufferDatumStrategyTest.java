@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -29,16 +29,16 @@ public class GetCurrentBufferDatumStrategyTest {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
-
     @Autowired
     private StrategyInitCreator strategyInitCreator;
-
     @Autowired
     private GetCurrentBufferDatumStrategy strategy;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private BotRawMessage ifExistAnswer;
-    private BotRawMessage ifNotExistAnswer;
+    private RawMessage<String> ifExistAnswer;
+    private RawMessage<String> ifNotExistAnswer;
 
     @BeforeEach
     void setUp() {
@@ -51,14 +51,14 @@ public class GetCurrentBufferDatumStrategyTest {
                 .text(COMMAND);
 
         String sid = String.valueOf(ID);
-        ifExistAnswer = new BotRawMessage("strategy.message.getCurrentBufferDatum.exist");
-        ifExistAnswer.add(sid);
-        ifExistAnswer.add(sid);
-        ifExistAnswer.add(TEXT);
+        ifExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.exist")
+                .add(sid)
+                .add(sid)
+                .add(TEXT);
 
-        ifNotExistAnswer = new BotRawMessage("strategy.message.getCurrentBufferDatum.notExist");
-        ifNotExistAnswer.add(sid);
-        ifNotExistAnswer.add(sid);
+        ifNotExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.notExist")
+                .add(sid)
+                .add(sid);
     }
 
     @ParameterizedTest
@@ -70,14 +70,14 @@ public class GetCurrentBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfCurrentDatumNotExist() {
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifNotExistAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfCurrentDatumExist() {
         botBuffer.add(ID, new TestBufferDatum(TEXT));
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifExistAnswer).isEqualTo(answer);
     }
 

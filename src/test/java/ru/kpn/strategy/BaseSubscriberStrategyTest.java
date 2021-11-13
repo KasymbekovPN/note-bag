@@ -46,7 +46,7 @@ public class BaseSubscriberStrategyTest {
         }
 
         @Override
-        public RawMessage<String> runAndGetAnswer(Update value) {
+        public RawMessage<String> runAndGetRawMessage(Update value) {
             return null;
         }
     }

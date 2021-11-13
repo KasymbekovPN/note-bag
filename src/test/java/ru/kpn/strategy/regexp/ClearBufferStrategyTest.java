@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactory;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -32,9 +32,11 @@ public class ClearBufferStrategyTest {
     private StrategyInitCreator strategyInitCreator;
     @Autowired
     private ClearBufferStrategy strategy;
+    @Autowired
+    private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private BotRawMessage expectedAnswer;
+    private RawMessage<String> expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +48,7 @@ public class ClearBufferStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        expectedAnswer = new BotRawMessage("strategy.message.clearBuffer.isCleaned");
-        expectedAnswer.add(String.valueOf(ID));
+        expectedAnswer = rawMessageFactory.create("strategy.message.clearBuffer.isCleaned").add(String.valueOf(ID));
     }
 
     @ParameterizedTest
@@ -59,14 +60,14 @@ public class ClearBufferStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessage<String> answer = strategy.runAndGetAnswer(builder.build());
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckClearing() {
         botBuffer.add(ID, new TestBufferDatum());
-        strategy.runAndGetAnswer(builder.build());
+        strategy.runAndGetRawMessage(builder.build());
         int size = botBuffer.getSize(ID);
         assertThat(size).isZero();
     }

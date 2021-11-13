@@ -36,14 +36,12 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetAnswer(Update value) {
+    public RawMessage<String> runAndGetRawMessage(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);
-        RawMessage<String> source = createSource("strategy.message.reset");
-        source.add(chatId);
-        source.add(chatId);
-
-        return source;
+        return createRawMessage("strategy.message.reset")
+                .add(chatId)
+                .add(chatId);
     }
 
     private void resetState(Update value) {
