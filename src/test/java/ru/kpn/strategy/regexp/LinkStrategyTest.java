@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;

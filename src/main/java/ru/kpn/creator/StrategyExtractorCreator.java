@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ExtractorFactory;
 import ru.kpn.extractor.ExtractorType;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.*;
 import java.util.function.Function;

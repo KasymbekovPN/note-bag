@@ -2,8 +2,8 @@ package ru.kpn.creator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.HashMap;
 import java.util.Map;

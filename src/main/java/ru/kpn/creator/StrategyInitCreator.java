@@ -4,11 +4,10 @@ package ru.kpn.creator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.Map;
 

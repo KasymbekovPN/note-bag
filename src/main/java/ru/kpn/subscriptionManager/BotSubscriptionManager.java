@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.strategyCalculator.StrategyCalculator;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
+import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;

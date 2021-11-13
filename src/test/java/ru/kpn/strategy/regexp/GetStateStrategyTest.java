@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.creator.StrategyInitCreator;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;
 

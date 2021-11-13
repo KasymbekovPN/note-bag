@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
+import ru.kpn.rawMessage.RawMessage;
 
 @Component
 public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {

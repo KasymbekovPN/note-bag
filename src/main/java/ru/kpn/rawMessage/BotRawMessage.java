@@ -1,4 +1,4 @@
-package ru.kpn.strategyCalculator;
+package ru.kpn.rawMessage;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
+// TODO: 13.11.2021 it must be package-private 
+@ToString // TODO: 10.11.2021 del 
 @EqualsAndHashCode
 @RequiredArgsConstructor
 public class BotRawMessage implements RawMessage<String> {

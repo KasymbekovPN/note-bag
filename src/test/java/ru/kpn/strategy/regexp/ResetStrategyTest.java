@@ -14,8 +14,8 @@ import ru.kpn.bot.state.NPBotState;
 import ru.kpn.creator.StrategyInitCreator;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
-import ru.kpn.strategyCalculator.BotRawMessage;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
+import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package ru.kpn.strategy;
 
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.Optional;
 

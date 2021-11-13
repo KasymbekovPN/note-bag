@@ -9,7 +9,7 @@ import ru.kpn.bot.state.NPBotState;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.BaseSubscriberStrategy;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;
 

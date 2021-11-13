@@ -3,9 +3,9 @@ package ru.kpn.strategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategyCalculator.BotRawMessage;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.strategyCalculator.StrategyCalculator;
-import ru.kpn.strategyCalculator.RawMessage;
+import ru.kpn.rawMessage.RawMessage;
 
 import java.util.Optional;
 import java.util.function.Function;
