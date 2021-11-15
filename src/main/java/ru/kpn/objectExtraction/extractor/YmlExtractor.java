@@ -7,7 +7,6 @@ import ru.kpn.objectExtraction.result.Result;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: 13.11.2021 test 
 @RequiredArgsConstructor
 public class YmlExtractor<D, RT> implements Extractor<Result<RT>> {
 
@@ -29,6 +28,7 @@ public class YmlExtractor<D, RT> implements Extractor<Result<RT>> {
     }
 
     private Result<RT> attemptCreateNewResult(String key) {
-        return builder.key(key).datum(initData.get(key)).doScenario().build();
+        // TODO: 15.11.2021 if datum is null not call datum() use other method 
+        return builder.key(key).datum(initData.getOrDefault(key, null)).doScenario().build();
     }
 }
