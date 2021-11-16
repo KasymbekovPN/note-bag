@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.function.Function;
 
 // TODO: 13.11.2021 del
-public class MatcherFactoryImpl implements MatcherFactory<Update, Boolean> {
+public class MatcherFactoryOldImpl implements MatcherFactoryOld<Update, Boolean> {
 
     private final EnumMap<MatcherType, Function<Object[], Function<Update, Boolean>>> creators;
 
@@ -14,7 +14,7 @@ public class MatcherFactoryImpl implements MatcherFactory<Update, Boolean> {
         return new Builder();
     }
 
-    private MatcherFactoryImpl(EnumMap<MatcherType, Function<Object[], Function<Update, Boolean>>> creators) {
+    private MatcherFactoryOldImpl(EnumMap<MatcherType, Function<Object[], Function<Update, Boolean>>> creators) {
         this.creators = creators;
     }
 
@@ -31,9 +31,9 @@ public class MatcherFactoryImpl implements MatcherFactory<Update, Boolean> {
             return this;
         }
 
-        public MatcherFactoryImpl build() throws Exception {
+        public MatcherFactoryOldImpl build() throws Exception {
             checkCreatorsAmount();
-            return new MatcherFactoryImpl(creators);
+            return new MatcherFactoryOldImpl(creators);
         }
 
         private void checkCreatorsAmount() throws Exception {

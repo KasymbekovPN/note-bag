@@ -12,6 +12,7 @@ import ru.kpn.rawMessage.RawMessageFactory;
 
 import java.util.Map;
 
+// TODO: 16.11.2021 del
 // TODO: 08.11.2021 rename
 @Service
 @ConfigurationProperties(prefix = "telegram.tube")

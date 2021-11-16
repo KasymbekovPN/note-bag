@@ -1,10 +1,9 @@
 package ru.kpn.objectExtraction.extractor;
 
 import lombok.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.cglib.transform.impl.AddStaticInitTransformer;
 import ru.kpn.objectExtraction.builder.Builder;
 import ru.kpn.objectExtraction.result.Result;
 import ru.kpn.objectExtraction.result.ResultImpl;
@@ -20,10 +19,10 @@ class YmlExtractorTest {
     private static final String KEY1 = "key1";
     private static final String VALUE0 = "value0";
 
-    private static YmlExtractor<TestDatum, String> extractor;
+    private YmlExtractor<TestDatum, String> extractor;
 
-    @BeforeAll
-    static void beforeAll() {
+    @BeforeEach
+    void setUp() {
         HashMap<String, TestDatum> initData = new HashMap<>(){{
             put(KEY0, new TestDatum(VALUE0));
         }};
@@ -79,6 +78,7 @@ class YmlExtractorTest {
                 result.setSuccess(true);
                 result.setValue(datum.getValue());
             }
+            datum = null;
             return result;
         }
     }

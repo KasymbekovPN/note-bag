@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.matcher.MatcherFactory;
+import ru.kpn.matcher.MatcherFactoryOld;
 import ru.kpn.matcher.MatcherType;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -13,6 +13,7 @@ import ru.kpn.rawMessage.RawMessageFactory;
 import java.util.*;
 import java.util.function.Function;
 
+// TODO: 16.11.2021 del
 // TODO: 08.11.2021 rename
 @Service
 @ConfigurationProperties(prefix = "telegram.tube")
@@ -20,7 +21,7 @@ public class StrategyMatcherCreator {
 
     private final Map<String, Result> results = new HashMap<>();
 
-    private MatcherFactory<Update, Boolean> factory;
+    private MatcherFactoryOld<Update, Boolean> factory;
     private Map<String, Datum> matcherInitData;
     private RawMessageFactory<String> rawMessageFactory;
 
@@ -30,7 +31,7 @@ public class StrategyMatcherCreator {
     }
 
     @Autowired
-    public void setFactory(MatcherFactory<Update, Boolean> factory) {
+    public void setFactory(MatcherFactoryOld<Update, Boolean> factory) {
         this.factory = factory;
     }
 
@@ -90,7 +91,7 @@ public class StrategyMatcherCreator {
 
         private Datum datum;
         private String name;
-        private MatcherFactory<Update, Boolean> factory;
+        private MatcherFactoryOld<Update, Boolean> factory;
 
         private Boolean success = true;
         private MatcherType type;
@@ -108,7 +109,7 @@ public class StrategyMatcherCreator {
             return this;
         }
 
-        public Builder factory(MatcherFactory<Update, Boolean> factory){
+        public Builder factory(MatcherFactoryOld<Update, Boolean> factory){
             this.factory = factory;
             return this;
         }

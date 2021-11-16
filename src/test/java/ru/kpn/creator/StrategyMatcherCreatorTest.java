@@ -25,7 +25,7 @@ class StrategyMatcherCreatorTest {
 
     @BeforeEach
     void setUp() {
-        TestMatcherFactory factory = new TestMatcherFactory();
+        TestMatcherFactoryOld factory = new TestMatcherFactoryOld();
         creator.setFactory(factory);
         creator.setRawMessageFactory(rawMessageFactory);
 
@@ -127,7 +127,7 @@ class StrategyMatcherCreatorTest {
         assertThat(expectedRawMessage).isEqualTo(result.getRawMessage());
     }
 
-    private static class TestMatcherFactory implements MatcherFactory<Update, Boolean>{
+    private static class TestMatcherFactoryOld implements MatcherFactoryOld<Update, Boolean> {
         @Override
         public Function<Update, Boolean> create(MatcherType matcherType, Object... args) {
             if (matcherType.equals(MatcherType.CONSTANT)){

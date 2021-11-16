@@ -28,7 +28,9 @@ public class YmlExtractor<D, RT> implements Extractor<Result<RT>> {
     }
 
     private Result<RT> attemptCreateNewResult(String key) {
-        // TODO: 15.11.2021 if datum is null not call datum() use other method 
-        return builder.key(key).datum(initData.getOrDefault(key, null)).doScenario().build();
+        Builder<D, RT> builder = this.builder.key(key);
+        if (initData.containsKey(key))
+            builder.datum(initData.get(key));
+        return builder.doScenario().build();
     }
 }

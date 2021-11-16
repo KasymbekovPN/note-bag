@@ -13,13 +13,13 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class MatcherFactoryImplTest {
-    private MatcherFactoryImpl factory;
+public class MatcherFactoryOldImplTest {
+    private MatcherFactoryOldImpl factory;
     
     @SneakyThrows
     @BeforeEach
     void setUp() {
-        MatcherFactoryImpl.Builder builder = MatcherFactoryImpl.builder();
+        MatcherFactoryOldImpl.Builder builder = MatcherFactoryOldImpl.builder();
         for (MatcherType type : MatcherType.values()) {
             builder.creator(type, new TestMatcherCreator(String.valueOf(type)));
         }
@@ -37,7 +37,7 @@ public class MatcherFactoryImplTest {
     @Test
     void shouldCheckInvalidFactoryBuilding() {
         Throwable throwable = catchThrowable(() -> {
-            MatcherFactoryImpl factory = MatcherFactoryImpl.builder().build();
+            MatcherFactoryOldImpl factory = MatcherFactoryOldImpl.builder().build();
         });
         assertThat(throwable).isInstanceOf(Exception.class);
     }

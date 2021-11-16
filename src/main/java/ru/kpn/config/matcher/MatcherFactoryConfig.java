@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class MatcherFactoryConfig {
 
     @Bean
-    public MatcherFactory<Update, Boolean> matcherFactory(){
+    public MatcherFactoryOld<Update, Boolean> matcherFactory(){
         try {
             return createFactory();
         } catch (Exception e) {
@@ -24,8 +24,8 @@ public class MatcherFactoryConfig {
         }
     }
 
-    private MatcherFactory<Update, Boolean> createFactory() throws Exception {
-        return MatcherFactoryImpl.builder()
+    private MatcherFactoryOld<Update, Boolean> createFactory() throws Exception {
+        return MatcherFactoryOldImpl.builder()
                 .creator(MatcherType.CONSTANT, new ConstantMatcherCreator())
                 .creator(MatcherType.REGEX, new RegexMatcherCreator())
                 .creator(MatcherType.MULTI_REGEX, new MultiRegexMatcherCreator())

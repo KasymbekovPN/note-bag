@@ -11,10 +11,10 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class MatcherFactoryConfigTest {
+public class MatcherFactoryOldConfigTest {
 
     @Autowired
-    private MatcherFactoryImpl factory;
+    private MatcherFactoryOldImpl factory;
 
     @Test
     void shouldCheckConstantMatcherCreation() {
