@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class MatcherFactoryTest {
 
-
     private ObjectFactory<MatcherFactory.Type, Function<Update, Boolean>> factory;
 
     @SneakyThrows
