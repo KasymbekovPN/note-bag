@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ExtractorFactoryTest {
 
-
     private ObjectFactory<ExtractorFactory.Type, Function<Update, String>> factory;
 
     @SneakyThrows
