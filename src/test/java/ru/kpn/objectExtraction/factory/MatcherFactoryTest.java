@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.exception.RawMessageException;
 
 import java.util.function.Function;
 
@@ -12,12 +13,13 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class MatcherFactoryTest {
 
-    private MatcherFactory factory;
+
+    private ObjectFactory<MatcherFactory.Type, Function<Update, Boolean>> factory;
 
     @SneakyThrows
     @BeforeEach
     void setUp() {
-        factory = MatcherFactory.build()
+        factory = MatcherFactory.builder()
                 .creator(MatcherFactory.Type.CONSTANT, new TestCreator(MatcherFactory.Type.CONSTANT))
                 .creator(MatcherFactory.Type.REGEX, new TestCreator(MatcherFactory.Type.REGEX))
                 .creator(MatcherFactory.Type.MULTI_REGEX, new TestCreator(MatcherFactory.Type.MULTI_REGEX))
@@ -27,9 +29,9 @@ public class MatcherFactoryTest {
     @Test
     void shouldCheckNotCompletelyBuilding() {
         Throwable throwable = catchThrowable(() -> {
-            MatcherFactory.build().build();
+            MatcherFactory.builder().build();
         });
-        assertThat(throwable).isInstanceOf(MatcherFactoryBuildException.class);
+        assertThat(throwable).isInstanceOf(RawMessageException.class);
     }
 
     @Test

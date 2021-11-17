@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.Set;
 
+// TODO: 17.11.2021 del
 @Getter
 @Setter
 public class ExtractorDatum {

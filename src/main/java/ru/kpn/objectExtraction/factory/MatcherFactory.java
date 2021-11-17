@@ -1,47 +1,36 @@
 package ru.kpn.objectExtraction.factory;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.exception.RawMessageException;
 
-import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
-// TODO: 16.11.2021 insert according datum as inner static class
-// TODO: 16.11.2021 some functional into base class
-public class MatcherFactory implements ObjectFactory<MatcherFactory.Type, Function<Update, Boolean>>{
+public class MatcherFactory extends BaseFactory<MatcherFactory.Type, Function<Update, Boolean>>{
 
-    private final EnumMap<Type, Function<Object[], Function<Update, Boolean>>> creators;
-
-    public MatcherFactory(EnumMap<Type, Function<Object[], Function<Update, Boolean>>> creators) {
-        this.creators = creators;
-    }
-
-    public static Builder build(){
+    public static Builder builder(){
         return new Builder();
     }
 
-    @Override
-    public Function<Update, Boolean> create(Type type, Object... args) {
-        return creators.get(type).apply(args);
+    private MatcherFactory(Map<Type, Function<Object[], Function<Update, Boolean>>> creators) {
+        super(creators);
     }
 
-    public static class Builder{
-
-        private final EnumMap<Type, Function<Object[], Function<Update, Boolean>>> creators = new EnumMap<>(Type.class);
-
-        public Builder creator(Type type, Function<Object[], Function<Update, Boolean>> creator){
-            creators.put(type, creator);
-            return this;
-        }
-
-        public MatcherFactory build() throws MatcherFactoryBuildException {
-            checkCreatorsAmount();
-            return new MatcherFactory(creators);
-        }
-
-        private void checkCreatorsAmount() throws MatcherFactoryBuildException {
+    public static class Builder extends BaseFactory.Builder<Type, Function<Update, Boolean>>{
+        @Override
+        protected void checkCreatorsAmount() throws RawMessageException {
             if (creators.size() != Type.values().length){
-                throw new MatcherFactoryBuildException("matcher.notCompletely.building");
+                // TODO: 17.11.2021 add code to file 
+                throw new RawMessageException("matcher.notCompletely.building");
             }
+        }
+
+        @Override
+        protected ObjectFactory<Type, Function<Update, Boolean>> create() {
+            return new MatcherFactory(creators);
         }
     }
 
@@ -49,5 +38,14 @@ public class MatcherFactory implements ObjectFactory<MatcherFactory.Type, Functi
         CONSTANT,
         REGEX,
         MULTI_REGEX
+    }
+
+    @Getter
+    @Setter
+    public static class Datum{
+        private String type;
+        private Boolean constant;
+        private String template;
+        private Set<String> templates;
     }
 }

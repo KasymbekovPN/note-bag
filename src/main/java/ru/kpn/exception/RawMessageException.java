@@ -1,16 +1,15 @@
-package ru.kpn.objectExtraction.factory;
+package ru.kpn.exception;
 
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 16.11.2021 need base class
-public class MatcherFactoryBuildException extends Exception implements RawMessage<String> {
+public class RawMessageException extends Exception implements RawMessage<String> {
     private final String code;
     private final List<Object> args = new ArrayList<>();
 
-    public MatcherFactoryBuildException(String code) {
+    public RawMessageException(String code) {
         this.code = code;
     }
 
