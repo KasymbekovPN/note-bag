@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.creator.StrategyInitCreator;
+import ru.kpn.creator.StrategyInitCreatorOld;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.rawMessage.RawMessageFactory;
 import ru.kpn.service.userProfile.UserProfileService;
@@ -35,7 +35,7 @@ public class ResetStrategyTest {
     @Autowired
     private BotStateService<User, NPBotState> stateService;
     @Autowired
-    private StrategyInitCreator strategyInitCreator;
+    private StrategyInitCreatorOld strategyInitCreatorOld;
     @Autowired
     private RawMessageFactory<String> rawMessageFactory;
 
@@ -85,7 +85,7 @@ public class ResetStrategyTest {
 
     @Test
     void shouldCheckPriority() {
-        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("reset").getPriority());
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreatorOld.getDatum("reset").getPriority());
     }
 
     @AfterEach

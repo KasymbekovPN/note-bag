@@ -5,6 +5,7 @@ import ru.kpn.exception.RawMessageException;
 import java.util.Map;
 import java.util.function.Function;
 
+// TODO: 20.11.2021 must contain results
 public class StrategyInitFactory extends BaseFactory<StrategyInitFactory.Type, Integer> {
 
     public static Builder builder(){

@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.creator.StrategyInitCreator;
+import ru.kpn.creator.StrategyInitCreatorOld;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
@@ -31,7 +31,7 @@ public class SimpleNoteStrategyTest {
     @Autowired
     private SimpleNoteStrategy strategy;
     @Autowired
-    private StrategyInitCreator strategyInitCreator;
+    private StrategyInitCreatorOld strategyInitCreatorOld;
     @Autowired
     private RawMessageFactory<String> rawMessageFactory;
 
@@ -76,7 +76,7 @@ public class SimpleNoteStrategyTest {
 
     @Test
     void shouldCheckPriority() {
-        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("simpleNote").getPriority());
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreatorOld.getDatum("simpleNote").getPriority());
     }
 
     @AfterEach

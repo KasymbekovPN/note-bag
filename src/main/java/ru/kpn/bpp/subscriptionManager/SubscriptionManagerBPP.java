@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.creator.StrategyExtractorCreator;
-import ru.kpn.creator.StrategyInitCreator;
+import ru.kpn.creator.StrategyInitCreatorOld;
 import ru.kpn.creator.StrategyMatcherCreator;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
@@ -36,7 +36,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     @Autowired
     private StrategyExtractorCreator extractorCreator;
     @Autowired
-    private StrategyInitCreator strategyInitCreator;
+    private StrategyInitCreatorOld strategyInitCreatorOld;
     @Autowired
     private StrategyExtractorCreator strategyExtractorCreator;
     @Autowired
@@ -55,7 +55,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
             Optional<Method> maybePriorityInjectionMethod = getMethodForInjection(strategy, InjectionType.PRIORITY);
             if (maybePriorityInjectionMethod.isPresent()){
-                StrategyInitCreator.Result result = strategyInitCreator.getDatum(strategyName);
+                StrategyInitCreatorOld.Result result = strategyInitCreatorOld.getDatum(strategyName);
                 if (result.getSuccess()){
                     inject(strategy, maybePriorityInjectionMethod.get(), result.getPriority());
                 } else {

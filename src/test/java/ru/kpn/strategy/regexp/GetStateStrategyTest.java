@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.creator.StrategyInitCreator;
+import ru.kpn.creator.StrategyInitCreatorOld;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
 import utils.UpdateInstanceBuilder;
@@ -28,7 +28,7 @@ public class GetStateStrategyTest {
     @Autowired
     private BotStateService<User, NPBotState> stateService;
     @Autowired
-    private StrategyInitCreator strategyInitCreator;
+    private StrategyInitCreatorOld strategyInitCreatorOld;
     @Autowired
     private RawMessageFactory<String> rawMessageFactory;
 
@@ -66,6 +66,6 @@ public class GetStateStrategyTest {
 
     @Test
     void shouldCheckPriority() {
-        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreator.getDatum("getState").getPriority());
+        assertThat(strategy.getPriority()).isEqualTo(strategyInitCreatorOld.getDatum("getState").getPriority());
     }
 }

@@ -9,5 +9,9 @@ public interface Result<T> {
     void setSuccess(Boolean success);
     void setRawMessage(RawMessage<String> rawMessage);
     void setValue(T value);
+
+    // TODO: 20.11.2021 del
     void makeFailure(RawMessage<String> rawMessage);
+
+    RawMessage<String> takeMessage(String code);
 }

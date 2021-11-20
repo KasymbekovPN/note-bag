@@ -16,7 +16,7 @@ import java.util.Map;
 // TODO: 08.11.2021 rename
 @Service
 @ConfigurationProperties(prefix = "telegram.tube")
-public class StrategyInitCreator {
+public class StrategyInitCreatorOld {
 
     private Map<String, Datum> strategyInitData;
     private RawMessageFactory<String> rawMessageFactory;

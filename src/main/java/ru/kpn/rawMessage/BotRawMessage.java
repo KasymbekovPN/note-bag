@@ -10,10 +10,11 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-class BotRawMessage implements RawMessage<String> {
+public class BotRawMessage implements RawMessage<String> {
     private final String code;
     private final List<Object> args = new ArrayList<>();
 
+    // TODO: 20.11.2021 test
     @Override
     public String getCode() {
         return code;
