@@ -27,7 +27,7 @@ public class MatcherBuilderTest {
 
     @BeforeEach
     void setUp() {
-        builder = new MatcherBuilder(new TestMatcherFactory(), new BotRawMessageFactory());
+        builder = new MatcherBuilder(new TestMatcherFactory(), rawMessageFactory);
     }
 
     @Test
