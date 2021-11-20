@@ -1,12 +1,9 @@
 package ru.kpn.objectExtraction.factory;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.exception.RawMessageException;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 public class ExtractorFactory extends BaseFactory<ExtractorFactory.Type, Function<Update, String>>{
@@ -36,12 +33,5 @@ public class ExtractorFactory extends BaseFactory<ExtractorFactory.Type, Functio
 
     public enum Type{
         BY_PREFIX
-    }
-
-    @Getter
-    @Setter
-    public static class Datum{
-        private String type;
-        private Set<String> prefixes;
     }
 }

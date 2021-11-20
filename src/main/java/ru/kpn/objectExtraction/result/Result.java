@@ -9,4 +9,5 @@ public interface Result<T> {
     void setSuccess(Boolean success);
     void setRawMessage(RawMessage<String> rawMessage);
     void setValue(T value);
+    void makeFailure(RawMessage<String> rawMessage);
 }

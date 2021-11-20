@@ -1,7 +1,5 @@
 package ru.kpn.objectExtraction.factory;
 
-import lombok.Getter;
-import lombok.Setter;
 import ru.kpn.exception.RawMessageException;
 
 import java.util.Map;
@@ -31,12 +29,6 @@ public class StrategyInitFactory extends BaseFactory<StrategyInitFactory.Type, I
 
     public enum Type{
         COMMON
-    }
-
-    @Getter
-    @Setter
-    public static class Datum{
-        private Integer priority;
     }
 
     private static class Creator implements Function<Object[], Integer>{

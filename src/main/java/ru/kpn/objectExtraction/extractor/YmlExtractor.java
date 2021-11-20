@@ -28,7 +28,7 @@ public class YmlExtractor<D, RT> implements Extractor<Result<RT>> {
     }
 
     private Result<RT> attemptCreateNewResult(String key) {
-        Builder<D, RT> builder = this.builder.key(key);
+        Builder<D, RT> builder = this.builder.start(key);
         if (initData.containsKey(key))
             builder.datum(initData.get(key));
         return builder.doScenario().build();

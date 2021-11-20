@@ -2,10 +2,12 @@ package ru.kpn.rawMessage;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
 class BotRawMessage implements RawMessage<String> {

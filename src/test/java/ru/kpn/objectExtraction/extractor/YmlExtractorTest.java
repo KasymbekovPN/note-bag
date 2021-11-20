@@ -53,7 +53,7 @@ class YmlExtractorTest {
         private TestDatum datum;
 
         @Override
-        public Builder<TestDatum, String> key(String key) {
+        public Builder<TestDatum, String> start(String key) {
             return this;
         }
 

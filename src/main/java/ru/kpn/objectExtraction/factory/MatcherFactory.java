@@ -1,12 +1,9 @@
 package ru.kpn.objectExtraction.factory;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.exception.RawMessageException;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 public class MatcherFactory extends BaseFactory<MatcherFactory.Type, Function<Update, Boolean>>{
@@ -38,14 +35,5 @@ public class MatcherFactory extends BaseFactory<MatcherFactory.Type, Function<Up
         CONSTANT,
         REGEX,
         MULTI_REGEX
-    }
-
-    @Getter
-    @Setter
-    public static class Datum{
-        private String type;
-        private Boolean constant;
-        private String template;
-        private Set<String> templates;
     }
 }
