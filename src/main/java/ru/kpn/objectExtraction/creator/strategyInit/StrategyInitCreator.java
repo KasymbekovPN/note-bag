@@ -39,8 +39,10 @@ public class StrategyInitCreator implements Creator<StrategyInitDatum, Integer> 
             return this;
         }
 
-        private Result<Integer> create(){
-            result.setValue(datum.getPriority());
+        public Result<Integer> create(){
+            if (result.getSuccess()){
+                result.setValue(datum.getPriority());
+            }
             return result;
         }
     }
