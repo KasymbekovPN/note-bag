@@ -1,7 +1,7 @@
-// TODO: 27.11.2021 del
+package ru.kpn.objectExtraction.datum;
 
-//package ru.kpn.objectExtraction.datum;
-//
+import ru.kpn.objectFactory.datum.AbstractDatum;
+
 //import lombok.Getter;
 //import lombok.Setter;
 //
@@ -9,7 +9,15 @@
 //
 //@Getter
 //@Setter
-//public class ExtractorDatum {
-//    private String type;
-//    private Set<String> prefixes;
+//public class ExtractorDatum extends AbstractDatum<ExtractorDatum.TYPE> {
+//    @Override
+//    public void setType(String type) {
+//
+//    }
+//    //    private String type;
+////    private Set<String> prefixes;
+//
+//    private enum TYPE{
+//        BY_PREFIX
+//    }
 //}
