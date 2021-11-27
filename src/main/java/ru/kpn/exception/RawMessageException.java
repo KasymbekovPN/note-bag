@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RawMessageException extends Exception implements RawMessage<String> {
-    private final String code;
     private final List<Object> args = new ArrayList<>();
+
+    private String code;
 
     public RawMessageException(String code) {
         this.code = code;
@@ -16,6 +17,13 @@ public class RawMessageException extends Exception implements RawMessage<String>
     @Override
     public String getCode() {
         return code;
+    }
+
+    // TODO: 27.11.2021 ??? xirita
+    @Override
+    public RawMessage<String> setCode(String code) {
+        this.code = code;
+        return this;
     }
 
     @Override

@@ -43,6 +43,7 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
+        // TODO: 27.11.2021 refactoring !!!
         RawMessage<String> rawMessage = new RawMessage<>() {
             @Override
             public String getCode() {
@@ -55,6 +56,11 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
             @Override
             public Object[] getArgs() {
                 return new Object[]{chatId, text};
+            }
+
+            @Override
+            public RawMessage<String> setCode(String code) {
+                return null;
             }
         };
 

@@ -13,6 +13,12 @@ repositories {
     mavenCentral()
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 ext{
     juniperVersion = '5.7.2'
     springBootVersion = '2.5.3'
@@ -51,6 +57,8 @@ dependencies {
     testImplementation "de.flapdoodle.embedmongo:de.flapdoodle.embedmongo:${embedMongo}"
 
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
+
+    implementation 'com.github.KasymbekovPN:objectFactory:1.0.0'
 }
 
 test {

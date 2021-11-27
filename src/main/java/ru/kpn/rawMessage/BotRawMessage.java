@@ -7,17 +7,32 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: 27.11.2021 refactoring
 @ToString
 @EqualsAndHashCode
-@RequiredArgsConstructor
 public class BotRawMessage implements RawMessage<String> {
-    private final String code;
     private final List<Object> args = new ArrayList<>();
+
+    private String code;
+
+    public BotRawMessage() {
+        this.code = "";
+    }
+
+    public BotRawMessage(String code) {
+        this.code = code;
+    }
 
     // TODO: 20.11.2021 test
     @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public RawMessage<String> setCode(String code) {
+        this.code = code;
+        return null;
     }
 
     @Override

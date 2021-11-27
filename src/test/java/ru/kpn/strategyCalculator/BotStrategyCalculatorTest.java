@@ -35,6 +35,7 @@ public class BotStrategyCalculatorTest {
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
+    // TODO: 27.11.2021 refactoring !!!
     private static class TextRawMessage implements RawMessage<String> {
 
 
@@ -52,6 +53,11 @@ public class BotStrategyCalculatorTest {
                     String.valueOf(CHAT_ID),
                     TEXT
             };
+        }
+
+        @Override
+        public RawMessage<String> setCode(String code) {
+            return null;
         }
     }
 
