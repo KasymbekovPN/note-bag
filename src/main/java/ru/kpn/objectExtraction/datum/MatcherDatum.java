@@ -1,16 +1,21 @@
-// TODO: 27.11.2021 del
-//package ru.kpn.objectExtraction.datum;
-//
-//import lombok.Getter;
-//import lombok.Setter;
-//
-//import java.util.Set;
-//
-//@Getter
-//@Setter
-//public class MatcherDatum {
-//    private String type;
-//    private Boolean constant;
-//    private String template;
-//    private Set<String> templates;
-//}
+package ru.kpn.objectExtraction.datum;
+
+import lombok.Getter;
+import lombok.Setter;
+import ru.kpn.objectExtraction.type.MatcherDatumType;
+import ru.kpn.objectFactory.datum.AbstractDatum;
+
+import java.util.Set;
+
+@Getter
+@Setter
+public class MatcherDatum extends AbstractDatum<MatcherDatumType> {
+    private Boolean constant;
+    private String template;
+    private Set<String> templates;
+
+    @Override
+    public void setType(String type) {
+        this.type = new MatcherDatumType(type);
+    }
+}
