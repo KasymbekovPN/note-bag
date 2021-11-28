@@ -1,5 +1,6 @@
 package ru.kpn.objectExtraction.creator.extractor;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,16 +22,16 @@ public class ByPrefixesExtractorCreator implements Creator<ExtractorDatum, Funct
 
     @Override
     public synchronized Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
-        return new InnerCreator(datum)
+        return new InnerCreator(new OptimisticResult<>(), datum)
                 .checkDatumOnNull()
                 .checkPrefixesAreNull()
                 .checkPrefixesAreEmpty()
                 .create();
     }
 
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     private static class InnerCreator{
-        private final OptimisticResult<Function<Update, String>> result = new OptimisticResult<>();
+        private final OptimisticResult<Function<Update, String>> result;
         private final ExtractorDatum datum;
 
         public Result<Function<Update, String>, RawMessage<String>> create() {
