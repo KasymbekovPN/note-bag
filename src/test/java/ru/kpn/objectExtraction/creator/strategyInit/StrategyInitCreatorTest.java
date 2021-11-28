@@ -1,23 +1,14 @@
-// TODO: 27.11.2021 del
-//package ru.kpn.objectExtraction.creator.strategyInit;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import ru.kpn.objectExtraction.datum.StrategyInitDatum;
-//import ru.kpn.objectExtraction.result.Result;
-//import ru.kpn.rawMessage.BotRawMessageFactory;
-//import ru.kpn.rawMessage.RawMessage;
-//import ru.kpn.rawMessage.RawMessageFactory;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//
-//@SpringBootTest
-//public class StrategyInitCreatorTest {
-//
-//    private static final String NAME = "StrategyInitCreator";
-//    private static final int PRIORITY = 1;
-//
+package ru.kpn.objectExtraction.creator.strategyInit;
+
+
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class StrategyInitCreatorTest {
+
+    private static final String NAME = "StrategyInitCreator";
+    private static final int PRIORITY = 1;
+
 //    private static final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
 //
 //    @Autowired
@@ -47,4 +38,4 @@
 //        assertThat(result.getSuccess()).isTrue();
 //        assertThat(result.getValue()).isEqualTo(PRIORITY);
 //    }
-//}
+}

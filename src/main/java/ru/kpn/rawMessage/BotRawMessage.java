@@ -32,7 +32,7 @@ public class BotRawMessage implements RawMessage<String> {
     @Override
     public RawMessage<String> setCode(String code) {
         this.code = code;
-        return null;
+        return this;
     }
 
     @Override
