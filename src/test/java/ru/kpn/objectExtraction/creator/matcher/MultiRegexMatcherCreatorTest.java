@@ -9,19 +9,20 @@ import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
 
+import java.util.Set;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class RegexMatcherCreatorTest {
+public class MultiRegexMatcherCreatorTest {
 
-    private static final String NAME = "RegexMatcherCreator";
+    private static final String NAME = "MultiRegexMatcherCreator";
 
     @Autowired
     private RawMessageFactory<String> messageFactory;
     @Autowired
-    private RegexMatcherCreator creator;
+    private MultiRegexMatcherCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
@@ -32,9 +33,19 @@ public class RegexMatcherCreatorTest {
     }
 
     @Test
-    void shouldCheckCreationAttemptWhenDatumTemplateIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.template.isNull").add(NAME);
+    void shouldCheckCreationAttemptWhenDatumTemplatesIsNull() {
+        RawMessage<String> expectedStatus = messageFactory.create("datum.templates.isNull").add(NAME);
         Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(new MatcherDatum());
+        assertThat(result.getSuccess()).isFalse();
+        assertThat(expectedStatus).isEqualTo(result.getStatus());
+    }
+
+    @Test
+    void shouldCheckCreationAttemptWhenDatumTemplatesIsEmpty() {
+        RawMessage<String> expectedStatus = messageFactory.create("datum.templates.isEmpty").add(NAME);
+        MatcherDatum datum = new MatcherDatum();
+        datum.setTemplates(Set.of());
+        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
@@ -42,10 +53,11 @@ public class RegexMatcherCreatorTest {
     @Test
     void shouldCheckCreation() {
         MatcherDatum datum = new MatcherDatum();
-        String template = "template";
-        datum.setTemplate(template);
+        Set<String> templates = Set.of("t0", "t1");
+        datum.setTemplates(templates);
         Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }
+
 }
