@@ -11,6 +11,7 @@ import ru.kpn.rawMessage.RawMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 01.12.2021 need base class
 public class StrategyInitFactory extends AbstractObjectFactory<StrategyInitDatum, Integer, RawMessage<String>> {
 
     private final Map<StrategyInitDatumType, Creator<StrategyInitDatum, Integer, RawMessage<String>>> creators;

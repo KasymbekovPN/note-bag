@@ -18,6 +18,10 @@ public class ExtractorDatumType extends AbstractDatumType {
         return allowedTypeNames.contains(strType);
     }
 
+    public Object asStr() {
+        return strType;
+    }
+
     public enum ALLOWED_TYPE {
         BY_PREFIX
     }
