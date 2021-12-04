@@ -11,14 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.creator.StrategyExtractorCreator;
-import ru.kpn.creator.StrategyInitCreatorOld;
-import ru.kpn.creator.StrategyMatcherCreator;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
-import ru.kpn.objectExtraction.datum.ExtractorDatum;
-import ru.kpn.objectExtraction.datum.MatcherDatum;
-import ru.kpn.objectExtraction.datum.StrategyInitDatum;
+import ru.kpn.objectFactory.datum.ExtractorDatum;
+import ru.kpn.objectFactory.datum.MatcherDatum;
+import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
@@ -44,16 +41,6 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     private static final String STRATEGY_BEAN_SUFFIX = "Strategy";
 
     @Autowired
-    private StrategyMatcherCreator matcherCreator;
-    @Autowired
-    private StrategyExtractorCreator extractorCreator;
-    @Autowired
-    private StrategyInitCreatorOld strategyInitCreatorOld;
-    @Autowired
-    private StrategyExtractorCreator strategyExtractorCreator;
-    @Autowired
-    private StrategyMatcherCreator strategyMatcherCreator;
-    @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
     @Autowired
     private SubscriptionManager<Update, BotApiMethod<?>> subscriptionManager;
@@ -77,42 +64,7 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
             injectPriority(strategy);
             injectExtractor(strategy);
             injectMatcher(strategy);
-            createSubscriber(strategy);
-
-            // TODO: 04.12.2021 del
-//            String strategyName = calculateStrategyName(strategy);
-//            Optional<Method> maybePriorityInjectionMethod = getMethodForInjection(strategy, InjectionType.PRIORITY);
-//            if (maybePriorityInjectionMethod.isPresent()){
-//                StrategyInitCreatorOld.Result result = strategyInitCreatorOld.getDatum(strategyName);
-//                if (result.getSuccess()){
-//                    inject(strategy, maybePriorityInjectionMethod.get(), result.getPriority());
-//                } else {
-//                    // TODO: 08.11.2021 use rawMessage
-//                    throw new BeanCreationException(String.format("Priority for '%s' doesn't exist", strategyName));
-//                }
-//            }
-//
-//            Optional<Method> maybeExtractorInjectionMethod = getMethodForInjection(strategy, InjectionType.EXTRACTOR);
-//            if (maybeExtractorInjectionMethod.isPresent()){
-//                StrategyExtractorCreator.Result result = strategyExtractorCreator.getOrCreate(strategyName);
-//                if (result.getSuccess()){
-//                    inject(strategy, maybeExtractorInjectionMethod.get(), result.getExtractor());
-//                } else {
-//                    // TODO: 10.11.2021 use exception with rawMessage
-//                    throw new BeanCreationException(String.format("Extractor for '%s' doesn't exist", strategyName));
-//                }
-//            }
-//
-//            Optional<Method> maybeMatcherInjectionMethod = getMethodForInjection(strategy, InjectionType.MATCHER);
-//            if (maybeMatcherInjectionMethod.isPresent()){
-//                StrategyMatcherCreator.Result result = strategyMatcherCreator.getOrCreate(strategyName);
-//                if (result.getSuccess()){
-//                    inject(strategy, maybeMatcherInjectionMethod.get(), result.getMatcher());
-//                } else {
-//                    // TODO: 10.11.2021 use exception with rawMessage
-//                    throw new BeanCreationException(String.format("Matcher for '%s' doesn't exist", strategyName));
-//                }
-//            }
+            subscriptionManager.subscribe(createSubscriber(strategy));
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }

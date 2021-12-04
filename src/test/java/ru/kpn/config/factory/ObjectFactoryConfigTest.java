@@ -1,13 +1,12 @@
 package ru.kpn.config.factory;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.objectExtraction.datum.ExtractorDatum;
-import ru.kpn.objectExtraction.datum.MatcherDatum;
-import ru.kpn.objectExtraction.datum.StrategyInitDatum;
+import ru.kpn.objectFactory.datum.ExtractorDatum;
+import ru.kpn.objectFactory.datum.MatcherDatum;
+import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.rawMessage.RawMessage;
 
