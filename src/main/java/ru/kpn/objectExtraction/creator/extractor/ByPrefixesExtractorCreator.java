@@ -1,13 +1,13 @@
 package ru.kpn.objectExtraction.creator.extractor;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ByPrefixExtractor;
+import ru.kpn.objectExtraction.creator.CreatorWithType;
 import ru.kpn.objectExtraction.datum.ExtractorDatum;
 import ru.kpn.objectExtraction.result.OptimisticResult;
-import ru.kpn.objectFactory.creator.Creator;
+import ru.kpn.objectExtraction.type.ExtractorDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 
@@ -16,9 +16,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class ByPrefixesExtractorCreator implements Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>> {
+public class ByPrefixesExtractorCreator implements CreatorWithType<ExtractorDatum, ExtractorDatumType, Function<Update, String>, RawMessage<String>> {
 
     private static final String NAME = "ByPrefixesExtractorCreator";
+    private static final ExtractorDatumType TYPE = new ExtractorDatumType(ExtractorDatumType.ALLOWED_TYPE.BY_PREFIX.name());
 
     @Override
     public synchronized Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
@@ -27,6 +28,11 @@ public class ByPrefixesExtractorCreator implements Creator<ExtractorDatum, Funct
                 .checkPrefixesAreNull()
                 .checkPrefixesAreEmpty()
                 .create();
+    }
+
+    @Override
+    public ExtractorDatumType getType() {
+        return TYPE;
     }
 
     @AllArgsConstructor

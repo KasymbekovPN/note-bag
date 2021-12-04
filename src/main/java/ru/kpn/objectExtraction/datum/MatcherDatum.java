@@ -16,6 +16,9 @@ public class MatcherDatum extends AbstractDatum<MatcherDatumType> {
 
     @Override
     public void setType(String type) {
+        //<
+        System.out.println("matcher type: " + type);
+        //<
         this.type = new MatcherDatumType(type);
     }
 }

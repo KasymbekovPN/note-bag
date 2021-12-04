@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.RegexMatcher;
+import ru.kpn.objectExtraction.creator.CreatorWithType;
 import ru.kpn.objectExtraction.datum.MatcherDatum;
 import ru.kpn.objectExtraction.result.OptimisticResult;
+import ru.kpn.objectExtraction.type.MatcherDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
@@ -13,9 +15,10 @@ import ru.kpn.rawMessage.RawMessage;
 import java.util.function.Function;
 
 @Component
-public class RegexMatcherCreator implements Creator<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> {
+public class RegexMatcherCreator implements CreatorWithType<MatcherDatum, MatcherDatumType, Function<Update, Boolean>, RawMessage<String>> {
 
     private static final String NAME = "RegexMatcherCreator";
+    private static final MatcherDatumType TYPE = new MatcherDatumType(MatcherDatumType.ALLOWED_TYPE.REGEX.name());
 
     @Override
     public Result<Function<Update, Boolean>, RawMessage<String>> create(MatcherDatum datum) {
@@ -23,6 +26,11 @@ public class RegexMatcherCreator implements Creator<MatcherDatum, Function<Updat
                 .checkDatumOnNull()
                 .checkTemplateOnNull()
                 .create();
+    }
+
+    @Override
+    public MatcherDatumType getType() {
+        return TYPE;
     }
 
     @AllArgsConstructor

@@ -11,15 +11,33 @@ telegram:
     subscriber-thread-limit: 2
     runner-init-value: false
     strategyInitData:
-      help.priority: 0
-      getState.priority: 1
-      reset.priority: 2
-      getBufferStatus.priority: 3
-      getCurrentBufferDatum.priority: 4
-      skipBufferDatum.priority: 5
-      clearBuffer.priority: 6
-      simpleNote.priority: 7
-      link.priority: 8
+      help:
+        type: COMMON
+        priority: 0
+      getState:
+        type: COMMON
+        priority: 1
+      reset:
+        type: COMMON
+        priority: 2
+      getBufferStatus:
+        type: COMMON
+        priority: 3
+      getCurrentBufferDatum:
+        type: COMMON
+        priority: 4
+      skipBufferDatum:
+        type: COMMON
+        priority: 5
+      clearBuffer:
+        type: COMMON
+        priority: 6
+      simpleNote:
+        type: COMMON
+        priority: 7
+      link:
+        type: COMMON
+        priority: 8
     matcherInitData:
       help:
         template: /help

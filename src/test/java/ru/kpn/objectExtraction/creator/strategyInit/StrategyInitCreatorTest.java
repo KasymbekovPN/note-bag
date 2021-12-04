@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectExtraction.datum.StrategyInitDatum;
+import ru.kpn.objectExtraction.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -45,5 +46,11 @@ public class StrategyInitCreatorTest {
         Result<Integer, RawMessage<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo(PRIORITY);
+    }
+
+    @Test
+    void shouldCheckGottenType() {
+        StrategyInitDatumType type = new StrategyInitDatumType(StrategyInitDatumType.ALLOWED_TYPE.COMMON.name());
+        assertThat(type).isEqualTo(creator.getType());
     }
 }

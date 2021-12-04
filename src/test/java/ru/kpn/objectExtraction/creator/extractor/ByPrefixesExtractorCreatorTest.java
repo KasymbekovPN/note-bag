@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectExtraction.datum.ExtractorDatum;
+import ru.kpn.objectExtraction.type.ExtractorDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -58,5 +59,11 @@ public class ByPrefixesExtractorCreatorTest {
         Result<Function<Update, String>, RawMessage<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
+    }
+
+    @Test
+    void shouldCheckGottenType() {
+        ExtractorDatumType type = new ExtractorDatumType(ExtractorDatumType.ALLOWED_TYPE.BY_PREFIX.name());
+        assertThat(type).isEqualTo(creator.getType());
     }
 }

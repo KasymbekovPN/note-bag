@@ -4,18 +4,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.MultiRegexMatcher;
+import ru.kpn.objectExtraction.creator.CreatorWithType;
 import ru.kpn.objectExtraction.datum.MatcherDatum;
 import ru.kpn.objectExtraction.result.OptimisticResult;
-import ru.kpn.objectFactory.creator.Creator;
+import ru.kpn.objectExtraction.type.MatcherDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;
 
 @Component
-public class MultiRegexMatcherCreator implements Creator<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> {
+public class MultiRegexMatcherCreator implements CreatorWithType<MatcherDatum, MatcherDatumType, Function<Update, Boolean>, RawMessage<String>> {
 
     private static final String NAME = "MultiRegexMatcherCreator";
+    private static final MatcherDatumType TYPE = new MatcherDatumType(MatcherDatumType.ALLOWED_TYPE.MULTI_REGEX.name());
 
     @Override
     public Result<Function<Update, Boolean>, RawMessage<String>> create(MatcherDatum datum) {
@@ -24,6 +26,11 @@ public class MultiRegexMatcherCreator implements Creator<MatcherDatum, Function<
                 .checkDatumTemplatesIsNull()
                 .checkDatumTemplatesIsEmpty()
                 .create();
+    }
+
+    @Override
+    public MatcherDatumType getType() {
+        return TYPE;
     }
 
     @AllArgsConstructor

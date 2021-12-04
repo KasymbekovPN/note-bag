@@ -15,6 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
+// TODO: 04.12.2021 del
 @Configuration
 public class ExtractorFactoryConfig {
 

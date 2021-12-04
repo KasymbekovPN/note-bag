@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectExtraction.datum.MatcherDatum;
+import ru.kpn.objectExtraction.type.MatcherDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -60,4 +61,9 @@ public class MultiRegexMatcherCreatorTest {
         assertThat(result.getValue()).isNotNull();
     }
 
+    @Test
+    void shouldCheckGottenType() {
+        MatcherDatumType type = new MatcherDatumType(MatcherDatumType.ALLOWED_TYPE.MULTI_REGEX.name());
+        assertThat(type).isEqualTo(creator.getType());
+    }
 }
