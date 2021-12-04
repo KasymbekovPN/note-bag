@@ -1,5 +1,6 @@
 package ru.kpn.objectExtraction.factory;
 
+import ru.kpn.objectExtraction.creator.CreatorWithType;
 import ru.kpn.objectExtraction.result.OptimisticResult;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.datum.Datum;
@@ -37,6 +38,7 @@ abstract public class BaseObjectFactory<D extends Datum<? extends DatumType>, RT
     protected static abstract class BaseBuilder<D extends Datum<? extends DatumType>, RT> {
         protected final Map<DatumType, Creator<D, RT, RawMessage<String>>> creators = new HashMap<>();
 
+        // TODO: 04.12.2021 take type from creator - only one arg
         public BaseBuilder<D, RT> creator(DatumType type, Creator<D, RT, RawMessage<String>> creator){
             creators.put(type, creator);
             return this;

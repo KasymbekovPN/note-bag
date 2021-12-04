@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ExtractorFactoryConfig {
 
     @Bean
-    public ExtractorFactory<Update, String> extractorFactory(){
+    public ExtractorFactory<Update, String> extractorFactory1(){
         try{
             return createFactory();
         } catch (Exception ex){

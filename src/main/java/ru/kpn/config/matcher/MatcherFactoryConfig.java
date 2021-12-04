@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MatcherFactoryConfig {
 
     @Bean
-    public MatcherFactoryOld<Update, Boolean> matcherFactory(){
+    public MatcherFactoryOld<Update, Boolean> matcherFactory1(){
         try {
             return createFactory();
         } catch (Exception e) {
