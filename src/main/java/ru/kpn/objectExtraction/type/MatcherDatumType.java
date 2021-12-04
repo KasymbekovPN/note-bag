@@ -18,6 +18,11 @@ public class MatcherDatumType extends AbstractDatumType {
         return allowedTypeNames.contains(strType);
     }
 
+    // TODO: 04.12.2021 to base
+    public String asStr() {
+        return strType;
+    }
+
     public enum ALLOWED_TYPE {
         CONSTANT,
         REGEX,
