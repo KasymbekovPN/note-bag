@@ -11,6 +11,7 @@ import ru.kpn.objectExtraction.datum.ExtractorDatum;
 import ru.kpn.objectExtraction.result.OptimisticResult;
 import ru.kpn.objectExtraction.type.ExtractorDatumType;
 import ru.kpn.objectFactory.creator.Creator;
+import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
@@ -27,8 +28,7 @@ public class ExtractorFactoryTest {
     private final EnumMap<ExtractorDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(ExtractorDatumType.ALLOWED_TYPE.class);
     private final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
-
-    private ExtractorFactory factory;
+    private ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> factory;
 
     @SneakyThrows
     @BeforeEach

@@ -9,6 +9,7 @@ import ru.kpn.objectExtraction.datum.StrategyInitDatum;
 import ru.kpn.objectExtraction.result.OptimisticResult;
 import ru.kpn.objectExtraction.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.creator.Creator;
+import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
@@ -24,8 +25,7 @@ public class StrategyInitFactoryTest {
     private final EnumMap<StrategyInitDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(StrategyInitDatumType.ALLOWED_TYPE.class);
     private final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
-
-    private StrategyInitFactory factory;
+    private ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>> factory;
 
     @SneakyThrows
     @BeforeEach

@@ -2,61 +2,42 @@ package ru.kpn.objectExtraction.factory;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectExtraction.datum.ExtractorDatum;
-import ru.kpn.objectExtraction.result.OptimisticResult;
 import ru.kpn.objectExtraction.type.ExtractorDatumType;
 import ru.kpn.objectFactory.creator.Creator;
-import ru.kpn.objectFactory.factory.AbstractObjectFactory;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.objectFactory.factory.ObjectFactory;
+import ru.kpn.objectFactory.type.DatumType;
 import ru.kpn.rawMessage.RawMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ExtractorFactory extends AbstractObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> {
-
-    private final Map<ExtractorDatumType, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators;
+public class ExtractorFactory extends BaseObjectFactory<ExtractorDatum, Function<Update, String>>{
 
     public static Builder builder(){
         return new Builder();
     }
 
-    private ExtractorFactory(Map<ExtractorDatumType, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators) {
-        this.creators = creators;
+    private ExtractorFactory(Map<DatumType, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators) {
+        super(creators);
     }
 
     @Override
-    protected Result<Function<Update, String>, RawMessage<String>> getResult(ExtractorDatum datum) {
-        return creators.get(datum.getType()).create(datum);
+    protected void toFail(RawMessage<String> status, ExtractorDatum datum) {
+        status.setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
     }
 
-    @Override
-    protected Result<Function<Update, String>, RawMessage<String>> getWrongResult(ExtractorDatum datum) {
-        OptimisticResult<Function<Update, String>> result = new OptimisticResult<>();
-        result.setSuccess(false);
-        result.toFailAndGetStatus().setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
-        return result;
-    }
-
-    public static class Builder {
-        private final Map<ExtractorDatumType, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators
-                = new HashMap<>();
-
-        public Builder creator(ExtractorDatumType type, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>> creator){
-            creators.put(type, creator);
-            return this;
-        }
-
-        public ExtractorFactory build() throws Exception {
-            checkCreators();
-            return new ExtractorFactory(creators);
-        }
-
-        private void checkCreators() throws Exception {
+    public static class Builder extends BaseBuilder<ExtractorDatum, Function<Update, String>>{
+        @Override
+        protected void check() throws Exception {
             if (ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 // TODO: 01.12.2021 other exception !!!
                 throw new Exception("Not completely map of creators");
             }
+        }
+
+        @Override
+        protected ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> create() {
+            return new ExtractorFactory(creators);
         }
     }
 }

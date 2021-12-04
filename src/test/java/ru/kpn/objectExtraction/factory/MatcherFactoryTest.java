@@ -1,84 +1,76 @@
-// TODO: 27.11.2021 del
-//package ru.kpn.objectExtraction.factory;
+package ru.kpn.objectExtraction.factory;
+
+public class MatcherFactoryTest {
+
+
+//        private final EnumMap<ExtractorDatumType.ALLOWED_TYPE, Integer> expectedValues
+//            = new EnumMap<>(ExtractorDatumType.ALLOWED_TYPE.class);
+//    private final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
 //
-//import lombok.SneakyThrows;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.telegram.telegrambots.meta.api.objects.Update;
-//import ru.kpn.exception.RawMessageException;
-//
-//import java.util.function.Function;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.assertj.core.api.Assertions.catchThrowable;
-//
-//public class MatcherFactoryTest {
-//
-//    private ObjectFactory<MatcherFactory.Type, Function<Update, Boolean>> factory;
+//    private ExtractorFactory factory;
 //
 //    @SneakyThrows
 //    @BeforeEach
 //    void setUp() {
-//        factory = MatcherFactory.builder()
-//                .creator(MatcherFactory.Type.CONSTANT, new TestCreator(MatcherFactory.Type.CONSTANT))
-//                .creator(MatcherFactory.Type.REGEX, new TestCreator(MatcherFactory.Type.REGEX))
-//                .creator(MatcherFactory.Type.MULTI_REGEX, new TestCreator(MatcherFactory.Type.MULTI_REGEX))
-//                .build();
+//        ExtractorFactory.Builder builder = ExtractorFactory.builder();
+//        int value = 0;
+//        for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
+//            builder.creator(new ExtractorDatumType(allowedType.name()), new TestCreator(value));
+//            expectedValues.put(allowedType, value++);
+//        }
+//        factory = builder.build();
 //    }
 //
 //    @Test
-//    void shouldCheckNotCompletelyBuilding() {
+//    void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
 //        Throwable throwable = catchThrowable(() -> {
-//            MatcherFactory.builder().build();
+//            ExtractorFactory.builder().build();
 //        });
-//        assertThat(throwable).isInstanceOf(RawMessageException.class);
+//        assertThat(throwable).isInstanceOf(Exception.class);
 //    }
 //
 //    @Test
-//    void shouldCheckConstantMatcherCreation() {
-//        TestMatcher matcher = (TestMatcher) factory.create(MatcherFactory.Type.CONSTANT);
-//        assertThat(MatcherFactory.Type.CONSTANT).isEqualTo(matcher.getType());
-//    }
-//
-//    @Test
-//    void shouldCheckRegexMatcherCreation() {
-//        TestMatcher matcher = (TestMatcher) factory.create(MatcherFactory.Type.REGEX);
-//        assertThat(MatcherFactory.Type.REGEX).isEqualTo(matcher.getType());
-//    }
-//
-//    @Test
-//    void shouldCheckMultiMatcherCreation() {
-//        TestMatcher matcher = (TestMatcher) factory.create(MatcherFactory.Type.MULTI_REGEX);
-//        assertThat(MatcherFactory.Type.MULTI_REGEX).isEqualTo(matcher.getType());
-//    }
-//
-//    private static class TestCreator implements Function<Object[], Function<Update, Boolean>> {
-//        private final MatcherFactory.Type type;
-//
-//        public TestCreator(MatcherFactory.Type type) {
-//            this.type = type;
+//    void shouldCheckCreation() {
+//        for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
+//            ExtractorDatum datum = new ExtractorDatum();
+//            datum.setType(allowedType.name());
+//            Result<Function<Update, String>, RawMessage<String>> result = factory.create(datum);
+//            assertThat(new TestExtractor(expectedValues.get(allowedType))).isEqualTo(result.getValue());
 //        }
+//    }
+//
+//    @Test
+//    void shouldCheckCreationAttemptWithWrongType() {
+//        String wrong = "WRONG";
+//        RawMessage<String> expectedStatus = messageFactory.create("strategyInitFactory.wrongType").add(wrong);
+//        ExtractorDatum datum = new ExtractorDatum();
+//        datum.setType(wrong);
+//         Result<Function<Update, String>, RawMessage<String>> result = factory.create(datum);
+//        assertThat(result.getSuccess()).isFalse();
+//        assertThat(result.getStatus()).isEqualTo(expectedStatus);
+//    }
+//
+//    @AllArgsConstructor
+//    @Getter
+//    private static class TestCreator implements Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>> {
+//        private final int value;
 //
 //        @Override
-//        public Function<Update, Boolean> apply(Object[] objects) {
-//            return new TestMatcher(type);
+//        public Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
+//            return OptimisticResult.<Function<Update, String>>builder().value(new TestExtractor(value)).build();
 //        }
 //    }
 //
-//    private static class TestMatcher implements Function<Update, Boolean> {
-//        private final MatcherFactory.Type type;
-//
-//        public TestMatcher(MatcherFactory.Type type) {
-//            this.type = type;
-//        }
-//
-//        public MatcherFactory.Type getType() {
-//            return type;
-//        }
+//    @AllArgsConstructor
+//    @EqualsAndHashCode
+//    private static class TestExtractor implements Function<Update, String>{
+//        private final int value;
 //
 //        @Override
-//        public Boolean apply(Update update) {
+//        public String apply(Update update) {
 //            return null;
 //        }
 //    }
-//}
+
+
+}
