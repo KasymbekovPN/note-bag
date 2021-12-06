@@ -6,7 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.extractor.ByPrefixExtractor;
 import ru.kpn.objectFactory.creator.CreatorWithType;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
-import ru.kpn.objectFactory.result.OptimisticResult;
+import ru.kpn.objectFactory.result.builder.AbstractResultBuilder;
+import ru.kpn.objectFactory.result.builder.ResultBuilder;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
@@ -23,11 +24,12 @@ public class ByPrefixesExtractorCreator implements CreatorWithType<ExtractorDatu
 
     @Override
     public synchronized Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
-        return new InnerCreator(new OptimisticResult<>(), datum)
+        return new ResultBuilderImpl(datum)
                 .checkDatumOnNull()
                 .checkPrefixesAreNull()
                 .checkPrefixesAreEmpty()
-                .create();
+                .calculateValue()
+                .build();
     }
 
     @Override
@@ -36,35 +38,38 @@ public class ByPrefixesExtractorCreator implements CreatorWithType<ExtractorDatu
     }
 
     @AllArgsConstructor
-    private static class InnerCreator{
-        private final OptimisticResult<Function<Update, String>> result;
+    private static class ResultBuilderImpl extends AbstractResultBuilder<Function<Update, String>>{
         private final ExtractorDatum datum;
 
-        public Result<Function<Update, String>, RawMessage<String>> create() {
-            if (result.getSuccess()){
+        public ResultBuilderImpl checkDatumOnNull(){
+            if (success && datum == null){
+                success = false;
+                status.setCode("datum.isNull").add(NAME);
+            }
+            return this;
+        }
+
+        private ResultBuilderImpl checkPrefixesAreNull(){
+            if (success && datum.getPrefixes() == null){
+                success = false;
+                status.setCode("datum.prefixes.isNull").add(NAME);
+            }
+            return this;
+        }
+
+        private ResultBuilderImpl checkPrefixesAreEmpty(){
+            if (success && datum.getPrefixes().isEmpty()){
+                success = false;
+                status.setCode("datum.prefixes.empty").add(NAME);
+            }
+            return this;
+        }
+
+        @Override
+        public ResultBuilder<Function<Update, String>> calculateValue() {
+            if (success){
                 Set<String> prefixes = datum.getPrefixes().stream().map(s -> s + " ").collect(Collectors.toSet());
-                result.setValue(new ByPrefixExtractor(prefixes));
-            }
-            return result;
-        }
-
-        public InnerCreator checkDatumOnNull() {
-            if (result.getSuccess() && datum == null){
-                result.toFailAndGetStatus().setCode("datum.isNull").add(NAME);
-            }
-            return this;
-        }
-
-        public InnerCreator checkPrefixesAreNull() {
-            if (result.getSuccess() && datum.getPrefixes() == null){
-                result.toFailAndGetStatus().setCode("datum.prefixes.isNull").add(NAME);
-            }
-            return this;
-        }
-
-        public InnerCreator checkPrefixesAreEmpty() {
-            if (result.getSuccess() && datum.getPrefixes().isEmpty()){
-                result.toFailAndGetStatus().setCode("datum.prefixes.empty").add(NAME);
+                value = new ByPrefixExtractor(prefixes);
             }
             return this;
         }
