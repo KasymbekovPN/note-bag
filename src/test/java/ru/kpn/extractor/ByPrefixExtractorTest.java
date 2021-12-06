@@ -9,7 +9,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// TODO: 17.11.2021 del
 public class ByPrefixExtractorTest {
 
     private static final Set<String> PREFIXES = Set.of("/sn ", "/simple note ");

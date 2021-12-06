@@ -3,7 +3,7 @@ package ru.kpn.objectFactory.result;
 import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 
-// TODO: 28.11.2021 refactoring + test it
+// TODO: 06.12.2021 del
 public class OptimisticResult<V> extends AbstractResult<V, RawMessage<String>> {
 
     public OptimisticResult() {
@@ -62,6 +62,7 @@ public class OptimisticResult<V> extends AbstractResult<V, RawMessage<String>> {
         }
 
 
+        // TODO: 06.12.2021 ???
 //        private void check() {
 //            success = success && value != null;
 //            if (!success && status.getCode().isEmpty()){
