@@ -6,7 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.matcher.ConstantMatcher;
 import ru.kpn.objectFactory.creator.CreatorWithType;
 import ru.kpn.objectFactory.datum.MatcherDatum;
-import ru.kpn.objectFactory.result.OptimisticResult;
+import ru.kpn.objectFactory.result.builder.AbstractResultBuilder;
+import ru.kpn.objectFactory.result.builder.ResultBuilder;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
@@ -21,10 +22,11 @@ public class ConstantMatcherCreator implements CreatorWithType<MatcherDatum, Mat
 
     @Override
     public Result<Function<Update, Boolean>, RawMessage<String>> create(MatcherDatum datum) {
-        return new InnerCreator(new OptimisticResult<>(), datum)
+        return new ResultBuilderImpl(datum)
                 .checkDatumOnNull()
                 .checkConstantIsNull()
-                .create();
+                .calculateValue()
+                .build();
     }
 
     @Override
@@ -33,27 +35,29 @@ public class ConstantMatcherCreator implements CreatorWithType<MatcherDatum, Mat
     }
 
     @AllArgsConstructor
-    private static class InnerCreator{
-        private final OptimisticResult<Function<Update, Boolean>> result;
+    private static class ResultBuilderImpl extends AbstractResultBuilder<Function<Update, Boolean>>{
         private final MatcherDatum datum;
 
-        public Result<Function<Update, Boolean>, RawMessage<String>> create() {
-            if (result.getSuccess()){
-                result.setValue(new ConstantMatcher(datum.getConstant()));
-            }
-            return result;
-        }
-
-        public InnerCreator checkDatumOnNull() {
-            if (result.getSuccess() && datum == null){
-                result.toFailAndGetStatus().setCode("datum.isNull").add(NAME);
+        public ResultBuilderImpl checkDatumOnNull(){
+            if (success && datum == null){
+                success = false;
+                status.setCode("datum.isNull").add(NAME);
             }
             return this;
         }
-
-        public InnerCreator checkConstantIsNull() {
-            if (result.getSuccess() && datum.getConstant() == null){
-                result.toFailAndGetStatus().setCode("datum.constant.isNull").add(NAME);
+        
+        public ResultBuilderImpl checkConstantIsNull(){
+            if (success && datum.getConstant() == null){
+                success = false;
+                status.setCode("datum.constant.isNull").add(NAME);
+            }
+            return this;
+        }
+        
+        @Override
+        public ResultBuilder<Function<Update, Boolean>> calculateValue() {
+            if (success){
+                value = new ConstantMatcher(datum.getConstant());
             }
             return this;
         }
