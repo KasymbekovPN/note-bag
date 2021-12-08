@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kpn.objectFactory.creator.CreatorWithType;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
-import ru.kpn.objectFactory.result.OptimisticResult;
+import ru.kpn.objectFactory.result.builder.AbstractResultBuilder;
+import ru.kpn.objectFactory.result.builder.ResultBuilder;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
@@ -17,10 +18,11 @@ public class StrategyInitCreator implements CreatorWithType<StrategyInitDatum, S
 
     @Override
     public Result<Integer, RawMessage<String>> create(StrategyInitDatum datum) {
-        return new InnerCreator(new OptimisticResult<>(), datum)
+        return new ResultBuilderImpl(datum)
                 .checkDatumOnNull()
                 .checkPriorityOnNull()
-                .create();
+                .calculateValue()
+                .build();
     }
 
     @Override
@@ -29,27 +31,29 @@ public class StrategyInitCreator implements CreatorWithType<StrategyInitDatum, S
     }
 
     @AllArgsConstructor
-    private static class InnerCreator{
-        private OptimisticResult<Integer> result;
-        private StrategyInitDatum datum;
+    private static class ResultBuilderImpl extends AbstractResultBuilder<Integer> {
+        private final StrategyInitDatum datum;
 
-        public Result<Integer, RawMessage<String>> create() {
-            if (result.getSuccess()){
-                result.setValue(datum.getPriority());
-            }
-            return result;
-        }
-
-        public InnerCreator checkDatumOnNull() {
-            if (result.getSuccess() && datum == null){
-                result.toFailAndGetStatus().setCode("datum.isNull").add(NAME);
+        public ResultBuilderImpl checkDatumOnNull(){
+            if (success && datum == null){
+                success = false;
+                status.setCode("datum.isNull").add(NAME);
             }
             return this;
         }
 
-        public InnerCreator checkPriorityOnNull() {
-            if (result.getSuccess() && datum.getPriority() == null){
-                result.toFailAndGetStatus().setCode("datum.priority.isNull").add(NAME);
+        public ResultBuilderImpl checkPriorityOnNull() {
+            if (success && datum.getPriority() == null){
+                success = false;
+                status.setCode("datum.priority.isNull").add(NAME);
+            }
+            return this;
+        }
+
+        @Override
+        public ResultBuilder<Integer> calculateValue() {
+            if (success){
+                value = datum.getPriority();
             }
             return this;
         }
