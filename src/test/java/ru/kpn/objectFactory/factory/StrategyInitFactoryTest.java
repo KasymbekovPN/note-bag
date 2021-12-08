@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
-import ru.kpn.objectFactory.result.OptimisticResult;
+import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.result.Result;
@@ -74,7 +74,7 @@ public class StrategyInitFactoryTest {
 
         @Override
         public Result<Integer, RawMessage<String>> create(StrategyInitDatum datum) {
-            return OptimisticResult.<Integer>builder().value(value).build();
+            return new ValuedResult<>(value);
         }
     }
 }

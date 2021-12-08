@@ -1,10 +1,11 @@
 package ru.kpn.objectFactory.factory;
 
-import ru.kpn.objectFactory.result.OptimisticResult;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.datum.Datum;
 import ru.kpn.objectFactory.result.Result;
+import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.type.DatumType;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.HashMap;
@@ -24,13 +25,8 @@ abstract public class BaseObjectFactory<D extends Datum<? extends DatumType>, RT
 
     @Override
     protected Result<RT, RawMessage<String>> getWrongResult(D datum) {
-        OptimisticResult<RT> result = new OptimisticResult<>();
-        result.setSuccess(false);
-        toFail(result.toFailAndGetStatus(), datum);
-        return result;
+        return new ValuedResult<>(new BotRawMessage());
     }
-
-    protected abstract void toFail(RawMessage<String> status, D datum);
 
     protected static abstract class BaseBuilder<D extends Datum<? extends DatumType>, RT> {
         protected final Map<DatumType, Creator<D, RT, RawMessage<String>>> creators = new HashMap<>();

@@ -2,6 +2,7 @@ package ru.kpn.objectFactory.factory;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.MatcherDatum;
+import ru.kpn.objectFactory.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.type.DatumType;
@@ -21,8 +22,10 @@ public class MatcherFactory extends BaseObjectFactory<MatcherDatum, Function<Upd
     }
 
     @Override
-    protected void toFail(RawMessage<String> status, MatcherDatum datum) {
-        status.setCode("matcherFactory.wrongType").add(datum.getType().asStr());
+    protected Result<Function<Update, Boolean>, RawMessage<String>> getWrongResult(MatcherDatum datum) {
+        Result<Function<Update, Boolean>, RawMessage<String>> result = super.getWrongResult(datum);
+        result.getStatus().setCode("matcherFactory.wrongType").add(datum.getType().asStr());
+        return result;
     }
 
     public static class Builder extends BaseBuilder<MatcherDatum, Function<Update, Boolean>>{

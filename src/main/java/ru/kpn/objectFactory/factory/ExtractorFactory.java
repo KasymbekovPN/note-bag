@@ -2,6 +2,7 @@ package ru.kpn.objectFactory.factory;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
+import ru.kpn.objectFactory.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.type.DatumType;
@@ -21,8 +22,10 @@ public class ExtractorFactory extends BaseObjectFactory<ExtractorDatum, Function
     }
 
     @Override
-    protected void toFail(RawMessage<String> status, ExtractorDatum datum) {
-        status.setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
+    protected Result<Function<Update, String>, RawMessage<String>> getWrongResult(ExtractorDatum datum) {
+        Result<Function<Update, String>, RawMessage<String>> result = super.getWrongResult(datum);
+        result.getStatus().setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
+        return result;
     }
 
     public static class Builder extends BaseBuilder<ExtractorDatum, Function<Update, String>>{

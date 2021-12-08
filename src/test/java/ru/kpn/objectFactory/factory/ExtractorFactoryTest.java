@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
-import ru.kpn.objectFactory.result.OptimisticResult;
+import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.result.Result;
@@ -77,7 +77,7 @@ public class ExtractorFactoryTest {
 
         @Override
         public Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
-            return OptimisticResult.<Function<Update, String>>builder().value(new TestExtractor(value)).build();
+            return new ValuedResult<>(new TestExtractor(value));
         }
     }
 

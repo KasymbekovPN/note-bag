@@ -1,6 +1,7 @@
 package ru.kpn.objectFactory.factory;
 
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
+import ru.kpn.objectFactory.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.creator.Creator;
 import ru.kpn.objectFactory.type.DatumType;
@@ -19,8 +20,10 @@ public class StrategyInitFactory extends BaseObjectFactory<StrategyInitDatum, In
     }
 
     @Override
-    protected void toFail(RawMessage<String> status, StrategyInitDatum datum) {
-        status.setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
+    protected Result<Integer, RawMessage<String>> getWrongResult(StrategyInitDatum datum) {
+        Result<Integer, RawMessage<String>> result = super.getWrongResult(datum);
+        result.getStatus().setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
+        return result;
     }
 
     public static class Builder extends BaseBuilder<StrategyInitDatum, Integer>{
