@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,13 +8,13 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
-import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;
 
 @Component
-public class ClearBufferStrategy extends BaseSubscriberStrategy {
+public class LinkStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
@@ -31,11 +31,18 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
 
     @Override
     public RawMessage<String> runAndGetRawMessage(Update value) {
-        botBuffer.clear(value.getMessage().getChatId());
-        return calculateAnswer(value);
+        putIntoBuffer(value);
+        return getAnswer(value);
     }
 
-    private RawMessage<String> calculateAnswer(Update value) {
-        return createRawMessage("strategy.message.clearBuffer.isCleaned").add(calculateChatId(value));
+    private void putIntoBuffer(Update value) {
+        BufferDatum<BufferDatumType, String> datum = botBuffer.createDatum(BufferDatumType.LINK, value.getMessage().getText());
+        botBuffer.add(value.getMessage().getChatId(), datum);
+    }
+
+    private RawMessage<String> getAnswer(Update value) {
+        return createRawMessage("strategy.message.link")
+                .add(calculateChatId(value))
+                .add(value.getMessage().getText());
     }
 }

@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
-import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;

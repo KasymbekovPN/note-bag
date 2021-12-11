@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.ReflectionUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategy.Strategy;
+import ru.kpn.strategy.strategies.Strategy;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.lang.reflect.Field;

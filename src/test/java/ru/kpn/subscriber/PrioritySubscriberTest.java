@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.strategy.Strategy;
+import ru.kpn.strategy.strategies.Strategy;
 import ru.kpn.rawMessage.RawMessage;
 import utils.UpdateInstanceBuilder;
 

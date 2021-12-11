@@ -19,7 +19,8 @@ import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.strategy.Strategy;
+import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
+import ru.kpn.strategy.strategies.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
 import ru.kpn.subscriptionManager.SubscriptionManager;
@@ -37,8 +38,8 @@ import java.util.function.Function;
 @ConfigurationProperties(prefix = "telegram.tube")
 public class SubscriptionManagerBPP implements BeanPostProcessor {
 
-    // TODO: 03.11.2021 how it set?
-    private static final String STRATEGY_BEAN_SUFFIX = "Strategy";
+    @Autowired
+    private NameCalculator nameCalculator;
 
     @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
@@ -61,16 +62,26 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         Optional<Strategy<Update, BotApiMethod<?>>> maybeStrategy = checkBean(bean);
         if (maybeStrategy.isPresent()){
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
-            injectPriority(strategy);
-            injectExtractor(strategy);
-            injectMatcher(strategy);
-            subscriptionManager.subscribe(createSubscriber(strategy));
+
+            Result<String, RawMessage<String>> nameCalcResult = nameCalculator.calculate(bean);
+            if (nameCalcResult.getSuccess()){
+                String strategyName = nameCalcResult.getValue();
+                injectPriority(strategy, strategyName);
+                injectExtractor(strategy, strategyName);
+                injectMatcher(strategy, strategyName);
+
+                subscriptionManager.subscribe(createSubscriber(strategy));
+            }
+            else {
+                // TODO: 11.12.2021 change exception
+                throw new BeanCreationException(nameCalcResult.getStatus().getCode());
+            }
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 
-    private void injectPriority(Strategy<Update, BotApiMethod<?>> strategy) {
-        String strategyName = calculateStrategyName(strategy);
+    private void injectPriority(Strategy<Update, BotApiMethod<?>> strategy, String strategyName) {
+//        String strategyName = calculateStrategyName(strategy);
         Optional<Method> maybeMethod = getMethodForInjection(strategy, InjectionType.PRIORITY);
         if (maybeMethod.isPresent()){
             if (strategyInitData.containsKey(strategyName)){
@@ -87,8 +98,8 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         }
     }
 
-    private void injectExtractor(Strategy<Update, BotApiMethod<?>> strategy) {
-        String strategyName = calculateStrategyName(strategy);
+    private void injectExtractor(Strategy<Update, BotApiMethod<?>> strategy, String strategyName) {
+//        String strategyName = calculateStrategyName(strategy);
         Optional<Method> maybeMethod = getMethodForInjection(strategy, InjectionType.EXTRACTOR);
         if (maybeMethod.isPresent()){
             if (extractorInitData.containsKey(strategyName)){
@@ -105,8 +116,8 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         }
     }
 
-    private void injectMatcher(Strategy<Update, BotApiMethod<?>> strategy) {
-        String strategyName = calculateStrategyName(strategy);
+    private void injectMatcher(Strategy<Update, BotApiMethod<?>> strategy, String strategyName) {
+//        String strategyName = calculateStrategyName(strategy);
         Optional<Method> maybeMethod = getMethodForInjection(strategy, InjectionType.MATCHER);
         if (maybeMethod.isPresent()){
             if (matcherInitData.containsKey(strategyName)){
@@ -139,23 +150,6 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
     @SneakyThrows // TODO: 08.11.2021 ???
     private void inject(Strategy<Update, BotApiMethod<?>> strategy, Method method, Object value) {
         method.invoke(strategy, value);
-    }
-
-    // TODO: 03.11.2021 it must be bean 
-    private String calculateStrategyName(Strategy<Update, BotApiMethod<?>> strategy) {
-        String simpleName = strategy.getClass().getSimpleName();
-        int simpleNameLen = simpleName.length();
-        int suffixLen = STRATEGY_BEAN_SUFFIX.length();
-        if (simpleNameLen > suffixLen){
-            int borderIndex = simpleNameLen - suffixLen;
-            String suffix = simpleName.substring(borderIndex, simpleNameLen);
-            if (STRATEGY_BEAN_SUFFIX.equals(suffix)){
-                char[] chars = simpleName.substring(0, borderIndex).toCharArray();
-                chars[0] = Character.toLowerCase(chars[0]);
-                return String.valueOf(chars);
-            }
-        }
-        throw new BeanCreationException(String.format("Strategy bean '%s' isn't ended on '%s'", simpleName, STRATEGY_BEAN_SUFFIX));
     }
 
     // TODO: 03.11.2021 it must be bean 

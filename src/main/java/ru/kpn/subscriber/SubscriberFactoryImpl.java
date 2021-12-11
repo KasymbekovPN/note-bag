@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.strategy.Strategy;
+import ru.kpn.strategy.strategies.Strategy;
 
 import java.util.Comparator;
 

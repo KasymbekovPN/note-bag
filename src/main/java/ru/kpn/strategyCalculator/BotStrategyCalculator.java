@@ -8,6 +8,7 @@ import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.rawMessage.RawMessage;
 
+// TODO: 11.12.2021 rename
 @Component
 public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
 

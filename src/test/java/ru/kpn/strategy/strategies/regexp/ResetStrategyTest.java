@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

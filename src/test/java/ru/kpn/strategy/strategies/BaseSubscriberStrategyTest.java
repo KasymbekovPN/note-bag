@@ -1,4 +1,4 @@
-package ru.kpn.strategy;
+package ru.kpn.strategy.strategies;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;

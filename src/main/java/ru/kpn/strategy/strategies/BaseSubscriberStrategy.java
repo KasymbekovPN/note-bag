@@ -1,4 +1,4 @@
-package ru.kpn.strategy;
+package ru.kpn.strategy.strategies;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

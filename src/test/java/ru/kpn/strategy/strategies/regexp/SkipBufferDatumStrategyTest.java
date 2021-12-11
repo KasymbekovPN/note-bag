@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,20 +20,21 @@ import utils.UpdateInstanceBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class ClearBufferStrategyTest {
+public class SkipBufferDatumStrategyTest {
 
     private static final Long ID = 123L;
-    private static final String COMMAND = "/clr buffer";
+    private static final String COMMAND = "/skip buffer datum";
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
     @Autowired
-    private ClearBufferStrategy strategy;
+    private SkipBufferDatumStrategy strategy;
     @Autowired
     private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private RawMessage<String> expectedAnswer;
+    private RawMessage<String> ifEmptyRawMessage;
+    private RawMessage<String> ifNotEmptyRawMessage;
 
     @BeforeEach
     void setUp() {
@@ -45,28 +46,33 @@ public class ClearBufferStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        expectedAnswer = rawMessageFactory.create("strategy.message.clearBuffer.isCleaned").add(String.valueOf(ID));
+        ifEmptyRawMessage = rawMessageFactory.create("strategy.message.skipBufferDatum.isEmpty")
+                .add(String.valueOf(ID));
+
+        ifNotEmptyRawMessage = rawMessageFactory.create("strategy.message.skipBufferDatum.isNotEmpty")
+                .add(String.valueOf(ID))
+                .add(1);
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckStrategyExecution_clearBuffer.csv")
+    @CsvFileSource(resources = "shouldCheckStrategyExecution_skipBufferDatum.csv")
     void shouldCheckStrategyExecution(String command, Boolean expectedIsPresent) {
         Update update = builder.text(command).build();
         assertThat(strategy.execute(update).isPresent()).isEqualTo(expectedIsPresent);
     }
 
     @Test
-    void shouldCheckAnswer() {
+    void shouldCheckAnswerIfBufferEmpty() {
         RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
-        assertThat(expectedAnswer).isEqualTo(answer);
+        assertThat(ifEmptyRawMessage).isEqualTo(answer);
     }
 
     @Test
-    void shouldCheckClearing() {
-        botBuffer.add(ID, new TestBufferDatum());
-        strategy.runAndGetRawMessage(builder.build());
-        int size = botBuffer.getSize(ID);
-        assertThat(size).isZero();
+    void shouldCheckAnswerIfBufferNotEmpty() {
+        botBuffer.add(ID, new TestBufferDatum("1"));
+        botBuffer.add(ID, new TestBufferDatum("2"));
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
+        assertThat(ifNotEmptyRawMessage).isEqualTo(answer);
     }
 
     @AfterEach

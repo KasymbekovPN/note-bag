@@ -1,6 +1,6 @@
 package ru.kpn.subscriber;
 
-import ru.kpn.strategy.Strategy;
+import ru.kpn.strategy.strategies.Strategy;
 
 import java.util.Comparator;
 

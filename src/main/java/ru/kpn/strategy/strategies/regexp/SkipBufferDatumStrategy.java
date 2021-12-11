@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,15 +8,13 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
-import ru.kpn.strategy.BaseSubscriberStrategy;
+import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.function.Function;
 
 @Component
-public class SimpleNoteStrategy extends BaseSubscriberStrategy {
-
-    private Function<Update, String> extractor;
+public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
@@ -26,11 +24,6 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         this.priority = priority;
     }
 
-    @Inject(InjectionType.EXTRACTOR)
-    public void setExtractor(Function<Update, String> extractor){
-        this.extractor = extractor;
-    }
-
     @Inject(InjectionType.MATCHER)
     public void setMatcher(Function<Update, Boolean> matcher){
         this.matcher = matcher;
@@ -38,18 +31,14 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
 
     @Override
     public RawMessage<String> runAndGetRawMessage(Update value) {
-        putIntoBuffer(value);
-        return getAnswer(value);
-    }
-
-    private void putIntoBuffer(Update value) {
-        Long chatId = value.getMessage().getChatId();
-        String text = extractor.apply(value);
-        final BufferDatum<BufferDatumType, String> datum = botBuffer.createDatum(BufferDatumType.SIMPLE_TEXT, text);
-        botBuffer.add(chatId, datum);
-    }
-
-    private RawMessage<String> getAnswer(Update value) {
-        return createRawMessage("strategy.message.simpleNode").add(calculateChatId(value));
+        Long id = value.getMessage().getChatId();
+        int bufferSize = botBuffer.getSize(id);
+        RawMessage<String> rawMessage = createRawMessage(
+                bufferSize == 0
+                        ? "strategy.message.skipBufferDatum.isEmpty"
+                        : "strategy.message.skipBufferDatum.isNotEmpty"
+        )
+                .add(calculateChatId(value));
+        return bufferSize != 0 ? rawMessage.add(bufferSize - 1) : rawMessage;
     }
 }

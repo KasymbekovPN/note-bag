@@ -1,4 +1,4 @@
-package ru.kpn.strategy.regexp;
+package ru.kpn.strategy.strategies.regexp;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,26 +14,28 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
+import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class LinkStrategyTest {
+public class GetCurrentBufferDatumStrategyTest {
 
     private static final Long ID = 123L;
+    private static final String COMMAND = "/get current buffer datum";
+    private static final String TEXT = "some text";
 
     @Autowired
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
     @Autowired
-    private LinkStrategy strategy;
+    private GetCurrentBufferDatumStrategy strategy;
     @Autowired
     private RawMessageFactory<String> rawMessageFactory;
 
     private UpdateInstanceBuilder builder;
-    private RawMessage<String> expectedRawMessage;
+    private RawMessage<String> ifExistAnswer;
+    private RawMessage<String> ifNotExistAnswer;
 
     @BeforeEach
     void setUp() {
@@ -42,34 +44,38 @@ public class LinkStrategyTest {
 
         builder = new UpdateInstanceBuilder()
                 .chatId(ID)
-                .from(user);
+                .from(user)
+                .text(COMMAND);
 
-        expectedRawMessage = rawMessageFactory.create("strategy.message.link").add(String.valueOf(ID));
+        String sid = String.valueOf(ID);
+        ifExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.exist")
+                .add(sid)
+                .add(sid)
+                .add(TEXT);
+
+        ifNotExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.notExist")
+                .add(sid)
+                .add(sid);
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckStrategyExecution_link.csv")
+    @CsvFileSource(resources = "shouldCheckStrategyExecution_getCurrentBufferDatum.csv")
     void shouldCheckStrategyExecution(String command, Boolean expectedIsPresent) {
         Update update = builder.text(command).build();
         assertThat(strategy.execute(update).isPresent()).isEqualTo(expectedIsPresent);
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckAnswer_link.csv")
-    void shouldCheckAnswer(String command) {
-        expectedRawMessage.add(command);
-        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.text(command).build());
-        assertThat(expectedRawMessage).isEqualTo(rawMessage);
+    @Test
+    void shouldCheckAnswerIfCurrentDatumNotExist() {
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
+        assertThat(ifNotExistAnswer).isEqualTo(answer);
     }
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "shouldCheckAdded_link.csv")
-    void shouldCheckAdded(String command, String expectedLink, Boolean expectedResult) {
-        strategy.execute(builder.text(command).build());
-        Optional<BufferDatum<BufferDatumType, String>> maybeDatum = botBuffer.poll(ID);
-        assertThat(maybeDatum).isPresent();
-        assertThat(maybeDatum.get().getType()).isEqualTo(BufferDatumType.LINK);
-        assertThat(maybeDatum.get().getContent().equals(expectedLink)).isEqualTo(expectedResult);
+    @Test
+    void shouldCheckAnswerIfCurrentDatumExist() {
+        botBuffer.add(ID, new TestBufferDatum(TEXT));
+        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
+        assertThat(ifExistAnswer).isEqualTo(answer);
     }
 
     @AfterEach
