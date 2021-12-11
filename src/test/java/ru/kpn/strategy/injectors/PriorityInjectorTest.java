@@ -12,6 +12,7 @@ import ru.kpn.rawMessage.RawMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 11.12.2021 it must be BaseInjectorTest 
 @SpringBootTest
 class PriorityInjectorTest {
 
