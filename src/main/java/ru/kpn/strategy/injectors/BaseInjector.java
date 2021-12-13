@@ -69,7 +69,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                 } else {
                     success = false;
                     continueIt = false;
-                    status = new BotRawMessage("injection.no.init-data").add(name).add(InjectionType.PRIORITY);
+                    status = new BotRawMessage("injection.no.init-data").add(name).add(type);
                 }
             }
             return this;
