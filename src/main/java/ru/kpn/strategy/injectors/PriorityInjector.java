@@ -22,8 +22,8 @@ public class PriorityInjector extends BaseInjector<StrategyInitDatum, Integer> {
     private Map<String, StrategyInitDatum> strategyInitData;
 
     @Override
-    protected InnerInjector<StrategyInitDatum, Integer> createInnerInjector(Object object, String name) {
-        return new InnerInjector<>(object, name, InjectionType.PRIORITY);
+    protected InnerInjector<StrategyInitDatum, Integer> createInnerInjector(Object object) {
+        return new InnerInjector<>(object, InjectionType.PRIORITY);
     }
 
     @Override

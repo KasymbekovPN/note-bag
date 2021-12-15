@@ -6,5 +6,5 @@ import ru.kpn.objectFactory.type.DatumType;
 import ru.kpn.rawMessage.RawMessage;
 
 public interface Injector<D extends Datum<? extends DatumType>, RT> {
-    Result<RT, RawMessage<String>> inject(Object object, String name);
+    Result<RT, RawMessage<String>> inject(Object object);
 }

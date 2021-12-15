@@ -33,7 +33,7 @@ public class MatcherInjector extends BaseInjector<MatcherDatum, Function<Update,
     }
 
     @Override
-    protected InnerInjector<MatcherDatum, Function<Update, Boolean>> createInnerInjector(Object object, String name) {
-        return new InnerInjector<>(object, name, InjectionType.MATCHER);
+    protected InnerInjector<MatcherDatum, Function<Update, Boolean>> createInnerInjector(Object object) {
+        return new InnerInjector<>(object, InjectionType.MATCHER);
     }
 }

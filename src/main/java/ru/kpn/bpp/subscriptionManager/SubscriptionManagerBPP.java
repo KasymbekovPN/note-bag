@@ -1,5 +1,6 @@
 package ru.kpn.bpp.subscriptionManager;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,9 @@ import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
+import ru.kpn.strategy.injectors.ExtractorInjector;
+import ru.kpn.strategy.injectors.MatcherInjector;
+import ru.kpn.strategy.injectors.PriorityInjector;
 import ru.kpn.strategy.strategies.Strategy;
 import ru.kpn.subscriber.Subscriber;
 import ru.kpn.subscriber.SubscriberFactory;
@@ -38,8 +42,16 @@ import java.util.function.Function;
 @ConfigurationProperties(prefix = "telegram.tube")
 public class SubscriptionManagerBPP implements BeanPostProcessor {
 
+    // TODO: 13.12.2021 move to injectors 
     @Autowired
     private NameCalculator nameCalculator;
+
+    @Autowired
+    private PriorityInjector priorityInjector;
+    @Autowired
+    private MatcherInjector matcherInjector;
+    @Autowired
+    private ExtractorInjector extractorInjector;
 
     @Autowired
     private SubscriberFactory<Update, BotApiMethod<?>> subscriberFactory;
@@ -63,19 +75,50 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
         if (maybeStrategy.isPresent()){
             Strategy<Update, BotApiMethod<?>> strategy = maybeStrategy.get();
 
-            Result<String, RawMessage<String>> nameCalcResult = nameCalculator.calculate(bean);
-            if (nameCalcResult.getSuccess()){
-                String strategyName = nameCalcResult.getValue();
-                injectPriority(strategy, strategyName);
-                injectExtractor(strategy, strategyName);
-                injectMatcher(strategy, strategyName);
+//            Result<String, RawMessage<String>> result = nameCalculator.calculate(bean);
+//            if (result.getSuccess()){
+//                String strategyName = result.getValue();
+//                new StatusCollector()
+//                        .collect(priorityInjector.inject(bean, st))
+//            } else {
+//                
+//            }
 
-                subscriptionManager.subscribe(createSubscriber(strategy));
-            }
-            else {
-                // TODO: 11.12.2021 change exception
-                throw new BeanCreationException(nameCalcResult.getStatus().getCode());
-            }
+            // TODO: 13.12.2021 del
+//            RawMessage<String> status = null;
+//
+//            Result<String, RawMessage<String>> nameCalcResult = nameCalculator.calculate(bean);
+//            if (nameCalcResult.getSuccess()){
+//                String strategyName = nameCalcResult.getValue();
+//
+//                Result<Integer, RawMessage<String>> priorityInjectResult
+//                        = priorityInjector.inject(bean, strategyName);
+//                if (priorityInjectResult.getSuccess()){
+//                    Result<Function<Update, Boolean>, RawMessage<String>> matcherInjectResult
+//                            = matcherInjector.inject(bean, strategyName);
+//                    if (matcherInjectResult.getSuccess()){
+//                        Result<Function<Update, String>, RawMessage<String>> extractorInjectResult
+//                                = extractorInjector.inject(bean, strategyName);
+//                    } else {
+//                        status = 
+//                    }
+//                } else {
+//                    status = priorityInjectResult.getStatus();;
+//                }
+//
+//
+//                // TODO: 13.12.2021 del
+////                injectPriority(strategy, strategyName);
+////                injectExtractor(strategy, strategyName);
+////                injectMatcher(strategy, strategyName);
+//
+//                subscriptionManager.subscribe(createSubscriber(strategy));
+//            } else {
+//                status = nameCalcResult.getStatus();
+//                // TODO: 13.12.2021 del
+//                // TODO: 11.12.2021 change exception
+////                throw new BeanCreationException(nameCalcResult.getStatus().getCode());
+//            }
         }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
@@ -175,5 +218,19 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
                 .reset()
                 .strategy(strategy)
                 .build();
+    }
+
+    @Getter
+    private static class StatusCollector{
+        private RawMessage<String> status;
+        private boolean success = true;
+
+        public StatusCollector collect(Result<?, RawMessage<String>> result){
+            if (status == null && !result.getSuccess()){
+                success = false;
+                status = result.getStatus();
+            }
+            return this;
+        }
     }
 }
