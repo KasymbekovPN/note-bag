@@ -28,7 +28,6 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
     @Override
     public Result<RT, RawMessage<String>> inject(Object object) {
         return createInnerInjector(object)
-                .checkObject()
                 .calculateName(nameCalculator)
                 .findMethod()
                 .datum(getInitData())
@@ -54,25 +53,6 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         private RT value;
         private D datum;
-
-        public InnerInjector<D, RT> checkObject(){
-            if (continueIt){
-                Type[] genericInterfaces = object.getClass().getSuperclass().getGenericInterfaces();
-                for (Type genericInterface : genericInterfaces) {
-                    if (!(genericInterface instanceof ParameterizedType)){
-                        continue;
-                    }
-                    ParameterizedType pt = (ParameterizedType) genericInterface;
-                    Type rawType = pt.getRawType();
-                    if (rawType.getTypeName().equals(Strategy.class.getTypeName())){
-                        return this;
-                    }
-                }
-                success = continueIt = false;
-                status = new BotRawMessage("injection.class.wrong").add(type).add(object.getClass().getSimpleName());
-            }
-            return this;
-        }
 
         public InnerInjector<D, RT> calculateName(NameCalculator nameCalculator){
             if (continueIt){

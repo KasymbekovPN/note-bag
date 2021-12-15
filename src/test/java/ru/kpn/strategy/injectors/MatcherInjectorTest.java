@@ -25,16 +25,6 @@ class MatcherInjectorTest {
     private MatcherInjector injector;
 
     @Test
-    void shouldCheckCheckingOfBeanType() {
-        RawMessage<String> expectedStatus = new BotRawMessage("injection.class.wrong")
-                .add(TYPE)
-                .add(NotStrategy.class.getSimpleName());
-        Result<Function<Update, Boolean>, RawMessage<String>> result = injector.inject(new NotStrategy());
-        assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getStatus()).isEqualTo(expectedStatus);
-    }
-
-    @Test
     void shouldCheckNameCalculation() {
         RawMessage<String> expectedStatus
                 = new BotRawMessage("injection.name.wrong").add(TYPE).add(StrategyWithoutSuffix.class.getSimpleName());
@@ -68,8 +58,6 @@ class MatcherInjectorTest {
         assertThat(result.getSuccess()).isTrue();
         assertThat(object.getValue().getClass()).isEqualTo(RegexMatcher.class);
     }
-
-    private static class NotStrategy{}
 
     private static class StrategyWithoutSuffix extends BaseSubscriberStrategy {
         @Override
