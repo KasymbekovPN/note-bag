@@ -1,4 +1,4 @@
-package ru.kpn.strategyCalculator;
+package ru.kpn.strategy.calculaters.answerCalculator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,33 +11,31 @@ import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BotStrategyCalculatorTest {
+class AnswerCalculatorTest {
 
     private static final Long CHAT_ID = 123L;
     private static final String TEMPLATE = "??? : %s";
     private static final String TEXT = "some text";
     private static final String CODE = "noneSubscriberStrategy.unknownInput";
 
-    private BotStrategyCalculator strategyCalculator;
+    private AnswerCalculator answerCalculator;
 
     @BeforeEach
     void setUp() {
-        strategyCalculator = new BotStrategyCalculator(new TestMessageBuilderFactory());
+        answerCalculator = new AnswerCalculator(new TestMessageBuilderFactory());
     }
 
     @Test
     void shouldCheckCalculation() {
         Update update = createUpdate();
         SendMessage expectedCalcResult = createExpectedCalcResult(update);
-        SendMessage calcResult = (SendMessage) strategyCalculator.calculate(new TextRawMessage());
-
+        SendMessage calcResult = (SendMessage) answerCalculator.apply(new TextRawMessage());
         assertThat(expectedCalcResult.getChatId()).isEqualTo(calcResult.getChatId());
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
     // TODO: 27.11.2021 refactoring !!!
     private static class TextRawMessage implements RawMessage<String> {
-
 
         @Override
         public String getCode() {

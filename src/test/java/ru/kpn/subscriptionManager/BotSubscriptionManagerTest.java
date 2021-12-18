@@ -9,13 +9,13 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
-import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,15 +69,26 @@ public class BotSubscriptionManagerTest {
         }
     }
 
-    private static class TestStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
+    private static class TestStrategyCalculator implements Function<RawMessage<String>, BotApiMethod<?>>{
         private static final String DEFAULT_CHAT_ID = "0";
         private static final String DEFAULT_MESSAGE = "default message";
 
         @Override
-        public BotApiMethod<?> calculate(RawMessage<String> source) {
+        public BotApiMethod<?> apply(RawMessage<String> rawMessage) {
             return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
         }
     }
+
+    // TODO: 18.12.2021 del
+//    private static class TestStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
+//        private static final String DEFAULT_CHAT_ID = "0";
+//        private static final String DEFAULT_MESSAGE = "default message";
+//
+//        @Override
+//        public BotApiMethod<?> calculate(RawMessage<String> source) {
+//            return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
+//        }
+//    }
 
 
     @Getter

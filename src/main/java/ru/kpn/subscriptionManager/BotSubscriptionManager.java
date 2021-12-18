@@ -5,20 +5,22 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
-import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
 public class BotSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
     private final Transmitter<BotApiMethod<?>> transmitter;
-    private final StrategyCalculator<BotApiMethod<?>, String> defaultStrategyCalculator;
+    // TODO: 18.12.2021 del
+//    private final StrategyCalculator<BotApiMethod<?>, String> defaultStrategyCalculator;
+    private final Function<RawMessage<String>, BotApiMethod<?>> defaultAnswerCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
 
     @Override
@@ -64,6 +66,8 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
             }
         };
 
-        return defaultStrategyCalculator.calculate(rawMessage);
+        return defaultAnswerCalculator.apply(rawMessage);
+        // TODO: 18.12.2021
+//        return defaultStrategyCalculator.calculate(rawMessage);
     }
 }

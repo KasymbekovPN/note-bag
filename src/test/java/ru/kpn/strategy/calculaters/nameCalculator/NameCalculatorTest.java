@@ -1,6 +1,5 @@
 package ru.kpn.strategy.calculaters.nameCalculator;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -29,7 +28,7 @@ class NameCalculatorTest {
 
     @Test
     void shouldCheckNameCalculation() {
-        Result<String, RawMessage<String>> result = calculator.calculate(new SomeStrategy());
+        Result<String, RawMessage<String>> result = calculator.apply(new SomeStrategy());
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo("some");
     }
@@ -40,7 +39,7 @@ class NameCalculatorTest {
         BotRawMessage expectedStates = new BotRawMessage(code);
         Arrays.stream(args).forEach(expectedStates::add);
 
-        Result<String, RawMessage<String>> result = calculator.calculate(object);
+        Result<String, RawMessage<String>> result = calculator.apply(object);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStates).isEqualTo(result.getStatus());
     }

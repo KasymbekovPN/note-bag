@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.rawMessage.RawMessageFactory;
-import ru.kpn.strategyCalculator.StrategyCalculator;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.Optional;
@@ -12,7 +11,10 @@ import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
-    private StrategyCalculator<BotApiMethod<?>, String> strategyCalculator;
+    // TODO: 18.12.2021 del
+//    private StrategyCalculator<BotApiMethod<?>, String> strategyCalculator;
+
+    private Function<RawMessage<String>, BotApiMethod<?>> answerCalculator;
 
     protected Function<Update, Boolean> matcher;
     protected Integer priority;
@@ -24,9 +26,15 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     @Autowired
-    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>, String> strategyCalculator) {
-        this.strategyCalculator = strategyCalculator;
+    public void setAnswerCalculator(Function<RawMessage<String>, BotApiMethod<?>> answerCalculator) {
+        this.answerCalculator = answerCalculator;
     }
+
+// TODO: 18.12.2021 del
+//    @Autowired
+//    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>, String> strategyCalculator) {
+//        this.strategyCalculator = strategyCalculator;
+//    }
 
     @Override
     public Integer getPriority() {
@@ -44,7 +52,10 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
 
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
         RawMessage<String> source = runAndGetRawMessage(value);
-        return strategyCalculator.calculate(source);
+        return answerCalculator.apply(source);
+
+        // TODO: 18.12.2021 del
+//        return strategyCalculator.calculate(source);
     }
 
     protected String calculateChatId(Update value) {

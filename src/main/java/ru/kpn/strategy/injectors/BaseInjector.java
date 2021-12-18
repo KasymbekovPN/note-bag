@@ -12,12 +12,9 @@ import ru.kpn.objectFactory.type.DatumType;
 import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
-import ru.kpn.strategy.strategies.Strategy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Map;
 
 abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> implements Injector<D, RT>{
@@ -56,7 +53,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         public InnerInjector<D, RT> calculateName(NameCalculator nameCalculator){
             if (continueIt){
-                Result<String, RawMessage<String>> result = nameCalculator.calculate(object);
+                Result<String, RawMessage<String>> result = nameCalculator.apply(object);
                 if (result.getSuccess()){
                     name = result.getValue();
                 } else {

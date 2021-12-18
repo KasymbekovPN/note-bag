@@ -3,21 +3,21 @@ package ru.kpn.strategy.calculaters.nameCalculator;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import ru.kpn.objectFactory.result.Result;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.strategy.calculaters.Calculator;
+
+import java.util.function.Function;
 
 @Component
 @Setter
 @ConfigurationProperties(prefix = "telegram.tube")
-public class NameCalculator implements Calculator<String, Object> {
+public class NameCalculator implements Function<Object, ValuedResult<String>> {
 
     private String strategyBeanSuffix;
 
     @Override
-    public Result<String, RawMessage<String>> calculate(Object value) {
+    public ValuedResult<String> apply(Object value) {
         String simpleName = value.getClass().getSimpleName();
         int simpleNameLen = simpleName.length();
         int suffixLen = strategyBeanSuffix.length();

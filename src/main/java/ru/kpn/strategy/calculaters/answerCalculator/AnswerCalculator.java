@@ -1,4 +1,4 @@
-package ru.kpn.strategyCalculator;
+package ru.kpn.strategy.calculaters.answerCalculator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,23 +8,24 @@ import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
 import ru.kpn.rawMessage.RawMessage;
 
-// TODO: 11.12.2021 rename
+import java.util.function.Function;
+
 @Component
-public class BotStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
+public class AnswerCalculator implements Function<RawMessage<String>, BotApiMethod<?>> {
 
     private final MessageBuilderFactory messageBuilderFactory;
 
     @Autowired
-    public BotStrategyCalculator(MessageBuilderFactory messageBuilderFactory) {
+    public AnswerCalculator(MessageBuilderFactory messageBuilderFactory) {
         this.messageBuilderFactory = messageBuilderFactory;
     }
 
     @Override
-    public synchronized BotApiMethod<?> calculate(RawMessage<String> source) {
-        String chatId = String.valueOf(source.getArgs()[0]);
-        MessageBuilder builder = messageBuilderFactory.create(source.getCode());
-        for (int i = 0; i < source.getArgs().length; i++) {
-            builder.arg(source.getArgs()[i]);
+    public synchronized BotApiMethod<?> apply(RawMessage<String> rawMessage) {
+        String chatId = String.valueOf(rawMessage.getArgs()[0]);
+        MessageBuilder builder = messageBuilderFactory.create(rawMessage.getCode());
+        for (int i = 0; i < rawMessage.getArgs().length; i++) {
+            builder.arg(rawMessage.getArgs()[i]);
         }
         return new SendMessage(chatId, builder.build());
     }
