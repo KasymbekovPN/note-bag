@@ -34,7 +34,6 @@ class AnswerCalculatorTest {
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
-    // TODO: 27.11.2021 refactoring !!!
     private static class TextRawMessage implements RawMessage<String> {
 
         @Override

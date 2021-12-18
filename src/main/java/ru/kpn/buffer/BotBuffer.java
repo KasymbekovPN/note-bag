@@ -8,7 +8,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-// TODO: 11.10.2021 must key be String
 @Service
 public class BotBuffer implements Buffer<Long, BufferDatum<BufferDatumType, String>> {
 

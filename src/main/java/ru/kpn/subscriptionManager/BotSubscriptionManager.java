@@ -18,8 +18,6 @@ import java.util.function.Function;
 public class BotSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
     private final Transmitter<BotApiMethod<?>> transmitter;
-    // TODO: 18.12.2021 del
-//    private final StrategyCalculator<BotApiMethod<?>, String> defaultStrategyCalculator;
     private final Function<RawMessage<String>, BotApiMethod<?>> defaultAnswerCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
 
@@ -45,7 +43,6 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        // TODO: 27.11.2021 refactoring !!!
         RawMessage<String> rawMessage = new RawMessage<>() {
             @Override
             public String getCode() {
@@ -67,7 +64,5 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
         };
 
         return defaultAnswerCalculator.apply(rawMessage);
-        // TODO: 18.12.2021
-//        return defaultStrategyCalculator.calculate(rawMessage);
     }
 }

@@ -11,9 +11,6 @@ import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
-    // TODO: 18.12.2021 del
-//    private StrategyCalculator<BotApiMethod<?>, String> strategyCalculator;
-
     private Function<RawMessage<String>, BotApiMethod<?>> answerCalculator;
 
     protected Function<Update, Boolean> matcher;
@@ -29,12 +26,6 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     public void setAnswerCalculator(Function<RawMessage<String>, BotApiMethod<?>> answerCalculator) {
         this.answerCalculator = answerCalculator;
     }
-
-// TODO: 18.12.2021 del
-//    @Autowired
-//    public void setStrategyCalculator(StrategyCalculator<BotApiMethod<?>, String> strategyCalculator) {
-//        this.strategyCalculator = strategyCalculator;
-//    }
 
     @Override
     public Integer getPriority() {
@@ -53,9 +44,6 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
         RawMessage<String> source = runAndGetRawMessage(value);
         return answerCalculator.apply(source);
-
-        // TODO: 18.12.2021 del
-//        return strategyCalculator.calculate(source);
     }
 
     protected String calculateChatId(Update value) {

@@ -32,7 +32,6 @@ public class ExtractorFactory extends BaseObjectFactory<ExtractorDatum, Function
         @Override
         protected void check() throws Exception {
             if (ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
-                // TODO: 01.12.2021 other exception !!!
                 throw new Exception("Not completely map of creators");
             }
         }

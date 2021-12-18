@@ -16,7 +16,6 @@ public class StrategyInitDatumType extends AbstractDatumType {
         return allowedTypeNames.contains(strType);
     }
 
-    // TODO: 01.12.2021 move to base class ??? 
     public String asStr(){
         return strType;
     }

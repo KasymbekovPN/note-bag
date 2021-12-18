@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 27.11.2021 refactoring
 @ToString
 @EqualsAndHashCode
 public class BotRawMessage implements RawMessage<String> {
@@ -23,7 +22,6 @@ public class BotRawMessage implements RawMessage<String> {
         this.code = code;
     }
 
-    // TODO: 20.11.2021 test
     @Override
     public String getCode() {
         return code;

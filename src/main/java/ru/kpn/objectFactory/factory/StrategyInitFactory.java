@@ -30,7 +30,6 @@ public class StrategyInitFactory extends BaseObjectFactory<StrategyInitDatum, In
         @Override
         protected void check() throws Exception {
             if (StrategyInitDatumType.ALLOWED_TYPE.values().length != creators.size()){
-                // TODO: 29.11.2021 other exception !!!!
                 throw new Exception("Not completely map of creators");
             }
         }

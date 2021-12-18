@@ -54,7 +54,6 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
             if (collect.isSuccess()){
                 subscriptionManager.subscribe(createSubscriber((Strategy<Update, BotApiMethod<?>>) bean));
             } else {
-                // TODO: 15.12.2021 change exception
                 throw new BeanCreationException(collect.getStatus().getCode());
             }
         }

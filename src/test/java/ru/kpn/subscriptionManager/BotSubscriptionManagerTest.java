@@ -79,18 +79,6 @@ public class BotSubscriptionManagerTest {
         }
     }
 
-    // TODO: 18.12.2021 del
-//    private static class TestStrategyCalculator implements StrategyCalculator<BotApiMethod<?>, String> {
-//        private static final String DEFAULT_CHAT_ID = "0";
-//        private static final String DEFAULT_MESSAGE = "default message";
-//
-//        @Override
-//        public BotApiMethod<?> calculate(RawMessage<String> source) {
-//            return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
-//        }
-//    }
-
-
     @Getter
     private static class TestTransmitter implements Transmitter<BotApiMethod<?>> {
 

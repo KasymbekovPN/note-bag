@@ -60,7 +60,6 @@ public class ArgumentsAdapterImpl implements ArgumentsAdapter {
         }
 
         public ArgumentsAdapterImpl build(){
-            // TODO: 08.09.2021 checking & default args
             return new ArgumentsAdapterImpl(code, resizer, adapters);
         }
     }

@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-// TODO: 06.10.2021 decide need or not 
 @Service
 public class NPBotStateService implements BotStateService<User, NPBotState> {
 
