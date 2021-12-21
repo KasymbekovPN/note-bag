@@ -1,44 +1,59 @@
 package ru.kpn.objectFactory.factory;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.objectFactory.creator.TypedCreator;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.objectFactory.result.ValuedResult;
+import ru.kpn.objectFactory.results.builder.ResultBuilder;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.objectFactory.creator.Creator;
-import ru.kpn.objectFactory.type.DatumType;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 
 import java.util.Map;
 import java.util.function.Function;
 
-public class ExtractorFactory extends BaseObjectFactory<ExtractorDatum, Function<Update, String>>{
+public class ExtractorFactory extends BaseObjectFactory<ExtractorDatumType, ExtractorDatum, Function<Update, String>> {
 
     public static Builder builder(){
         return new Builder();
     }
 
-    private ExtractorFactory(Map<DatumType, Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators) {
+    public ExtractorFactory(Map<ExtractorDatumType, TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessage<String>>> creators) {
         super(creators);
     }
 
     @Override
     protected Result<Function<Update, String>, RawMessage<String>> getWrongResult(ExtractorDatum datum) {
-        Result<Function<Update, String>, RawMessage<String>> result = super.getWrongResult(datum);
-        result.getStatus().setCode("strategyInitFactory.wrongType").add(datum.getType().asStr());
-        return result;
+        return new ValuedResult<>(false, new BotRawMessage("extractorFactory.wrongType").add(datum.getType().asStr()));
     }
 
-    public static class Builder extends BaseBuilder<ExtractorDatum, Function<Update, String>>{
+    public static class Builder extends AbstractBuilder<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessage<String>>{
         @Override
-        protected void check() throws Exception {
-            if (ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
-                throw new Exception("Not completely map of creators");
+        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> check() {
+            if (success && ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
+                success = false;
+                status = new BotRawMessage("notCompletely.creators.extractor");
             }
+            return this;
         }
 
         @Override
-        protected ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> create() {
-            return new ExtractorFactory(creators);
+        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> calculateValue() {
+            if (success){
+                value = new ExtractorFactory(creators);
+            }
+            return this;
+        }
+
+        @Override
+        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> buildOnSuccess() {
+            return new ValuedResult<>(value);
+        }
+
+        @Override
+        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> buildOnFailure() {
+            return new ValuedResult<>(success, status);
         }
     }
 }

@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.kpn.objectFactory.creator.TypedCreator;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.objectFactory.creator.Creator;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -17,7 +18,6 @@ import ru.kpn.rawMessage.RawMessageFactory;
 import java.util.EnumMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class StrategyInitFactoryTest {
 
@@ -32,18 +32,19 @@ public class StrategyInitFactoryTest {
         StrategyInitFactory.Builder builder = StrategyInitFactory.builder();
         int value = 0;
         for (StrategyInitDatumType.ALLOWED_TYPE allowedType : StrategyInitDatumType.ALLOWED_TYPE.values()) {
-            builder.creator(new StrategyInitDatumType(allowedType.name()), new TestCreator(value));
+            builder.create(new TestCreator(value));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.build();
+        factory = builder.check().calculateValue().buildResult().getValue();
     }
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        Throwable throwable = catchThrowable(() -> {
-            StrategyInitFactory.builder().build();
-        });
-        assertThat(throwable).isInstanceOf(Exception.class);
+        BotRawMessage expectedStatus = new BotRawMessage("notCompletely.creators.strategyInit");
+        Result<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> result
+                = StrategyInitFactory.builder().check().calculateValue().buildResult();
+        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
@@ -69,8 +70,13 @@ public class StrategyInitFactoryTest {
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements Creator<StrategyInitDatum, Integer, RawMessage<String>> {
+    private static class TestCreator implements TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>> {
         private final int value;
+
+        @Override
+        public StrategyInitDatumType getType() {
+            return new StrategyInitDatumType(StrategyInitDatumType.ALLOWED_TYPE.COMMON.name());
+        }
 
         @Override
         public Result<Integer, RawMessage<String>> create(StrategyInitDatum datum) {

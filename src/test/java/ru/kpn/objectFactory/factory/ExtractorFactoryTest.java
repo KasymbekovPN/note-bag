@@ -7,11 +7,12 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.objectFactory.creator.TypedCreator;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.objectFactory.creator.Creator;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -20,7 +21,6 @@ import java.util.EnumMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ExtractorFactoryTest {
 
@@ -35,18 +35,19 @@ public class ExtractorFactoryTest {
         ExtractorFactory.Builder builder = ExtractorFactory.builder();
         int value = 0;
         for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
-            builder.creator(new ExtractorDatumType(allowedType.name()), new TestCreator(value));
+            builder.create(new TestCreator(value));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.build();
+        factory = builder.check().calculateValue().buildResult().getValue();
     }
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        Throwable throwable = catchThrowable(() -> {
-            ExtractorFactory.builder().build();
-        });
-        assertThat(throwable).isInstanceOf(Exception.class);
+        final BotRawMessage expectedStatus = new BotRawMessage("notCompletely.creators.extractor");
+        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> result
+                = ExtractorFactory.builder().check().calculateValue().buildResult();
+        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
@@ -62,7 +63,7 @@ public class ExtractorFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessage<String> expectedStatus = messageFactory.create("strategyInitFactory.wrongType").add(wrong);
+        RawMessage<String> expectedStatus = messageFactory.create("extractorFactory.wrongType").add(wrong);
         ExtractorDatum datum = new ExtractorDatum();
         datum.setType(wrong);
          Result<Function<Update, String>, RawMessage<String>> result = factory.create(datum);
@@ -72,8 +73,13 @@ public class ExtractorFactoryTest {
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements Creator<ExtractorDatum, Function<Update, String>, RawMessage<String>> {
+    private static class TestCreator implements TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessage<String>> {
         private final int value;
+
+        @Override
+        public ExtractorDatumType getType() {
+            return new ExtractorDatumType(ExtractorDatumType.ALLOWED_TYPE.BY_PREFIX.name());
+        }
 
         @Override
         public Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {

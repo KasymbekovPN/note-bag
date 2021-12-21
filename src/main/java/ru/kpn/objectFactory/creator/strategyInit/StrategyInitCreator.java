@@ -2,60 +2,73 @@ package ru.kpn.objectFactory.creator.strategyInit;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.kpn.objectFactory.creator.CreatorWithType;
+import ru.kpn.objectFactory.creator.AbstractTypedCreator;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
-import ru.kpn.objectFactory.result.builder.AbstractResultBuilder;
-import ru.kpn.objectFactory.result.builder.ResultBuilder;
+import ru.kpn.objectFactory.result.ValuedResult;
+import ru.kpn.objectFactory.results.builder.AbstractResultBuilder;
+import ru.kpn.objectFactory.results.builder.ResultBuilder;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 
 @Component
-public class StrategyInitCreator implements CreatorWithType<StrategyInitDatum, StrategyInitDatumType, Integer, RawMessage<String>> {
+public class StrategyInitCreator extends AbstractTypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>> {
 
     private static final String NAME = "StrategyInitCreator";
     private static final StrategyInitDatumType TYPE = new StrategyInitDatumType(StrategyInitDatumType.ALLOWED_TYPE.COMMON.name());
-
-    @Override
-    public Result<Integer, RawMessage<String>> create(StrategyInitDatum datum) {
-        return new ResultBuilderImpl(datum)
-                .checkDatumOnNull()
-                .checkPriorityOnNull()
-                .calculateValue()
-                .build();
-    }
 
     @Override
     public StrategyInitDatumType getType() {
         return TYPE;
     }
 
+    @Override
+    protected AbstractResultBuilder<Integer, RawMessage<String>> createBuilder(StrategyInitDatum datum) {
+        return new Builder(datum);
+    }
+
     @AllArgsConstructor
-    private static class ResultBuilderImpl extends AbstractResultBuilder<Integer> {
+    private static class Builder extends AbstractResultBuilder<Integer, RawMessage<String>>{
         private final StrategyInitDatum datum;
 
-        public ResultBuilderImpl checkDatumOnNull(){
-            if (success && datum == null){
-                success = false;
-                status.setCode("datum.isNull").add(NAME);
-            }
+        @Override
+        public ResultBuilder<Integer, RawMessage<String>> check() {
+            checkDatumOnNull();
+            checkPriorityOnNull();
             return this;
         }
 
-        public ResultBuilderImpl checkPriorityOnNull() {
-            if (success && datum.getPriority() == null){
-                success = false;
-                status.setCode("datum.priority.isNull").add(NAME);
+        @Override
+        public ResultBuilder<Integer, RawMessage<String>> calculateValue() {
+            if (success){
+                value = datum.getPriority();
             }
             return this;
         }
 
         @Override
-        public ResultBuilder<Integer> calculateValue() {
-            if (success){
-                value = datum.getPriority();
+        protected Result<Integer, RawMessage<String>> buildOnSuccess() {
+            return new ValuedResult<>(value);
+        }
+
+        @Override
+        protected Result<Integer, RawMessage<String>> buildOnFailure() {
+            return new ValuedResult<>(success, status);
+        }
+
+        private void checkDatumOnNull() {
+            if (success && datum == null){
+                success = false;
+                status = new BotRawMessage("datum.isNull").add(NAME);
             }
-            return this;
+        }
+
+        private void checkPriorityOnNull() {
+            if (success && datum.getPriority() == null){
+                success = false;
+                status = new BotRawMessage("datum.priority.isNull").add(NAME);
+            }
         }
     }
 }

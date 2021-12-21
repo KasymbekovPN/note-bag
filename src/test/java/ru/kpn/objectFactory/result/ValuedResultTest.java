@@ -19,7 +19,7 @@ class ValuedResultTest {
     @Test
     void shouldCheckCreationOfFailResult() {
         RawMessage<String> status = new BotRawMessage("code").add(123);
-        ValuedResult<String> result = new ValuedResult<>(status);
+        ValuedResult<String> result = new ValuedResult<>(false, status);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(status);
     }

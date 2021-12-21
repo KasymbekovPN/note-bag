@@ -16,10 +16,6 @@ public class MatcherDatumType extends AbstractDatumType {
         return allowedTypeNames.contains(strType);
     }
 
-    public String asStr() {
-        return strType;
-    }
-
     public enum ALLOWED_TYPE {
         CONSTANT,
         REGEX,

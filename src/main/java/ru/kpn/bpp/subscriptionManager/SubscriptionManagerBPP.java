@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.strategy.injectors.ExtractorInjector;
 import ru.kpn.strategy.injectors.MatcherInjector;

@@ -7,11 +7,12 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.objectFactory.creator.TypedCreator;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.objectFactory.creator.Creator;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.BotRawMessageFactory;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.rawMessage.RawMessageFactory;
@@ -20,7 +21,6 @@ import java.util.EnumMap;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.BDDAssertions.catchThrowable;
 
 public class MatcherFactoryTest {
 
@@ -35,18 +35,19 @@ public class MatcherFactoryTest {
         MatcherFactory.Builder builder = MatcherFactory.builder();
         int value = 0;
         for (MatcherDatumType.ALLOWED_TYPE allowedType : MatcherDatumType.ALLOWED_TYPE.values()) {
-            builder.creator(new MatcherDatumType(allowedType.name()), new TestCreator(value));
+            builder.create(new TestCreator(value, allowedType));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.build();
+        factory = builder.check().calculateValue().buildResult().getValue();
     }
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        Throwable throwable = catchThrowable(() -> {
-            MatcherFactory.builder().build();
-        });
-        assertThat(throwable).isInstanceOf(Exception.class);
+        BotRawMessage expectedStatus = new BotRawMessage("notCompletely.creators.matcher");
+        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessage<String>>, RawMessage<String>> result
+                = MatcherFactory.builder().check().calculateValue().buildResult();
+        assertThat(result.getSuccess()).isFalse();
+        assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
@@ -72,8 +73,14 @@ public class MatcherFactoryTest {
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements Creator<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> {
+    private static class TestCreator implements TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessage<String>> {
         private final int value;
+        private final MatcherDatumType.ALLOWED_TYPE type;
+
+        @Override
+        public MatcherDatumType getType() {
+            return new MatcherDatumType(type.name());
+        }
 
         @Override
         public Result<Function<Update, Boolean>, RawMessage<String>> create(MatcherDatum datum) {

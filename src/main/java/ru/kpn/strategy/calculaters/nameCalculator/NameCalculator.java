@@ -32,6 +32,6 @@ public class NameCalculator implements Function<Object, ValuedResult<String>> {
             }
         }
         RawMessage<String> status = new BotRawMessage("calculation.name.fail").add(simpleName).add(strategyBeanSuffix);
-        return new ValuedResult<>(status);
+        return new ValuedResult<>(false, status);
     }
 }

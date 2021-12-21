@@ -58,7 +58,7 @@ dependencies {
 
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
 
-    implementation 'com.github.KasymbekovPN:objectFactory:1.0.0'
+    implementation 'com.github.KasymbekovPN:objectFactory:1.1.2'
 }
 
 test {

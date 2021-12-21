@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.matcher.RegexMatcher;
-import ru.kpn.objectFactory.result.Result;
+import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.rawMessage.BotRawMessage;
 import ru.kpn.rawMessage.RawMessage;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
