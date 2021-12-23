@@ -6,8 +6,8 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Map;
 
@@ -17,27 +17,27 @@ public class StrategyInitFactory extends BaseObjectFactory<StrategyInitDatumType
         return new Builder();
     }
 
-    public StrategyInitFactory(Map<StrategyInitDatumType, TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>>> creators) {
+    public StrategyInitFactory(Map<StrategyInitDatumType, TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>>> creators) {
         super(creators);
     }
 
     @Override
-    protected Result<Integer, RawMessage<String>> getWrongResult(StrategyInitDatum datum) {
-        return new ValuedResult<>(false, new BotRawMessage("strategyInitFactory.wrongType").add(datum.getType().asStr()));
+    protected Result<Integer, RawMessageOld<String>> getWrongResult(StrategyInitDatum datum) {
+        return new ValuedResult<>(false, new BotRawMessageOld("strategyInitFactory.wrongType").add(datum.getType().asStr()));
     }
 
-    public static class Builder extends AbstractBuilder<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>>{
+    public static class Builder extends AbstractBuilder<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>>{
         @Override
-        public ResultBuilder<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> check() {
+        public ResultBuilder<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> check() {
             if (success && StrategyInitDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 success = false;
-                status = new BotRawMessage("notCompletely.creators.strategyInit");
+                status = new BotRawMessageOld("notCompletely.creators.strategyInit");
             }
             return this;
         }
 
         @Override
-        public ResultBuilder<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> calculateValue() {
+        public ResultBuilder<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> calculateValue() {
             if (success){
                 value = new StrategyInitFactory(creators);
             }
@@ -45,12 +45,12 @@ public class StrategyInitFactory extends BaseObjectFactory<StrategyInitDatumType
         }
 
         @Override
-        protected Result<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> buildOnSuccess() {
+        protected Result<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> buildOnFailure() {
+        protected Result<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
     }

@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -29,10 +29,10 @@ public class SimpleNoteStrategyTest {
     @Autowired
     private SimpleNoteStrategy strategy;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
-    private RawMessage<String> expectedAnswer;
+    private RawMessageOld<String> expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -43,7 +43,7 @@ public class SimpleNoteStrategyTest {
                 .chatId(ID)
                 .from(user);
 
-        expectedAnswer = rawMessageFactory.create("strategy.message.simpleNode").add(String.valueOf(ID));
+        expectedAnswer = rawMessageFactoryOld.create("strategy.message.simpleNode").add(String.valueOf(ID));
     }
 
     @ParameterizedTest
@@ -56,7 +56,7 @@ public class SimpleNoteStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAnswer_simpleNote.csv")
     void shouldCheckAnswer(String command) {
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.text(command).build());
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.text(command).build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 

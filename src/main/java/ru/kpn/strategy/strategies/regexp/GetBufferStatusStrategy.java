@@ -9,7 +9,7 @@ import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,18 +30,18 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         int bufferSize = getBufferSize(value);
         String chatId = calculateChatId(value);
 
-        RawMessage<String> rawMessage = createRawMessage(
+        RawMessageOld<String> rawMessageOld = createRawMessage(
                 bufferSize == 0
                         ? "strategy.message.getBufferStatus.empty"
                         : "strategy.message.getBufferStatus.contains"
         )
                 .add(chatId)
                 .add(chatId);
-        return bufferSize != 0 ? rawMessage.add(bufferSize) : rawMessage;
+        return bufferSize != 0 ? rawMessageOld.add(bufferSize) : rawMessageOld;
     }
 
     private int getBufferSize(Update value) {

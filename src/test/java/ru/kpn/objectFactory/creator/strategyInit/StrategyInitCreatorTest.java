@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,23 +18,23 @@ public class StrategyInitCreatorTest {
     private static final int PRIORITY = 1;
 
     @Autowired
-    private RawMessageFactory<String> messageFactory;
+    private RawMessageFactoryOld<String> messageFactory;
 
     @Autowired
     private StrategyInitCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        RawMessage<String> expectedMessage = messageFactory.create("datum.isNull").add(NAME);
-        Result<Integer, RawMessage<String>> result = creator.create(null);
+        RawMessageOld<String> expectedMessage = messageFactory.create("datum.isNull").add(NAME);
+        Result<Integer, RawMessageOld<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedMessage);
     }
 
     @Test
     void shouldCheckCreationAttemptWhenPriorityIsNull() {
-        RawMessage<String> expectedMessage = messageFactory.create("datum.priority.isNull").add(NAME);
-        Result<Integer, RawMessage<String>> result = creator.create(new StrategyInitDatum());
+        RawMessageOld<String> expectedMessage = messageFactory.create("datum.priority.isNull").add(NAME);
+        Result<Integer, RawMessageOld<String>> result = creator.create(new StrategyInitDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedMessage);
     }
@@ -43,7 +43,7 @@ public class StrategyInitCreatorTest {
     void shouldCheckCreation() {
         StrategyInitDatum datum = new StrategyInitDatum();
         datum.setPriority(PRIORITY);
-        Result<Integer, RawMessage<String>> result = creator.create(datum);
+        Result<Integer, RawMessageOld<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo(PRIORITY);
     }

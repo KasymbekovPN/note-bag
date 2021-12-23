@@ -4,8 +4,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import ru.kpn.objectFactory.result.ValuedResult;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ public class NameCalculator implements Function<Object, ValuedResult<String>> {
                 return new ValuedResult<>(String.valueOf(chars));
             }
         }
-        RawMessage<String> status = new BotRawMessage("calculation.name.fail").add(simpleName).add(strategyBeanSuffix);
+        RawMessageOld<String> status = new BotRawMessageOld("calculation.name.fail").add(simpleName).add(strategyBeanSuffix);
         return new ValuedResult<>(false, status);
     }
 }

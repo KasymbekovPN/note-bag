@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class BotSubscriptionManager implements SubscriptionManager<Update, BotApiMethod<?>> {
 
     private final Transmitter<BotApiMethod<?>> transmitter;
-    private final Function<RawMessage<String>, BotApiMethod<?>> defaultAnswerCalculator;
+    private final Function<RawMessageOld<String>, BotApiMethod<?>> defaultAnswerCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
 
     @Override
@@ -43,14 +43,14 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
 
-        RawMessage<String> rawMessage = new RawMessage<>() {
+        RawMessageOld<String> rawMessageOld = new RawMessageOld<>() {
             @Override
             public String getCode() {
                 return "noneSubscriberStrategy.unknownInput";
             }
 
             @Override
-            public RawMessage<String> add(Object o) {return this;}
+            public RawMessageOld<String> add(Object o) {return this;}
 
             @Override
             public Object[] getArgs() {
@@ -58,11 +58,11 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
             }
 
             @Override
-            public RawMessage<String> setCode(String code) {
+            public RawMessageOld<String> setCode(String code) {
                 return null;
             }
         };
 
-        return defaultAnswerCalculator.apply(rawMessage);
+        return defaultAnswerCalculator.apply(rawMessageOld);
     }
 }

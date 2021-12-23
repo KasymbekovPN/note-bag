@@ -9,7 +9,7 @@ import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,12 +30,12 @@ public class ClearBufferStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         botBuffer.clear(value.getMessage().getChatId());
         return calculateAnswer(value);
     }
 
-    private RawMessage<String> calculateAnswer(Update value) {
+    private RawMessageOld<String> calculateAnswer(Update value) {
         return createRawMessage("strategy.message.clearBuffer.isCleaned").add(calculateChatId(value));
     }
 }

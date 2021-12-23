@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 import ru.kpn.strategy.injectors.ExtractorInjector;
 import ru.kpn.strategy.injectors.MatcherInjector;
 import ru.kpn.strategy.injectors.PriorityInjector;
@@ -87,10 +87,10 @@ public class SubscriptionManagerBPP implements BeanPostProcessor {
 
     @Getter
     private static class StatusCollector{
-        private RawMessage<String> status;
+        private RawMessageOld<String> status;
         private boolean success = true;
 
-        public StatusCollector collect(Result<?, RawMessage<String>> result){
+        public StatusCollector collect(Result<?, RawMessageOld<String>> result){
             if (status == null && !result.getSuccess()){
                 success = false;
                 status = result.getStatus();

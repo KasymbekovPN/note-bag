@@ -3,7 +3,7 @@ package ru.kpn.strategy.strategies;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Random;
@@ -46,7 +46,7 @@ public class BaseSubscriberStrategyTest {
         }
 
         @Override
-        public RawMessage<String> runAndGetRawMessage(Update value) {
+        public RawMessageOld<String> runAndGetRawMessage(Update value) {
             return null;
         }
     }

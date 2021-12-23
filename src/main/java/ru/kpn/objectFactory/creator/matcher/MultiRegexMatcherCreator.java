@@ -11,13 +11,13 @@ import ru.kpn.objectFactory.results.builder.AbstractResultBuilder;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
 @Component
-public class MultiRegexMatcherCreator extends AbstractTypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessage<String>> {
+public class MultiRegexMatcherCreator extends AbstractTypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> {
 
     private static final String NAME = "MultiRegexMatcherCreator";
     private static final MatcherDatumType TYPE = new MatcherDatumType(MatcherDatumType.ALLOWED_TYPE.MULTI_REGEX.name());
@@ -28,16 +28,16 @@ public class MultiRegexMatcherCreator extends AbstractTypedCreator<MatcherDatumT
     }
 
     @Override
-    protected AbstractResultBuilder<Function<Update, Boolean>, RawMessage<String>> createBuilder(MatcherDatum datum) {
+    protected AbstractResultBuilder<Function<Update, Boolean>, RawMessageOld<String>> createBuilder(MatcherDatum datum) {
         return new Builder(datum);
     }
 
     @AllArgsConstructor
-    private static class Builder extends AbstractResultBuilder<Function<Update, Boolean>, RawMessage<String>>{
+    private static class Builder extends AbstractResultBuilder<Function<Update, Boolean>, RawMessageOld<String>>{
         private final MatcherDatum datum;
 
         @Override
-        public ResultBuilder<Function<Update, Boolean>, RawMessage<String>> check() {
+        public ResultBuilder<Function<Update, Boolean>, RawMessageOld<String>> check() {
             checkDatumOnNull();
             checkDatumTemplatesIsNull();
             checkDatumTemplatesIsEmpty();
@@ -45,7 +45,7 @@ public class MultiRegexMatcherCreator extends AbstractTypedCreator<MatcherDatumT
         }
 
         @Override
-        public ResultBuilder<Function<Update, Boolean>, RawMessage<String>> calculateValue() {
+        public ResultBuilder<Function<Update, Boolean>, RawMessageOld<String>> calculateValue() {
             if (success){
                 value = new MultiRegexMatcher(datum.getTemplates());
             }
@@ -53,33 +53,33 @@ public class MultiRegexMatcherCreator extends AbstractTypedCreator<MatcherDatumT
         }
 
         @Override
-        protected Result<Function<Update, Boolean>, RawMessage<String>> buildOnSuccess() {
+        protected Result<Function<Update, Boolean>, RawMessageOld<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<Function<Update, Boolean>, RawMessage<String>> buildOnFailure() {
+        protected Result<Function<Update, Boolean>, RawMessageOld<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
 
         private void checkDatumOnNull() {
             if (success && datum == null){
                 success = false;
-                status = new BotRawMessage("datum.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.isNull").add(NAME);
             }
         }
 
         private void checkDatumTemplatesIsNull() {
             if (success && datum.getTemplates() == null){
                 success = false;
-                status = new BotRawMessage("datum.templates.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.templates.isNull").add(NAME);
             }
         }
 
         private void checkDatumTemplatesIsEmpty() {
             if (success && datum.getTemplates().isEmpty()){
                 success = false;
-                status = new BotRawMessage("datum.templates.isEmpty").add(NAME);
+                status = new BotRawMessageOld("datum.templates.isEmpty").add(NAME);
             }
         }
     }

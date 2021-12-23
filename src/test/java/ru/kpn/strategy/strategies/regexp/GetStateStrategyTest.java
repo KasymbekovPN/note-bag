@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +27,7 @@ public class GetStateStrategyTest {
     @Autowired
     private BotStateService<User, NPBotState> stateService;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private User user;
     private UpdateInstanceBuilder builder;
@@ -52,12 +52,12 @@ public class GetStateStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessage<String> expectedRawMessage = rawMessageFactory.create("strategy.message.getstate")
+        RawMessageOld<String> expectedRawMessageOld = rawMessageFactoryOld.create("strategy.message.getstate")
                 .add(String.valueOf(ID))
                 .add(String.valueOf(ID))
                 .add(stateService.get(user));
 
-        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.build());
-        assertThat(expectedRawMessage).isEqualTo(rawMessage);
+        RawMessageOld<String> rawMessageOld = strategy.runAndGetRawMessage(builder.build());
+        assertThat(expectedRawMessageOld).isEqualTo(rawMessageOld);
     }
 }

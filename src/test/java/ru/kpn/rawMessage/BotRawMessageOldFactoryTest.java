@@ -7,22 +7,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class BotRawMessageFactoryTest {
+class BotRawMessageOldFactoryTest {
 
     private static final String CODE = "some.code";
 
     @Autowired
-    private BotRawMessageFactory factory;
+    private BotRawMessageFactoryOld factory;
 
     @Test
     void shouldCheckTypeOfCreatedInstance() {
-        RawMessage<String> rawMessage = factory.create(CODE);
-        assertThat(BotRawMessage.class).isEqualTo(rawMessage.getClass());
+        RawMessageOld<String> rawMessageOld = factory.create(CODE);
+        assertThat(BotRawMessageOld.class).isEqualTo(rawMessageOld.getClass());
     }
 
     @Test
     void shouldCheckRawMessageContent() {
-        RawMessage<String> rawMessage = factory.create(CODE);
-        assertThat(CODE).isEqualTo(rawMessage.getCode());
+        RawMessageOld<String> rawMessageOld = factory.create(CODE);
+        assertThat(CODE).isEqualTo(rawMessageOld.getCode());
     }
 }

@@ -9,8 +9,8 @@ import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
     private NameCalculator nameCalculator;
 
     @Override
-    public Result<RT, RawMessage<String>> inject(Object object) {
+    public Result<RT, RawMessageOld<String>> inject(Object object) {
         return createInnerInjector(object)
                 .calculateName(nameCalculator)
                 .findMethod()
@@ -33,7 +33,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                 .get();
     }
 
-    protected abstract ObjectFactory<D,RT, RawMessage<String>> getFactory();
+    protected abstract ObjectFactory<D,RT, RawMessageOld<String>> getFactory();
     protected abstract Map<String,D> getInitData();
     abstract protected InnerInjector<D, RT> createInnerInjector(Object object);
 
@@ -44,7 +44,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         private boolean success = true;
         private boolean continueIt = true;
-        private RawMessage<String> status;
+        private RawMessageOld<String> status;
         private Method method;
         private String name;
 
@@ -53,12 +53,12 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         public InnerInjector<D, RT> calculateName(NameCalculator nameCalculator){
             if (continueIt){
-                Result<String, RawMessage<String>> result = nameCalculator.apply(object);
+                Result<String, RawMessageOld<String>> result = nameCalculator.apply(object);
                 if (result.getSuccess()){
                     name = result.getValue();
                 } else {
                     success = continueIt = false;
-                    status = new BotRawMessage("injection.name.wrong").add(type).add(object.getClass().getSimpleName());
+                    status = new BotRawMessageOld("injection.name.wrong").add(type).add(object.getClass().getSimpleName());
                 }
             }
             return this;
@@ -76,7 +76,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     }
                 }
                 continueIt = false;
-                status = new BotRawMessage("injection.no.method").add(name).add(type);
+                status = new BotRawMessageOld("injection.no.method").add(name).add(type);
             }
             return this;
         }
@@ -88,15 +88,15 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                 } else {
                     success = false;
                     continueIt = false;
-                    status = new BotRawMessage("injection.no.init-data").add(name).add(type);
+                    status = new BotRawMessageOld("injection.no.init-data").add(name).add(type);
                 }
             }
             return this;
         }
 
-        public InnerInjector<D, RT> create(ObjectFactory<D, RT, RawMessage<String>> factory) {
+        public InnerInjector<D, RT> create(ObjectFactory<D, RT, RawMessageOld<String>> factory) {
             if (continueIt){
-                Result<RT, RawMessage<String>> result = factory.create(datum);
+                Result<RT, RawMessageOld<String>> result = factory.create(datum);
                 continueIt = success = result.getSuccess();
                 value = result.getValue();
                 status = result.getStatus();
@@ -110,13 +110,13 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     method.invoke(object, value);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     success = false;
-                    status = new BotRawMessage("injection.invoking.fail").add(name).add(type);
+                    status = new BotRawMessageOld("injection.invoking.fail").add(name).add(type);
                 }
             }
             return this;
         }
 
-        public Result<RT, RawMessage<String>> get(){
+        public Result<RT, RawMessageOld<String>> get(){
             return  new ValuedResult<>(success, value, status);
         }
     }

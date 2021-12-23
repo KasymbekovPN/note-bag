@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -30,11 +30,11 @@ public class SkipBufferDatumStrategyTest {
     @Autowired
     private SkipBufferDatumStrategy strategy;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
-    private RawMessage<String> ifEmptyRawMessage;
-    private RawMessage<String> ifNotEmptyRawMessage;
+    private RawMessageOld<String> ifEmptyRawMessageOld;
+    private RawMessageOld<String> ifNotEmptyRawMessageOld;
 
     @BeforeEach
     void setUp() {
@@ -46,10 +46,10 @@ public class SkipBufferDatumStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyRawMessage = rawMessageFactory.create("strategy.message.skipBufferDatum.isEmpty")
+        ifEmptyRawMessageOld = rawMessageFactoryOld.create("strategy.message.skipBufferDatum.isEmpty")
                 .add(String.valueOf(ID));
 
-        ifNotEmptyRawMessage = rawMessageFactory.create("strategy.message.skipBufferDatum.isNotEmpty")
+        ifNotEmptyRawMessageOld = rawMessageFactoryOld.create("strategy.message.skipBufferDatum.isNotEmpty")
                 .add(String.valueOf(ID))
                 .add(1);
     }
@@ -63,16 +63,16 @@ public class SkipBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
-        assertThat(ifEmptyRawMessage).isEqualTo(answer);
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.build());
+        assertThat(ifEmptyRawMessageOld).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfBufferNotEmpty() {
         botBuffer.add(ID, new TestBufferDatum("1"));
         botBuffer.add(ID, new TestBufferDatum("2"));
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
-        assertThat(ifNotEmptyRawMessage).isEqualTo(answer);
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.build());
+        assertThat(ifNotEmptyRawMessageOld).isEqualTo(answer);
     }
 
     @AfterEach

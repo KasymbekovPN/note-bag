@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.function.Function;
 
@@ -20,22 +20,22 @@ public class RegexMatcherCreatorTest {
     private static final String NAME = "RegexMatcherCreator";
 
     @Autowired
-    private RawMessageFactory<String> messageFactory;
+    private RawMessageFactoryOld<String> messageFactory;
     @Autowired
     private RegexMatcherCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(null);
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
 
     @Test
     void shouldCheckCreationAttemptWhenDatumTemplateIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.template.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(new MatcherDatum());
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.template.isNull").add(NAME);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(new MatcherDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
@@ -45,7 +45,7 @@ public class RegexMatcherCreatorTest {
         MatcherDatum datum = new MatcherDatum();
         String template = "template";
         datum.setTemplate(template);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(datum);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }

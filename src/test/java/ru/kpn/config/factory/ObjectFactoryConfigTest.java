@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -18,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ObjectFactoryConfigTest {
 
     @Autowired
-    ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>> strategyInitFactory;
+    ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> strategyInitFactory;
     @Autowired
-    ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> extractorFactory;
+    ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> extractorFactory;
     @Autowired
-    ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> matcherFactory;
+    ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> matcherFactory;
 
     @Test
     void shouldCheckStrategyInitFactoryCreation() {

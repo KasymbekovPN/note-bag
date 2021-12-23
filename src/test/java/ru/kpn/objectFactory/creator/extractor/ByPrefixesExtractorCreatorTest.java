@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -21,32 +21,32 @@ public class ByPrefixesExtractorCreatorTest {
     private static final String NAME = "ByPrefixesExtractorCreator";
 
     @Autowired
-    private RawMessageFactory<String> messageFactory;
+    private RawMessageFactoryOld<String> messageFactory;
     @Autowired
     private ByPrefixesExtractorCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
-        Result<Function<Update, String>, RawMessage<String>> result = creator.create(null);
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
+        Result<Function<Update, String>, RawMessageOld<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
     void shouldCheckCreationAttemptWhenPrefixesAreNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.prefixes.isNull").add(NAME);
-        Result<Function<Update, String>, RawMessage<String>> result = creator.create(new ExtractorDatum());
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.prefixes.isNull").add(NAME);
+        Result<Function<Update, String>, RawMessageOld<String>> result = creator.create(new ExtractorDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
     void shouldCheckCreationAttemptWhenPrefixesAreEmpty() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.prefixes.empty").add(NAME);
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.prefixes.empty").add(NAME);
         ExtractorDatum datum = new ExtractorDatum();
         datum.setPrefixes(Set.of());
-        Result<Function<Update, String>, RawMessage<String>> result = creator.create(datum);
+        Result<Function<Update, String>, RawMessageOld<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
@@ -56,7 +56,7 @@ public class ByPrefixesExtractorCreatorTest {
         Set<String> prefixes = Set.of("p1", "p2");
         ExtractorDatum datum = new ExtractorDatum();
         datum.setPrefixes(prefixes);
-        Result<Function<Update, String>, RawMessage<String>> result = creator.create(datum);
+        Result<Function<Update, String>, RawMessageOld<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }

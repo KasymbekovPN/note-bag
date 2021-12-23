@@ -9,7 +9,7 @@ import ru.kpn.bot.state.NPBotState;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,7 +30,7 @@ public class GetStateStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         return createRawMessage("strategy.message.getstate")
                 .add(calculateChatId(value))
                 .add(calculateChatId(value))

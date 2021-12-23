@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -31,11 +31,11 @@ public class GetCurrentBufferDatumStrategyTest {
     @Autowired
     private GetCurrentBufferDatumStrategy strategy;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
-    private RawMessage<String> ifExistAnswer;
-    private RawMessage<String> ifNotExistAnswer;
+    private RawMessageOld<String> ifExistAnswer;
+    private RawMessageOld<String> ifNotExistAnswer;
 
     @BeforeEach
     void setUp() {
@@ -48,12 +48,12 @@ public class GetCurrentBufferDatumStrategyTest {
                 .text(COMMAND);
 
         String sid = String.valueOf(ID);
-        ifExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.exist")
+        ifExistAnswer = rawMessageFactoryOld.create("strategy.message.getCurrentBufferDatum.exist")
                 .add(sid)
                 .add(sid)
                 .add(TEXT);
 
-        ifNotExistAnswer = rawMessageFactory.create("strategy.message.getCurrentBufferDatum.notExist")
+        ifNotExistAnswer = rawMessageFactoryOld.create("strategy.message.getCurrentBufferDatum.notExist")
                 .add(sid)
                 .add(sid);
     }
@@ -67,14 +67,14 @@ public class GetCurrentBufferDatumStrategyTest {
 
     @Test
     void shouldCheckAnswerIfCurrentDatumNotExist() {
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifNotExistAnswer).isEqualTo(answer);
     }
 
     @Test
     void shouldCheckAnswerIfCurrentDatumExist() {
         botBuffer.add(ID, new TestBufferDatum(TEXT));
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.build());
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(ifExistAnswer).isEqualTo(answer);
     }
 

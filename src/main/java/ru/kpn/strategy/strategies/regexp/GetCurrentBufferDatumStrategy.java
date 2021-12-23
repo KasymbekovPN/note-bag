@@ -9,7 +9,7 @@ import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,11 +31,11 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         String chatId = calculateChatId(value);
         Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 
-        RawMessage<String> rawMessage = createRawMessage(
+        RawMessageOld<String> rawMessageOld = createRawMessage(
                 maybeDatum.isPresent()
                         ? "strategy.message.getCurrentBufferDatum.exist"
                         : "strategy.message.getCurrentBufferDatum.notExist"
@@ -43,7 +43,7 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
                 .add(chatId)
                 .add(chatId);
 
-        return maybeDatum.isPresent() ? rawMessage.add(maybeDatum.get().getContent()) : rawMessage;
+        return maybeDatum.isPresent() ? rawMessageOld.add(maybeDatum.get().getContent()) : rawMessageOld;
     }
 
     private Optional<BufferDatum<BufferDatumType, String>> extractDatum(Update value) {

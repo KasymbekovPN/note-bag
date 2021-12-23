@@ -6,8 +6,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Arrays;
 
@@ -28,7 +28,7 @@ class NameCalculatorTest {
 
     @Test
     void shouldCheckNameCalculation() {
-        Result<String, RawMessage<String>> result = calculator.apply(new SomeStrategy());
+        Result<String, RawMessageOld<String>> result = calculator.apply(new SomeStrategy());
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo("some");
     }
@@ -36,10 +36,10 @@ class NameCalculatorTest {
     @ParameterizedTest
     @MethodSource("getTestData")
     void shouldCheckNameCalcOfWrongObjectWithoutSuffix(Object object, String code, Object[] args) {
-        BotRawMessage expectedStates = new BotRawMessage(code);
+        BotRawMessageOld expectedStates = new BotRawMessageOld(code);
         Arrays.stream(args).forEach(expectedStates::add);
 
-        Result<String, RawMessage<String>> result = calculator.apply(object);
+        Result<String, RawMessageOld<String>> result = calculator.apply(object);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStates).isEqualTo(result.getStatus());
     }

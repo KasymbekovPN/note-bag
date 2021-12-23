@@ -10,10 +10,10 @@ import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.BotRawMessageFactory;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.BotRawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.EnumMap;
 
@@ -23,8 +23,8 @@ public class StrategyInitFactoryTest {
 
     private final EnumMap<StrategyInitDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(StrategyInitDatumType.ALLOWED_TYPE.class);
-    private final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
-    private ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>> factory;
+    private final RawMessageFactoryOld<String> messageFactory = new BotRawMessageFactoryOld();
+    private ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> factory;
 
     @SneakyThrows
     @BeforeEach
@@ -40,8 +40,8 @@ public class StrategyInitFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        BotRawMessage expectedStatus = new BotRawMessage("notCompletely.creators.strategyInit");
-        Result<ObjectFactory<StrategyInitDatum, Integer, RawMessage<String>>, RawMessage<String>> result
+        BotRawMessageOld expectedStatus = new BotRawMessageOld("notCompletely.creators.strategyInit");
+        Result<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> result
                 = StrategyInitFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -52,7 +52,7 @@ public class StrategyInitFactoryTest {
         for (StrategyInitDatumType.ALLOWED_TYPE allowedType : StrategyInitDatumType.ALLOWED_TYPE.values()) {
             StrategyInitDatum datum = new StrategyInitDatum();
             datum.setType(allowedType.name());
-            Result<Integer, RawMessage<String>> result = factory.create(datum);
+            Result<Integer, RawMessageOld<String>> result = factory.create(datum);
             assertThat(expectedValues.get(allowedType)).isEqualTo(result.getValue());
         }
     }
@@ -60,17 +60,17 @@ public class StrategyInitFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessage<String> expectedStatus = messageFactory.create("strategyInitFactory.wrongType").add(wrong);
+        RawMessageOld<String> expectedStatus = messageFactory.create("strategyInitFactory.wrongType").add(wrong);
         StrategyInitDatum datum = new StrategyInitDatum();
         datum.setType(wrong);
-        Result<Integer, RawMessage<String>> result = factory.create(datum);
+        Result<Integer, RawMessageOld<String>> result = factory.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>> {
+    private static class TestCreator implements TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>> {
         private final int value;
 
         @Override
@@ -79,7 +79,7 @@ public class StrategyInitFactoryTest {
         }
 
         @Override
-        public Result<Integer, RawMessage<String>> create(StrategyInitDatum datum) {
+        public Result<Integer, RawMessageOld<String>> create(StrategyInitDatum datum) {
             return new ValuedResult<>(value);
         }
     }

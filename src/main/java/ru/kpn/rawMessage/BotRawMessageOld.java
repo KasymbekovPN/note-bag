@@ -1,16 +1,23 @@
-package ru.kpn.exception;
+package ru.kpn.rawMessage;
 
-import ru.kpn.rawMessage.RawMessage;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RawMessageException extends Exception implements RawMessage<String> {
+@ToString
+@EqualsAndHashCode
+public class BotRawMessageOld implements RawMessageOld<String> {
     private final List<Object> args = new ArrayList<>();
 
     private String code;
 
-    public RawMessageException(String code) {
+    public BotRawMessageOld() {
+        this.code = "";
+    }
+
+    public BotRawMessageOld(String code) {
         this.code = code;
     }
 
@@ -20,13 +27,13 @@ public class RawMessageException extends Exception implements RawMessage<String>
     }
 
     @Override
-    public RawMessage<String> setCode(String code) {
+    public RawMessageOld<String> setCode(String code) {
         this.code = code;
         return this;
     }
 
     @Override
-    public RawMessage<String> add(Object o) {
+    public RawMessageOld<String> add(Object o) {
         args.add(o);
         return this;
     }

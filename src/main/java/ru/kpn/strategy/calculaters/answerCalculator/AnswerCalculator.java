@@ -6,12 +6,12 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
 @Component
-public class AnswerCalculator implements Function<RawMessage<String>, BotApiMethod<?>> {
+public class AnswerCalculator implements Function<RawMessageOld<String>, BotApiMethod<?>> {
 
     private final MessageBuilderFactory messageBuilderFactory;
 
@@ -21,11 +21,11 @@ public class AnswerCalculator implements Function<RawMessage<String>, BotApiMeth
     }
 
     @Override
-    public synchronized BotApiMethod<?> apply(RawMessage<String> rawMessage) {
-        String chatId = String.valueOf(rawMessage.getArgs()[0]);
-        MessageBuilder builder = messageBuilderFactory.create(rawMessage.getCode());
-        for (int i = 0; i < rawMessage.getArgs().length; i++) {
-            builder.arg(rawMessage.getArgs()[i]);
+    public synchronized BotApiMethod<?> apply(RawMessageOld<String> rawMessageOld) {
+        String chatId = String.valueOf(rawMessageOld.getArgs()[0]);
+        MessageBuilder builder = messageBuilderFactory.create(rawMessageOld.getCode());
+        for (int i = 0; i < rawMessageOld.getArgs().length; i++) {
+            builder.arg(rawMessageOld.getArgs()[i]);
         }
         return new SendMessage(chatId, builder.build());
     }

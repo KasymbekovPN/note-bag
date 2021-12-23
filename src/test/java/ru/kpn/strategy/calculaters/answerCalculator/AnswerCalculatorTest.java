@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,12 +29,12 @@ class AnswerCalculatorTest {
     void shouldCheckCalculation() {
         Update update = createUpdate();
         SendMessage expectedCalcResult = createExpectedCalcResult(update);
-        SendMessage calcResult = (SendMessage) answerCalculator.apply(new TextRawMessage());
+        SendMessage calcResult = (SendMessage) answerCalculator.apply(new TextRawMessageOld());
         assertThat(expectedCalcResult.getChatId()).isEqualTo(calcResult.getChatId());
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
-    private static class TextRawMessage implements RawMessage<String> {
+    private static class TextRawMessageOld implements RawMessageOld<String> {
 
         @Override
         public String getCode() {
@@ -42,7 +42,7 @@ class AnswerCalculatorTest {
         }
 
         @Override
-        public RawMessage<String> add(Object o) {return this;}
+        public RawMessageOld<String> add(Object o) {return this;}
 
         @Override
         public Object[] getArgs() {
@@ -53,7 +53,7 @@ class AnswerCalculatorTest {
         }
 
         @Override
-        public RawMessage<String> setCode(String code) {
+        public RawMessageOld<String> setCode(String code) {
             return null;
         }
     }

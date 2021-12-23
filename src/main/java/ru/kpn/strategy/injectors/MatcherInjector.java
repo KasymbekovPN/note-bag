@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,11 +19,11 @@ import java.util.function.Function;
 public class MatcherInjector extends BaseInjector<MatcherDatum, Function<Update, Boolean>> {
 
     @Autowired
-    private ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> factory;
+    private ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> factory;
     private Map<String, MatcherDatum> matcherInitData;
 
     @Override
-    protected ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessage<String>> getFactory() {
+    protected ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> getFactory() {
         return factory;
     }
 

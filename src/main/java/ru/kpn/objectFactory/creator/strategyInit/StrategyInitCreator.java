@@ -9,11 +9,11 @@ import ru.kpn.objectFactory.results.builder.AbstractResultBuilder;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 @Component
-public class StrategyInitCreator extends AbstractTypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessage<String>> {
+public class StrategyInitCreator extends AbstractTypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>> {
 
     private static final String NAME = "StrategyInitCreator";
     private static final StrategyInitDatumType TYPE = new StrategyInitDatumType(StrategyInitDatumType.ALLOWED_TYPE.COMMON.name());
@@ -24,23 +24,23 @@ public class StrategyInitCreator extends AbstractTypedCreator<StrategyInitDatumT
     }
 
     @Override
-    protected AbstractResultBuilder<Integer, RawMessage<String>> createBuilder(StrategyInitDatum datum) {
+    protected AbstractResultBuilder<Integer, RawMessageOld<String>> createBuilder(StrategyInitDatum datum) {
         return new Builder(datum);
     }
 
     @AllArgsConstructor
-    private static class Builder extends AbstractResultBuilder<Integer, RawMessage<String>>{
+    private static class Builder extends AbstractResultBuilder<Integer, RawMessageOld<String>>{
         private final StrategyInitDatum datum;
 
         @Override
-        public ResultBuilder<Integer, RawMessage<String>> check() {
+        public ResultBuilder<Integer, RawMessageOld<String>> check() {
             checkDatumOnNull();
             checkPriorityOnNull();
             return this;
         }
 
         @Override
-        public ResultBuilder<Integer, RawMessage<String>> calculateValue() {
+        public ResultBuilder<Integer, RawMessageOld<String>> calculateValue() {
             if (success){
                 value = datum.getPriority();
             }
@@ -48,26 +48,26 @@ public class StrategyInitCreator extends AbstractTypedCreator<StrategyInitDatumT
         }
 
         @Override
-        protected Result<Integer, RawMessage<String>> buildOnSuccess() {
+        protected Result<Integer, RawMessageOld<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<Integer, RawMessage<String>> buildOnFailure() {
+        protected Result<Integer, RawMessageOld<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
 
         private void checkDatumOnNull() {
             if (success && datum == null){
                 success = false;
-                status = new BotRawMessage("datum.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.isNull").add(NAME);
             }
         }
 
         private void checkPriorityOnNull() {
             if (success && datum.getPriority() == null){
                 success = false;
-                status = new BotRawMessage("datum.priority.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.priority.isNull").add(NAME);
             }
         }
     }

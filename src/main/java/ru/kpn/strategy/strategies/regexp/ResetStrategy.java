@@ -11,7 +11,7 @@ import ru.kpn.injection.InjectionType;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,7 +36,7 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);
         return createRawMessage("strategy.message.reset")

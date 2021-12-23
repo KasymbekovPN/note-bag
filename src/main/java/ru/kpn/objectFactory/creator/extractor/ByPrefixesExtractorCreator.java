@@ -11,15 +11,15 @@ import ru.kpn.objectFactory.results.builder.AbstractResultBuilder;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessage<String>> {
+public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>> {
 
     private static final String NAME = "ByPrefixesExtractorCreator";
     private static final ExtractorDatumType TYPE = new ExtractorDatumType(ExtractorDatumType.ALLOWED_TYPE.BY_PREFIX.name());
@@ -30,16 +30,16 @@ public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDa
     }
 
     @Override
-    protected AbstractResultBuilder<Function<Update, String>, RawMessage<String>> createBuilder(ExtractorDatum datum) {
+    protected AbstractResultBuilder<Function<Update, String>, RawMessageOld<String>> createBuilder(ExtractorDatum datum) {
         return new Builder(datum);
     }
 
     @AllArgsConstructor
-    private static class Builder extends AbstractResultBuilder<Function<Update, String>, RawMessage<String>>{
+    private static class Builder extends AbstractResultBuilder<Function<Update, String>, RawMessageOld<String>>{
         private final ExtractorDatum datum;
 
         @Override
-        public ResultBuilder<Function<Update, String>, RawMessage<String>> check() {
+        public ResultBuilder<Function<Update, String>, RawMessageOld<String>> check() {
             checkDatumOnNull();
             checkPrefixesAreNull();
             checkPrefixesAreEmpty();
@@ -47,7 +47,7 @@ public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDa
         }
 
         @Override
-        public ResultBuilder<Function<Update, String>, RawMessage<String>> calculateValue() {
+        public ResultBuilder<Function<Update, String>, RawMessageOld<String>> calculateValue() {
             if (success){
                 Set<String> prefixes = datum.getPrefixes().stream().map(s -> s + " ").collect(Collectors.toSet());
                 value = new ByPrefixExtractor(prefixes);
@@ -56,33 +56,33 @@ public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDa
         }
 
         @Override
-        protected Result<Function<Update, String>, RawMessage<String>> buildOnSuccess() {
+        protected Result<Function<Update, String>, RawMessageOld<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<Function<Update, String>, RawMessage<String>> buildOnFailure() {
+        protected Result<Function<Update, String>, RawMessageOld<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
 
         private void checkDatumOnNull() {
             if (success && datum == null){
                 success = false;
-                status = new BotRawMessage("datum.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.isNull").add(NAME);
             }
         }
 
         private void checkPrefixesAreNull() {
             if (success && datum.getPrefixes() == null){
                 success = false;
-                status = new BotRawMessage("datum.prefixes.isNull").add(NAME);
+                status = new BotRawMessageOld("datum.prefixes.isNull").add(NAME);
             }
         }
 
         private void checkPrefixesAreEmpty() {
             if (success && datum.getPrefixes().isEmpty()){
                 success = false;
-                status = new BotRawMessage("datum.prefixes.empty").add(NAME);
+                status = new BotRawMessageOld("datum.prefixes.empty").add(NAME);
             }
         }
     }

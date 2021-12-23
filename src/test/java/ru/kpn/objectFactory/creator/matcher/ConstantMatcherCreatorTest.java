@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.function.Function;
 
@@ -20,22 +20,22 @@ public class ConstantMatcherCreatorTest {
     private static final String NAME = "ConstantMatcherCreator";
 
     @Autowired
-    private RawMessageFactory<String> messageFactory;
+    private RawMessageFactoryOld<String> messageFactory;
     @Autowired
     private ConstantMatcherCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(null);
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
 
     @Test
     void shouldCheckCreationAttemptWhenDatumConstantIsNull() {
-        RawMessage<String> expectedStatus = messageFactory.create("datum.constant.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(new MatcherDatum());
+        RawMessageOld<String> expectedStatus = messageFactory.create("datum.constant.isNull").add(NAME);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(new MatcherDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
@@ -44,7 +44,7 @@ public class ConstantMatcherCreatorTest {
     void shouldCheckCreation() {
         MatcherDatum datum = new MatcherDatum();
         datum.setConstant(true);
-        Result<Function<Update, Boolean>, RawMessage<String>> result = creator.create(datum);
+        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }

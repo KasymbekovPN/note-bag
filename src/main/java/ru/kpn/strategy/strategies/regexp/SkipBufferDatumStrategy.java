@@ -9,7 +9,7 @@ import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,15 +30,15 @@ public class SkipBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessage<String> runAndGetRawMessage(Update value) {
+    public RawMessageOld<String> runAndGetRawMessage(Update value) {
         Long id = value.getMessage().getChatId();
         int bufferSize = botBuffer.getSize(id);
-        RawMessage<String> rawMessage = createRawMessage(
+        RawMessageOld<String> rawMessageOld = createRawMessage(
                 bufferSize == 0
                         ? "strategy.message.skipBufferDatum.isEmpty"
                         : "strategy.message.skipBufferDatum.isNotEmpty"
         )
                 .add(calculateChatId(value));
-        return bufferSize != 0 ? rawMessage.add(bufferSize - 1) : rawMessage;
+        return bufferSize != 0 ? rawMessageOld.add(bufferSize - 1) : rawMessageOld;
     }
 }

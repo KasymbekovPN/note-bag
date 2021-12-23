@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.model.userProfile.UserProfileEntity;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import ru.kpn.service.userProfile.UserProfileService;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class ResetStrategyTest {
     @Autowired
     private BotStateService<User, NPBotState> stateService;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private User user;
     private UpdateInstanceBuilder builder;
@@ -58,11 +58,11 @@ public class ResetStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessage<String> expectedSource = rawMessageFactory.create("strategy.message.reset")
+        RawMessageOld<String> expectedSource = rawMessageFactoryOld.create("strategy.message.reset")
                 .add(String.valueOf(ID))
                 .add(String.valueOf(ID));
-        RawMessage<String> rawMessage = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
-        assertThat(expectedSource).isEqualTo(rawMessage);
+        RawMessageOld<String> rawMessageOld = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
+        assertThat(expectedSource).isEqualTo(rawMessageOld);
     }
 
     @Test

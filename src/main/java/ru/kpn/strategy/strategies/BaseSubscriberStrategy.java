@@ -3,27 +3,27 @@ package ru.kpn.strategy.strategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessageFactory;
-import ru.kpn.rawMessage.RawMessage;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
-    private Function<RawMessage<String>, BotApiMethod<?>> answerCalculator;
+    private Function<RawMessageOld<String>, BotApiMethod<?>> answerCalculator;
 
     protected Function<Update, Boolean> matcher;
     protected Integer priority;
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     @Autowired
-    public void setRawMessageFactory(RawMessageFactory<String> rawMessageFactory){
-        this.rawMessageFactory = rawMessageFactory;
+    public void setRawMessageFactory(RawMessageFactoryOld<String> rawMessageFactoryOld){
+        this.rawMessageFactoryOld = rawMessageFactoryOld;
     }
 
     @Autowired
-    public void setAnswerCalculator(Function<RawMessage<String>, BotApiMethod<?>> answerCalculator) {
+    public void setAnswerCalculator(Function<RawMessageOld<String>, BotApiMethod<?>> answerCalculator) {
         this.answerCalculator = answerCalculator;
     }
 
@@ -42,7 +42,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     private BotApiMethod<?> calculateBotApiMethod(Update value) {
-        RawMessage<String> source = runAndGetRawMessage(value);
+        RawMessageOld<String> source = runAndGetRawMessage(value);
         return answerCalculator.apply(source);
     }
 
@@ -50,7 +50,7 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
         return value.getMessage().getChatId().toString();
     }
 
-    protected RawMessage<String> createRawMessage(String code){
-        return rawMessageFactory.create(code);
+    protected RawMessageOld<String> createRawMessage(String code){
+        return rawMessageFactoryOld.create(code);
     }
 }

@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +22,7 @@ public class HelpStrategyTest {
     @Autowired
     private HelpStrategy strategy;
     @Autowired
-    private RawMessageFactory<String> rawMessageFactory;
+    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
 
@@ -40,8 +40,8 @@ public class HelpStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessage<String> expectedRawMessage = rawMessageFactory.create("strategy.message.help").add(String.valueOf(ID));
-        RawMessage<String> answer = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
-        assertThat(expectedRawMessage).isEqualTo(answer);
+        RawMessageOld<String> expectedRawMessageOld = rawMessageFactoryOld.create("strategy.message.help").add(String.valueOf(ID));
+        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
+        assertThat(expectedRawMessageOld).isEqualTo(answer);
     }
 }

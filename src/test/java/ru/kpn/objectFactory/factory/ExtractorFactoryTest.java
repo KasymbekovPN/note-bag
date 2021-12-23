@@ -12,10 +12,10 @@ import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.rawMessage.BotRawMessage;
-import ru.kpn.rawMessage.BotRawMessageFactory;
-import ru.kpn.rawMessage.RawMessage;
-import ru.kpn.rawMessage.RawMessageFactory;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.BotRawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -26,8 +26,8 @@ public class ExtractorFactoryTest {
 
     private final EnumMap<ExtractorDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(ExtractorDatumType.ALLOWED_TYPE.class);
-    private final RawMessageFactory<String> messageFactory = new BotRawMessageFactory();
-    private ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>> factory;
+    private final RawMessageFactoryOld<String> messageFactory = new BotRawMessageFactoryOld();
+    private ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> factory;
 
     @SneakyThrows
     @BeforeEach
@@ -43,8 +43,8 @@ public class ExtractorFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final BotRawMessage expectedStatus = new BotRawMessage("notCompletely.creators.extractor");
-        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessage<String>>, RawMessage<String>> result
+        final BotRawMessageOld expectedStatus = new BotRawMessageOld("notCompletely.creators.extractor");
+        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> result
                 = ExtractorFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -55,7 +55,7 @@ public class ExtractorFactoryTest {
         for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
             ExtractorDatum datum = new ExtractorDatum();
             datum.setType(allowedType.name());
-            Result<Function<Update, String>, RawMessage<String>> result = factory.create(datum);
+            Result<Function<Update, String>, RawMessageOld<String>> result = factory.create(datum);
             assertThat(new TestExtractor(expectedValues.get(allowedType))).isEqualTo(result.getValue());
         }
     }
@@ -63,17 +63,17 @@ public class ExtractorFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessage<String> expectedStatus = messageFactory.create("extractorFactory.wrongType").add(wrong);
+        RawMessageOld<String> expectedStatus = messageFactory.create("extractorFactory.wrongType").add(wrong);
         ExtractorDatum datum = new ExtractorDatum();
         datum.setType(wrong);
-         Result<Function<Update, String>, RawMessage<String>> result = factory.create(datum);
+         Result<Function<Update, String>, RawMessageOld<String>> result = factory.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessage<String>> {
+    private static class TestCreator implements TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>> {
         private final int value;
 
         @Override
@@ -82,7 +82,7 @@ public class ExtractorFactoryTest {
         }
 
         @Override
-        public Result<Function<Update, String>, RawMessage<String>> create(ExtractorDatum datum) {
+        public Result<Function<Update, String>, RawMessageOld<String>> create(ExtractorDatum datum) {
             return new ValuedResult<>(new TestExtractor(value));
         }
     }
