@@ -12,7 +12,7 @@ public class StringStatusSeedBuilderTest {
     void shouldCheckStringStatusSeedBuilding() {
         String expectedCode = "code";
         Object[] expectedArgs = {1, 2, 3};
-        StringStatusSeedBuilder builder = new StringStatusSeedBuilder(expectedCode);
+        StatusSeedBuilder<String> builder = new StringStatusSeedBuilder().code(expectedCode);
         for (Object expectedArg : expectedArgs) {
             builder.arg(expectedArg);
         }

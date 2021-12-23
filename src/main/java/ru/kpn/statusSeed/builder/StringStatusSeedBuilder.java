@@ -8,11 +8,13 @@ import java.util.List;
 
 // TODO: 23.12.2021 make it package-private
 public class StringStatusSeedBuilder implements StatusSeedBuilder<String> {
-    private final String code;
     private final List<Object> args = new ArrayList<>();
+    private String code;
 
-    public StringStatusSeedBuilder(String code) {
+    @Override
+    public StatusSeedBuilder<String> code(String code) {
         this.code = code;
+        return this;
     }
 
     @Override
