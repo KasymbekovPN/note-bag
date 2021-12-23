@@ -1,4 +1,4 @@
-package ru.kpn.statusSeed;
+package ru.kpn.rawMessage;
 
 import org.springframework.stereotype.Service;
 

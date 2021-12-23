@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 

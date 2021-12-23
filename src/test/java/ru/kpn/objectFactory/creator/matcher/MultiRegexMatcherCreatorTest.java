@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.statusSeed.RawMessageOld;
-import ru.kpn.statusSeed.RawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.Set;
 import java.util.function.Function;

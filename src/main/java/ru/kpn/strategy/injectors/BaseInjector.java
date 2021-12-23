@@ -9,8 +9,8 @@ import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
-import ru.kpn.statusSeed.BotRawMessageOld;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
 
 import java.lang.reflect.InvocationTargetException;

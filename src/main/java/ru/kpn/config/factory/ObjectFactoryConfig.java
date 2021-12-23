@@ -17,7 +17,7 @@ import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.List;
 import java.util.function.Function;

@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.model.userProfile.UserProfileEntity;
-import ru.kpn.statusSeed.RawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 import ru.kpn.service.userProfile.UserProfileService;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;

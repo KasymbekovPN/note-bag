@@ -1,4 +1,4 @@
-package ru.kpn.statusSeed;
+package ru.kpn.rawMessage;
 
 // TODO: 23.12.2021 del
 public interface RawMessageOld<T> {

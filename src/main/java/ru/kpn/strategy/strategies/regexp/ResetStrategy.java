@@ -11,7 +11,7 @@ import ru.kpn.injection.InjectionType;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.service.userProfile.UserProfileService;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;

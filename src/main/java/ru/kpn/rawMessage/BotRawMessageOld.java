@@ -1,4 +1,4 @@
-package ru.kpn.statusSeed;
+package ru.kpn.rawMessage;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

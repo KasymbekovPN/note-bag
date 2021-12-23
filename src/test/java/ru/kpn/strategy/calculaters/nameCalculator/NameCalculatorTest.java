@@ -6,8 +6,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.statusSeed.BotRawMessageOld;
-import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Arrays;
 

@@ -10,10 +10,10 @@ import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.statusSeed.BotRawMessageOld;
-import ru.kpn.statusSeed.BotRawMessageFactoryOld;
-import ru.kpn.statusSeed.RawMessageOld;
-import ru.kpn.statusSeed.RawMessageFactoryOld;
+import ru.kpn.rawMessage.BotRawMessageOld;
+import ru.kpn.rawMessage.BotRawMessageFactoryOld;
+import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.rawMessage.RawMessageFactoryOld;
 
 import java.util.EnumMap;
 
