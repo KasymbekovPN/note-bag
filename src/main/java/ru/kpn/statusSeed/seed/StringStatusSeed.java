@@ -2,17 +2,18 @@ package ru.kpn.statusSeed.seed;
 
 import lombok.EqualsAndHashCode;
 
+// TODO: 23.12.2021 make it package-private 
 @EqualsAndHashCode
-public class StatusSeedImpl implements StatusSeed<String> {
+public class StringStatusSeed implements StatusSeed<String> {
     private final String code;
     private final Object[] args;
 
-    public StatusSeedImpl(String code, Object[] args) {
+    public StringStatusSeed(String code, Object[] args) {
         this.code = code;
         this.args = args;
     }
 
-    public StatusSeedImpl(String code) {
+    public StringStatusSeed(String code) {
         this.code = code;
         this.args = new Object[0];
     }
