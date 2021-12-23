@@ -1,8 +1,7 @@
 package ru.kpn.seed;
 
-public class StringSeedBuilderFactory implements SeedBuilderService<String> {
-    @Override
-    public SeedBuilder<String> takeBuilder() {
+public class StringSeedBuilderFactory {
+    public static SeedBuilder<String> builder() {
         return new StringSeedBuilder();
     }
 }

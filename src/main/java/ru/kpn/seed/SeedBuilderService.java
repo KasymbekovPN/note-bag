@@ -1,5 +1,6 @@
 package ru.kpn.seed;
 
-public interface SeedBuilderService<T> {
-    SeedBuilder<T> takeBuilder();
-}
+// TODO: 23.12.2021 del 
+//public interface SeedBuilderService<T> {
+//    SeedBuilder<T> takeBuilder();
+//}
