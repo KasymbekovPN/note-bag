@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;

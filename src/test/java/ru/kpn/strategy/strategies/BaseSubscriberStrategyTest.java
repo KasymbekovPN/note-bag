@@ -3,7 +3,7 @@ package ru.kpn.strategy.strategies;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Random;

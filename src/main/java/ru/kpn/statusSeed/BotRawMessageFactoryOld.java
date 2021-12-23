@@ -1,7 +1,8 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed;
 
 import org.springframework.stereotype.Service;
 
+// TODO: 23.12.2021 del
 @Service
 public class BotRawMessageFactoryOld implements RawMessageFactoryOld<String> {
     @Override

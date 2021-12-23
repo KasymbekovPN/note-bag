@@ -4,8 +4,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import ru.kpn.objectFactory.result.ValuedResult;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.BotRawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.function.Function;
 

@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.statusSeed.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;

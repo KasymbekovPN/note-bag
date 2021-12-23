@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.strategy.strategies.Strategy;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.*;

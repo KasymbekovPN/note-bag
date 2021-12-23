@@ -1,0 +1,4 @@
+code0,arg0,arg1,code0,arg0,arg1,true
+code0,arg0,arg1,xcode0,arg0,arg1,false
+code0,arg0,arg1,code0,xarg0,xarg1,false
+code0,arg0,arg1,xcode0,xarg0,xarg1,false

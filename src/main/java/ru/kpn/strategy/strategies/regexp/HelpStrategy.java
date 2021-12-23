@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.function.Function;
 

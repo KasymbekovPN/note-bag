@@ -4,7 +4,7 @@ import ru.kpn.objectFactory.creator.TypedCreator;
 import ru.kpn.objectFactory.datum.Datum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.Map;
 

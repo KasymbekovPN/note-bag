@@ -1,6 +1,6 @@
 package ru.kpn.exception;
 
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.ArrayList;
 import java.util.List;

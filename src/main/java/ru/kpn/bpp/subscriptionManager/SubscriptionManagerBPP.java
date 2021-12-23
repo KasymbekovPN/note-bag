@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 import ru.kpn.strategy.injectors.ExtractorInjector;
 import ru.kpn.strategy.injectors.MatcherInjector;
 import ru.kpn.strategy.injectors.PriorityInjector;

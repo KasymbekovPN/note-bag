@@ -1,4 +1,4 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -8,6 +8,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 23.12.2021 del
 public class BotRawMessageOldTest {
 
     private static final Random RANDOM = new Random();

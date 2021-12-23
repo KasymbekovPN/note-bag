@@ -3,8 +3,8 @@ package ru.kpn.strategy.strategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageFactoryOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;

@@ -1,5 +1,6 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed;
 
+// TODO: 23.12.2021 del
 public interface RawMessageOld<T> {
     T getCode();
     RawMessageOld<T> setCode(T code);

@@ -1,15 +1,18 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed.seed;
 
-public class SimpleRawSource implements RawSource<String> {
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
+public class StatusSeedImpl implements StatusSeed<String> {
     private final String code;
     private final Object[] args;
 
-    public SimpleRawSource(String code, Object[] args) {
+    public StatusSeedImpl(String code, Object[] args) {
         this.code = code;
         this.args = args;
     }
 
-    public SimpleRawSource(String code) {
+    public StatusSeedImpl(String code) {
         this.code = code;
         this.args = new Object[0];
     }

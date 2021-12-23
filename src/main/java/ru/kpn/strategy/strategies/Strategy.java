@@ -1,6 +1,6 @@
 package ru.kpn.strategy.strategies;
 
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.statusSeed.RawMessageOld;
 
 import java.util.Optional;
 

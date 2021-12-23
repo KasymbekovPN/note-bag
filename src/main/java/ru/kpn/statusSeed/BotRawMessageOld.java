@@ -1,4 +1,4 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -6,6 +6,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: 23.12.2021 del
 @ToString
 @EqualsAndHashCode
 public class BotRawMessageOld implements RawMessageOld<String> {

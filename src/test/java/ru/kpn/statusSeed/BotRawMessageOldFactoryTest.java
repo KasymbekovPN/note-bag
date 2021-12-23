@@ -1,4 +1,4 @@
-package ru.kpn.rawMessage;
+package ru.kpn.statusSeed;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: 23.12.2021 del
 @SpringBootTest
 class BotRawMessageOldFactoryTest {
 
