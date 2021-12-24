@@ -8,8 +8,9 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.SeedBuilder;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,19 +32,20 @@ public class GetCurrentBufferDatumStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
+    public Seed<String> runAndGetRawMessage(Update value) {
         String chatId = calculateChatId(value);
         Optional<BufferDatum<BufferDatumType, String>> maybeDatum = extractDatum(value);
 
-        RawMessageOld<String> rawMessageOld = createRawMessage(
-                maybeDatum.isPresent()
-                        ? "strategy.message.getCurrentBufferDatum.exist"
-                        : "strategy.message.getCurrentBufferDatum.notExist"
-        )
-                .add(chatId)
-                .add(chatId);
+        final SeedBuilder<String> builder = builder().code(
+                        maybeDatum.isPresent()
+                                ? "strategy.message.getCurrentBufferDatum.exist"
+                                : "strategy.message.getCurrentBufferDatum.notExist"
+                )
+                .arg(chatId)
+                .arg(chatId);
+        maybeDatum.ifPresent(datum -> builder.arg(datum.getContent()));
 
-        return maybeDatum.isPresent() ? rawMessageOld.add(maybeDatum.get().getContent()) : rawMessageOld;
+        return builder.build();
     }
 
     private Optional<BufferDatum<BufferDatumType, String>> extractDatum(Update value) {

@@ -8,8 +8,8 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
+import ru.kpn.seed.Seed;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -37,7 +37,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
+    public Seed<String> runAndGetRawMessage(Update value) {
         putIntoBuffer(value);
         return getAnswer(value);
     }
@@ -49,7 +49,7 @@ public class SimpleNoteStrategy extends BaseSubscriberStrategy {
         botBuffer.add(chatId, datum);
     }
 
-    private RawMessageOld<String> getAnswer(Update value) {
-        return createRawMessage("strategy.message.simpleNode").add(calculateChatId(value));
+    private Seed<String> getAnswer(Update value) {
+        return builder().code("strategy.message.simpleNode").arg(calculateChatId(value)).build();
     }
 }

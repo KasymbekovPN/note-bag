@@ -6,12 +6,12 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 
 import java.util.function.Function;
 
 @Component
-public class AnswerCalculator implements Function<RawMessageOld<String>, BotApiMethod<?>> {
+public class AnswerCalculator implements Function<Seed<String>, BotApiMethod<?>> {
 
     private final MessageBuilderFactory messageBuilderFactory;
 
@@ -21,7 +21,7 @@ public class AnswerCalculator implements Function<RawMessageOld<String>, BotApiM
     }
 
     @Override
-    public synchronized BotApiMethod<?> apply(RawMessageOld<String> rawMessageOld) {
+    public synchronized BotApiMethod<?> apply(Seed<String> rawMessageOld) {
         String chatId = String.valueOf(rawMessageOld.getArgs()[0]);
         MessageBuilder builder = messageBuilderFactory.create(rawMessageOld.getCode());
         for (int i = 0; i < rawMessageOld.getArgs().length; i++) {

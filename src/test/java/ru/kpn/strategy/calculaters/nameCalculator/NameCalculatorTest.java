@@ -6,8 +6,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.SeedBuilder;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ class NameCalculatorTest {
 
     @Test
     void shouldCheckNameCalculation() {
-        Result<String, RawMessageOld<String>> result = calculator.apply(new SomeStrategy());
+        Result<String, Seed<String>> result = calculator.apply(new SomeStrategy());
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isEqualTo("some");
     }
@@ -36,12 +37,12 @@ class NameCalculatorTest {
     @ParameterizedTest
     @MethodSource("getTestData")
     void shouldCheckNameCalcOfWrongObjectWithoutSuffix(Object object, String code, Object[] args) {
-        BotRawMessageOld expectedStates = new BotRawMessageOld(code);
-        Arrays.stream(args).forEach(expectedStates::add);
+        SeedBuilder<String> builder = StringSeedBuilderFactory.builder().code(code);
+        Arrays.stream(args).forEach(builder::arg);
 
-        Result<String, RawMessageOld<String>> result = calculator.apply(object);
+        Result<String, Seed<String>> result = calculator.apply(object);
         assertThat(result.getSuccess()).isFalse();
-        assertThat(expectedStates).isEqualTo(result.getStatus());
+        assertThat(builder.build()).isEqualTo(result.getStatus());
     }
 
     private static class SomeStrategy {}

@@ -8,8 +8,8 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
+import ru.kpn.seed.Seed;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,11 +30,12 @@ public class GetStateStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
-        return createRawMessage("strategy.message.getstate")
-                .add(calculateChatId(value))
-                .add(calculateChatId(value))
-                .add(stateService.get(getUser(value)));
+    public Seed<String> runAndGetRawMessage(Update value) {
+        return builder().code("strategy.message.getstate")
+                .arg(calculateChatId(value))
+                .arg(calculateChatId(value))
+                .arg(stateService.get(getUser(value)))
+                .build();
     }
 
     private User getUser(Update value) {

@@ -2,7 +2,6 @@ package ru.kpn.seed;
 
 import lombok.EqualsAndHashCode;
 
-// TODO: 23.12.2021 make it package-private 
 @EqualsAndHashCode
 class StringSeed implements Seed<String> {
     private final String code;

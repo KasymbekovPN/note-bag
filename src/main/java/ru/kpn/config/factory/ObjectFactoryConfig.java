@@ -17,7 +17,7 @@ import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 
 import java.util.List;
 import java.util.function.Function;
@@ -27,11 +27,11 @@ public class ObjectFactoryConfig {
 
     @SneakyThrows
     @Bean
-    public ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> strategyInitFactory(
-            List<TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>>> creators){
+    public ObjectFactory<StrategyInitDatum, Integer, Seed<String>> strategyInitFactory(
+            List<TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, Seed<String>>> creators){
 
         StrategyInitFactory.Builder builder = StrategyInitFactory.builder();
-        for (TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>> creator : creators) {
+        for (TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, Seed<String>> creator : creators) {
             StrategyInitDatumType type = creator.getType();
             if (type.isValid()){
                 builder.create(creator);
@@ -39,7 +39,7 @@ public class ObjectFactoryConfig {
                 throw new BeanCreationException(String.format("Invalid type: %s", type.asStr()));
             }
         }
-        Result<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> result = builder.check().calculateValue().buildResult();
+        Result<ObjectFactory<StrategyInitDatum, Integer, Seed<String>>, Seed<String>> result = builder.check().calculateValue().buildResult();
         if (!result.getSuccess()){
             throw new BeanCreationException(result.getStatus().getCode());
         }
@@ -49,11 +49,11 @@ public class ObjectFactoryConfig {
 
     @SneakyThrows
     @Bean
-    public ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> extractorFactory(
-            List<TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>>> creators
+    public ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>> extractorFactory(
+            List<TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>>> creators
     ){
         ExtractorFactory.Builder builder = ExtractorFactory.builder();
-        for (TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>> creator : creators) {
+        for (TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>> creator : creators) {
             ExtractorDatumType type = creator.getType();
             if (type.isValid()){
                 builder.create(creator);
@@ -61,7 +61,7 @@ public class ObjectFactoryConfig {
                 throw new BeanCreationException(String.format("Invalid type: %s", type.asStr()));
             }
         }
-        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> result = builder.check().calculateValue().buildResult();
+        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> result = builder.check().calculateValue().buildResult();
         if (!result.getSuccess()){
             throw new BeanCreationException(result.getStatus().getCode());
         }
@@ -71,11 +71,11 @@ public class ObjectFactoryConfig {
 
     @SneakyThrows
     @Bean
-    public ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> matcherFactory(
-            List<TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>> creators
+    public ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>> matcherFactory(
+            List<TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>>> creators
     ){
         MatcherFactory.Builder builder = MatcherFactory.builder();
-        for (TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> creator : creators) {
+        for (TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>> creator : creators) {
             MatcherDatumType type = creator.getType();
             if (type.isValid()){
                 builder.create(creator);
@@ -83,7 +83,7 @@ public class ObjectFactoryConfig {
                 throw new BeanCreationException(String.format("Invalid type: %s", type.asStr()));
             }
         }
-        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> result = builder.check().calculateValue().buildResult();
+        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> result = builder.check().calculateValue().buildResult();
         if (!result.getSuccess()){
             throw new BeanCreationException(result.getStatus().getCode());
         }

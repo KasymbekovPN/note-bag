@@ -8,8 +8,9 @@ import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.SeedBuilder;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -30,18 +31,22 @@ public class GetBufferStatusStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
+    public Seed<String> runAndGetRawMessage(Update value) {
         int bufferSize = getBufferSize(value);
         String chatId = calculateChatId(value);
 
-        RawMessageOld<String> rawMessageOld = createRawMessage(
-                bufferSize == 0
-                        ? "strategy.message.getBufferStatus.empty"
-                        : "strategy.message.getBufferStatus.contains"
-        )
-                .add(chatId)
-                .add(chatId);
-        return bufferSize != 0 ? rawMessageOld.add(bufferSize) : rawMessageOld;
+        final SeedBuilder<String> builder = builder().code(
+                        bufferSize == 0
+                                ? "strategy.message.getBufferStatus.empty"
+                                : "strategy.message.getBufferStatus.contains"
+                )
+                .arg(chatId)
+                .arg(chatId);
+        if (bufferSize != 0){
+            builder.arg(bufferSize);
+        }
+
+        return builder.build();
     }
 
     private int getBufferSize(Update value) {

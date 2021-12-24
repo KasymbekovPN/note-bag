@@ -7,8 +7,8 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,27 +19,28 @@ public class ExtractorFactory extends BaseObjectFactory<ExtractorDatumType, Extr
         return new Builder();
     }
 
-    public ExtractorFactory(Map<ExtractorDatumType, TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>>> creators) {
+    public ExtractorFactory(Map<ExtractorDatumType, TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>>> creators) {
         super(creators);
     }
 
     @Override
-    protected Result<Function<Update, String>, RawMessageOld<String>> getWrongResult(ExtractorDatum datum) {
-        return new ValuedResult<>(false, new BotRawMessageOld("extractorFactory.wrongType").add(datum.getType().asStr()));
+    protected Result<Function<Update, String>, Seed<String>> getWrongResult(ExtractorDatum datum) {
+        Seed<String> seed = StringSeedBuilderFactory.builder().code("extractorFactory.wrongType").arg(datum.getType().asStr()).build();
+        return new ValuedResult<>(false, seed);
     }
 
-    public static class Builder extends AbstractBuilder<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>>{
+    public static class Builder extends AbstractBuilder<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>>{
         @Override
-        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> check() {
+        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> check() {
             if (success && ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 success = false;
-                status = new BotRawMessageOld("notCompletely.creators.extractor");
+                status = StringSeedBuilderFactory.builder().code("notCompletely.creators.extractor").build();
             }
             return this;
         }
 
         @Override
-        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> calculateValue() {
+        public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> calculateValue() {
             if (success){
                 value = new ExtractorFactory(creators);
             }
@@ -47,12 +48,12 @@ public class ExtractorFactory extends BaseObjectFactory<ExtractorDatumType, Extr
         }
 
         @Override
-        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> buildOnSuccess() {
+        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> buildOnFailure() {
+        protected Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
     }

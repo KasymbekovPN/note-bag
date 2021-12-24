@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
 
@@ -69,12 +69,12 @@ public class BotSubscriptionManagerTest {
         }
     }
 
-    private static class TestStrategyCalculator implements Function<RawMessageOld<String>, BotApiMethod<?>>{
+    private static class TestStrategyCalculator implements Function<Seed<String>, BotApiMethod<?>>{
         private static final String DEFAULT_CHAT_ID = "0";
         private static final String DEFAULT_MESSAGE = "default message";
 
         @Override
-        public BotApiMethod<?> apply(RawMessageOld<String> rawMessageOld) {
+        public BotApiMethod<?> apply(Seed<String> seed) {
             return new SendMessage(DEFAULT_CHAT_ID, DEFAULT_MESSAGE);
         }
     }

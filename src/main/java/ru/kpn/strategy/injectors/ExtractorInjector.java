@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,11 +19,11 @@ import java.util.function.Function;
 public class ExtractorInjector extends BaseInjector<ExtractorDatum, Function<Update, String>> {
 
     @Autowired
-    private ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> factory;
+    private ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>> factory;
     private Map<String, ExtractorDatum> extractorInitData;
 
     @Override
-    protected ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> getFactory() {
+    protected ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>> getFactory() {
         return factory;
     }
 

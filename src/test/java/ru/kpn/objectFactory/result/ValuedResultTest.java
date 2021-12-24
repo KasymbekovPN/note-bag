@@ -1,8 +1,8 @@
 package ru.kpn.objectFactory.result;
 
 import org.junit.jupiter.api.Test;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +18,7 @@ class ValuedResultTest {
 
     @Test
     void shouldCheckCreationOfFailResult() {
-        RawMessageOld<String> status = new BotRawMessageOld("code").add(123);
+        final Seed<String> status = StringSeedBuilderFactory.builder().code("code").arg(123).build();
         ValuedResult<String> result = new ValuedResult<>(false, status);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(status);

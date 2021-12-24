@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.factory.ObjectFactory;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 public class PriorityInjector extends BaseInjector<StrategyInitDatum, Integer> {
 
     @Autowired
-    private ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> factory;
+    private ObjectFactory<StrategyInitDatum, Integer, Seed<String>> factory;
     private Map<String, StrategyInitDatum> strategyInitData;
 
     @Override
@@ -26,7 +26,7 @@ public class PriorityInjector extends BaseInjector<StrategyInitDatum, Integer> {
     }
 
     @Override
-    protected ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> getFactory() {
+    protected ObjectFactory<StrategyInitDatum, Integer, Seed<String>> getFactory() {
         return factory;
     }
 

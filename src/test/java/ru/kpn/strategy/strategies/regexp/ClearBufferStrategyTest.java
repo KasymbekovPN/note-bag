@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -29,11 +29,9 @@ public class ClearBufferStrategyTest {
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
     @Autowired
     private ClearBufferStrategy strategy;
-    @Autowired
-    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
-    private RawMessageOld<String> expectedAnswer;
+    private Seed<String> expectedAnswer;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +43,8 @@ public class ClearBufferStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        expectedAnswer = rawMessageFactoryOld.create("strategy.message.clearBuffer.isCleaned").add(String.valueOf(ID));
+
+        expectedAnswer = StringSeedBuilderFactory.builder().code("strategy.message.clearBuffer.isCleaned").arg(String.valueOf(ID)).build();
     }
 
     @ParameterizedTest
@@ -57,7 +56,7 @@ public class ClearBufferStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        RawMessageOld<String> answer = strategy.runAndGetRawMessage(builder.build());
+        Seed<String> answer = strategy.runAndGetRawMessage(builder.build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }
 

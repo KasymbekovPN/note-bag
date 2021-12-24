@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
+import ru.kpn.seed.Seed;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.function.Function;
 
@@ -23,7 +23,7 @@ public class HelpStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
-        return createRawMessage("strategy.message.help").add(calculateChatId(value));
+    public Seed<String> runAndGetRawMessage(Update value) {
+        return builder().code("strategy.message.help").arg(calculateChatId(value)).build();
     }
 }

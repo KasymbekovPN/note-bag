@@ -9,9 +9,9 @@ import ru.kpn.bot.state.NPBotState;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.model.userProfile.UserProfileEntity;
+import ru.kpn.seed.Seed;
 import ru.kpn.service.userProfile.UserProfileService;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
-import ru.kpn.rawMessage.RawMessageOld;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,12 +36,13 @@ public class ResetStrategy extends BaseSubscriberStrategy {
     }
 
     @Override
-    public RawMessageOld<String> runAndGetRawMessage(Update value) {
+    public Seed<String> runAndGetRawMessage(Update value) {
         resetState(value);
         String chatId = calculateChatId(value);
-        return createRawMessage("strategy.message.reset")
-                .add(chatId)
-                .add(chatId);
+        return builder().code("strategy.message.reset")
+                .arg(chatId)
+                .arg(chatId)
+                .build();
     }
 
     private void resetState(Update value) {

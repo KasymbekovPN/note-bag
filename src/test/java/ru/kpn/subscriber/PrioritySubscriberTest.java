@@ -6,8 +6,8 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kpn.seed.Seed;
 import ru.kpn.strategy.strategies.Strategy;
-import ru.kpn.rawMessage.RawMessageOld;
 import utils.UpdateInstanceBuilder;
 
 import java.util.*;
@@ -71,7 +71,7 @@ public class PrioritySubscriberTest {
         }
 
         @Override
-        public RawMessageOld<String> runAndGetRawMessage(Update value) {
+        public Seed<String> runAndGetRawMessage(Update value) {
             return null;
         }
     }

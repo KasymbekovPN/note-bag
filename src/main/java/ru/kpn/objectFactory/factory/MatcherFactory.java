@@ -7,8 +7,8 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,27 +19,28 @@ public class MatcherFactory extends BaseObjectFactory<MatcherDatumType, MatcherD
         return new Builder();
     }
 
-    public MatcherFactory(Map<MatcherDatumType, TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>> creators) {
+    public MatcherFactory(Map<MatcherDatumType, TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>>> creators) {
         super(creators);
     }
 
     @Override
-    protected Result<Function<Update, Boolean>, RawMessageOld<String>> getWrongResult(MatcherDatum datum) {
-        return new ValuedResult<>(false, new BotRawMessageOld("matcherFactory.wrongType").add(datum.getType().asStr()));
+    protected Result<Function<Update, Boolean>, Seed<String>> getWrongResult(MatcherDatum datum) {
+        Seed<String> seed = StringSeedBuilderFactory.builder().code("matcherFactory.wrongType").arg(datum.getType().asStr()).build();
+        return new ValuedResult<>(false, seed);
     }
 
-    public static class Builder extends AbstractBuilder<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>{
+    public static class Builder extends AbstractBuilder<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>>{
         @Override
-        public ResultBuilder<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> check() {
+        public ResultBuilder<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> check() {
             if (success && MatcherDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 success = false;
-                status = new BotRawMessageOld("notCompletely.creators.matcher");
+                status = StringSeedBuilderFactory.builder().code("notCompletely.creators.matcher").build();
             }
             return this;
         }
 
         @Override
-        public ResultBuilder<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> calculateValue() {
+        public ResultBuilder<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> calculateValue() {
             if (success){
                 value = new MatcherFactory(creators);
             }
@@ -47,12 +48,12 @@ public class MatcherFactory extends BaseObjectFactory<MatcherDatumType, MatcherD
         }
 
         @Override
-        protected Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> buildOnSuccess() {
+        protected Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> buildOnSuccess() {
             return new ValuedResult<>(value);
         }
 
         @Override
-        protected Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> buildOnFailure() {
+        protected Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> buildOnFailure() {
             return new ValuedResult<>(success, status);
         }
     }

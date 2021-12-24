@@ -12,10 +12,8 @@ import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.BotRawMessageFactoryOld;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -26,8 +24,7 @@ public class MatcherFactoryTest {
 
     private final EnumMap<MatcherDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(MatcherDatumType.ALLOWED_TYPE.class);
-    private final RawMessageFactoryOld<String> messageFactory = new BotRawMessageFactoryOld();
-    private ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> factory;
+    private ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>> factory;
 
     @SneakyThrows
     @BeforeEach
@@ -43,8 +40,8 @@ public class MatcherFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        BotRawMessageOld expectedStatus = new BotRawMessageOld("notCompletely.creators.matcher");
-        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>>, RawMessageOld<String>> result
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.matcher").build();
+        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> result
                 = MatcherFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -55,7 +52,7 @@ public class MatcherFactoryTest {
         for (MatcherDatumType.ALLOWED_TYPE allowedType : MatcherDatumType.ALLOWED_TYPE.values()) {
             MatcherDatum datum = new MatcherDatum();
             datum.setType(allowedType.name());
-            Result<Function<Update, Boolean>, RawMessageOld<String>> result = factory.create(datum);
+            Result<Function<Update, Boolean>, Seed<String>> result = factory.create(datum);
             assertThat(new TestExtractor(expectedValues.get(allowedType))).isEqualTo(result.getValue());
         }
     }
@@ -63,17 +60,17 @@ public class MatcherFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessageOld<String> expectedStatus = messageFactory.create("matcherFactory.wrongType").add(wrong);
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("matcherFactory.wrongType").arg(wrong).build();
         MatcherDatum datum = new MatcherDatum();
         datum.setType(wrong);
-        final Result<Function<Update, Boolean>, RawMessageOld<String>> result = factory.create(datum);
+        final Result<Function<Update, Boolean>, Seed<String>> result = factory.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, RawMessageOld<String>> {
+    private static class TestCreator implements TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>> {
         private final int value;
         private final MatcherDatumType.ALLOWED_TYPE type;
 
@@ -83,7 +80,7 @@ public class MatcherFactoryTest {
         }
 
         @Override
-        public Result<Function<Update, Boolean>, RawMessageOld<String>> create(MatcherDatum datum) {
+        public Result<Function<Update, Boolean>, Seed<String>> create(MatcherDatum datum) {
             return new ValuedResult<>(new TestExtractor(value));
         }
     }

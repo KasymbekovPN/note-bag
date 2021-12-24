@@ -11,8 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.SeedBuilder;
+import ru.kpn.seed.StringSeedBuilderFactory;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -28,11 +29,8 @@ public class LinkStrategyTest {
     private Buffer<Long, BufferDatum<BufferDatumType, String>> botBuffer;
     @Autowired
     private LinkStrategy strategy;
-    @Autowired
-    private RawMessageFactoryOld<String> rawMessageFactoryOld;
 
     private UpdateInstanceBuilder builder;
-    private RawMessageOld<String> expectedRawMessageOld;
 
     @BeforeEach
     void setUp() {
@@ -42,8 +40,6 @@ public class LinkStrategyTest {
         builder = new UpdateInstanceBuilder()
                 .chatId(ID)
                 .from(user);
-
-        expectedRawMessageOld = rawMessageFactoryOld.create("strategy.message.link").add(String.valueOf(ID));
     }
 
     @ParameterizedTest
@@ -56,9 +52,9 @@ public class LinkStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAnswer_link.csv")
     void shouldCheckAnswer(String command) {
-        expectedRawMessageOld.add(command);
-        RawMessageOld<String> rawMessageOld = strategy.runAndGetRawMessage(builder.text(command).build());
-        assertThat(expectedRawMessageOld).isEqualTo(rawMessageOld);
+        final Seed<String> expectedAnswer = StringSeedBuilderFactory.builder().code("strategy.message.link").arg(String.valueOf(ID)).arg(command).build();
+        Seed<String> answer = strategy.runAndGetRawMessage(builder.text(command).build());
+        assertThat(expectedAnswer).isEqualTo(answer);
     }
 
     @ParameterizedTest

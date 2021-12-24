@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.i18n.builder.MessageBuilder;
 import ru.kpn.i18n.builder.MessageBuilderFactory;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +34,7 @@ class AnswerCalculatorTest {
         assertThat(expectedCalcResult.getText()).isEqualTo(calcResult.getText());
     }
 
-    private static class TextRawMessageOld implements RawMessageOld<String> {
+    private static class TextRawMessageOld implements Seed<String> {
 
         @Override
         public String getCode() {
@@ -42,19 +42,11 @@ class AnswerCalculatorTest {
         }
 
         @Override
-        public RawMessageOld<String> add(Object o) {return this;}
-
-        @Override
         public Object[] getArgs() {
             return new Object[]{
                     String.valueOf(CHAT_ID),
                     TEXT
             };
-        }
-
-        @Override
-        public RawMessageOld<String> setCode(String code) {
-            return null;
         }
     }
 

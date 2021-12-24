@@ -9,8 +9,8 @@ import ru.kpn.extractor.ByPrefixExtractor;
 import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.objectFactory.results.result.Result;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
 
 import java.util.function.Function;
@@ -27,27 +27,24 @@ class ExtractorInjectorTest {
 
     @Test
     void shouldCheckNameCalculation() {
-        RawMessageOld<String> expectedStatus
-                = new BotRawMessageOld("injection.name.wrong").add(TYPE).add(StrategyWithoutSuffix.class.getSimpleName());
-        Result<Function<Update, String>, RawMessageOld<String>> result = injector.inject(new StrategyWithoutSuffix());
+        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("injection.name.wrong").arg(TYPE).arg(StrategyWithoutSuffix.class.getSimpleName()).build();
+        Result<Function<Update, String>, Seed<String>> result = injector.inject(new StrategyWithoutSuffix());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
     void shouldCheckAttemptOfInjectionWithoutInjectMethod() {
-        RawMessageOld<String> expectedStatus
-                = new BotRawMessageOld("injection.no.method").add("testWithoutInjectMethod").add(TYPE);
-        Result<Function<Update, String>, RawMessageOld<String>> result = injector.inject(new TestWithoutInjectMethodStrategy());
+        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("injection.no.method").arg("testWithoutInjectMethod").arg(TYPE).build();
+        Result<Function<Update, String>, Seed<String>> result = injector.inject(new TestWithoutInjectMethodStrategy());
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @Test
     void shouldCheckAttemptOfInjectionWithoutInitData() {
-        RawMessageOld<String> expectedStatus
-                = new BotRawMessageOld("injection.no.init-data").add("wrongNameTest").add(TYPE);
-        Result<Function<Update, String>, RawMessageOld<String>> result = injector.inject(new WrongNameTestStrategy());
+        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("injection.no.init-data").arg("wrongNameTest").arg(TYPE).build();
+        Result<Function<Update, String>, Seed<String>> result = injector.inject(new WrongNameTestStrategy());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
@@ -55,28 +52,28 @@ class ExtractorInjectorTest {
     @Test
     void shouldCheckInjection() {
         SimpleNoteStrategy object = new SimpleNoteStrategy();
-        Result<Function<Update, String>, RawMessageOld<String>> result = injector.inject(object);
+        Result<Function<Update, String>, Seed<String>> result = injector.inject(object);
         assertThat(result.getSuccess()).isTrue();
         assertThat(object.getValue().getClass()).isEqualTo(ByPrefixExtractor.class);
     }
 
     private static class StrategyWithoutSuffix extends BaseSubscriberStrategy {
         @Override
-        public RawMessageOld<String> runAndGetRawMessage(Update value) {
+        public Seed<String> runAndGetRawMessage(Update value) {
             return null;
         }
     }
 
     private static class TestWithoutInjectMethodStrategy extends BaseSubscriberStrategy{
         @Override
-        public RawMessageOld<String> runAndGetRawMessage(Update value) {
+        public Seed<String> runAndGetRawMessage(Update value) {
             return null;
         }
     }
 
     private static class WrongNameTestStrategy extends BaseSubscriberStrategy{
         @Override
-        public RawMessageOld<String> runAndGetRawMessage(Update value) {
+        public Seed<String> runAndGetRawMessage(Update value) {
             return null;
         }
 
@@ -89,7 +86,7 @@ class ExtractorInjectorTest {
         private Function<Update, String> value;
 
         @Override
-        public RawMessageOld<String> runAndGetRawMessage(Update value) {
+        public Seed<String> runAndGetRawMessage(Update value) {
             return null;
         }
 

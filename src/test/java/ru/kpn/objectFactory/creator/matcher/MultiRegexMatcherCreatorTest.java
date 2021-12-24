@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -21,32 +21,30 @@ public class MultiRegexMatcherCreatorTest {
     private static final String NAME = "MultiRegexMatcherCreator";
 
     @Autowired
-    private RawMessageFactoryOld<String> messageFactory;
-    @Autowired
     private MultiRegexMatcherCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        RawMessageOld<String> expectedStatus = messageFactory.create("datum.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(null);
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+        Result<Function<Update, Boolean>, Seed<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
 
     @Test
     void shouldCheckCreationAttemptWhenDatumTemplatesIsNull() {
-        RawMessageOld<String> expectedStatus = messageFactory.create("datum.templates.isNull").add(NAME);
-        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(new MatcherDatum());
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.templates.isNull").arg(NAME).build();
+        Result<Function<Update, Boolean>, Seed<String>> result = creator.create(new MatcherDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
 
     @Test
     void shouldCheckCreationAttemptWhenDatumTemplatesIsEmpty() {
-        RawMessageOld<String> expectedStatus = messageFactory.create("datum.templates.isEmpty").add(NAME);
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.templates.isEmpty").arg(NAME).build();
         MatcherDatum datum = new MatcherDatum();
         datum.setTemplates(Set.of());
-        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(datum);
+        Result<Function<Update, Boolean>, Seed<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
     }
@@ -56,7 +54,7 @@ public class MultiRegexMatcherCreatorTest {
         MatcherDatum datum = new MatcherDatum();
         Set<String> templates = Set.of("t0", "t1");
         datum.setTemplates(templates);
-        Result<Function<Update, Boolean>, RawMessageOld<String>> result = creator.create(datum);
+        Result<Function<Update, Boolean>, Seed<String>> result = creator.create(datum);
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getValue()).isNotNull();
     }

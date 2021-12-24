@@ -10,10 +10,8 @@ import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.BotRawMessageFactoryOld;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.EnumMap;
 
@@ -23,8 +21,7 @@ public class StrategyInitFactoryTest {
 
     private final EnumMap<StrategyInitDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(StrategyInitDatumType.ALLOWED_TYPE.class);
-    private final RawMessageFactoryOld<String> messageFactory = new BotRawMessageFactoryOld();
-    private ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>> factory;
+    private ObjectFactory<StrategyInitDatum, Integer, Seed<String>> factory;
 
     @SneakyThrows
     @BeforeEach
@@ -40,8 +37,8 @@ public class StrategyInitFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        BotRawMessageOld expectedStatus = new BotRawMessageOld("notCompletely.creators.strategyInit");
-        Result<ObjectFactory<StrategyInitDatum, Integer, RawMessageOld<String>>, RawMessageOld<String>> result
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.strategyInit").build();
+        Result<ObjectFactory<StrategyInitDatum, Integer, Seed<String>>, Seed<String>> result
                 = StrategyInitFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -52,7 +49,7 @@ public class StrategyInitFactoryTest {
         for (StrategyInitDatumType.ALLOWED_TYPE allowedType : StrategyInitDatumType.ALLOWED_TYPE.values()) {
             StrategyInitDatum datum = new StrategyInitDatum();
             datum.setType(allowedType.name());
-            Result<Integer, RawMessageOld<String>> result = factory.create(datum);
+            Result<Integer, Seed<String>> result = factory.create(datum);
             assertThat(expectedValues.get(allowedType)).isEqualTo(result.getValue());
         }
     }
@@ -60,17 +57,17 @@ public class StrategyInitFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessageOld<String> expectedStatus = messageFactory.create("strategyInitFactory.wrongType").add(wrong);
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("strategyInitFactory.wrongType").arg(wrong).build();
         StrategyInitDatum datum = new StrategyInitDatum();
         datum.setType(wrong);
-        Result<Integer, RawMessageOld<String>> result = factory.create(datum);
+        Result<Integer, Seed<String>> result = factory.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, RawMessageOld<String>> {
+    private static class TestCreator implements TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, Seed<String>> {
         private final int value;
 
         @Override
@@ -79,7 +76,7 @@ public class StrategyInitFactoryTest {
         }
 
         @Override
-        public Result<Integer, RawMessageOld<String>> create(StrategyInitDatum datum) {
+        public Result<Integer, Seed<String>> create(StrategyInitDatum datum) {
             return new ValuedResult<>(value);
         }
     }

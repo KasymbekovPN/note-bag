@@ -3,8 +3,8 @@ package ru.kpn.strategy.injectors;
 import ru.kpn.objectFactory.datum.Datum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
 
 public interface Injector<D extends Datum<? extends DatumType>, RT> {
-    Result<RT, RawMessageOld<String>> inject(Object object);
+    Result<RT, Seed<String>> inject(Object object);
 }

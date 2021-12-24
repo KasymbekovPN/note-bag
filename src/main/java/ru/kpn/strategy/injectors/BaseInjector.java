@@ -9,8 +9,8 @@ import ru.kpn.objectFactory.factory.ObjectFactory;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.RawMessageOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
     private NameCalculator nameCalculator;
 
     @Override
-    public Result<RT, RawMessageOld<String>> inject(Object object) {
+    public Result<RT, Seed<String>> inject(Object object) {
         return createInnerInjector(object)
                 .calculateName(nameCalculator)
                 .findMethod()
@@ -33,7 +33,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                 .get();
     }
 
-    protected abstract ObjectFactory<D,RT, RawMessageOld<String>> getFactory();
+    protected abstract ObjectFactory<D,RT, Seed<String>> getFactory();
     protected abstract Map<String,D> getInitData();
     abstract protected InnerInjector<D, RT> createInnerInjector(Object object);
 
@@ -44,7 +44,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         private boolean success = true;
         private boolean continueIt = true;
-        private RawMessageOld<String> status;
+        private Seed<String> status;
         private Method method;
         private String name;
 
@@ -53,12 +53,16 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
 
         public InnerInjector<D, RT> calculateName(NameCalculator nameCalculator){
             if (continueIt){
-                Result<String, RawMessageOld<String>> result = nameCalculator.apply(object);
+                Result<String, Seed<String>> result = nameCalculator.apply(object);
                 if (result.getSuccess()){
                     name = result.getValue();
                 } else {
                     success = continueIt = false;
-                    status = new BotRawMessageOld("injection.name.wrong").add(type).add(object.getClass().getSimpleName());
+                    status = StringSeedBuilderFactory.builder()
+                            .code("injection.name.wrong")
+                            .arg(type)
+                            .arg(object.getClass().getSimpleName())
+                            .build();
                 }
             }
             return this;
@@ -76,7 +80,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     }
                 }
                 continueIt = false;
-                status = new BotRawMessageOld("injection.no.method").add(name).add(type);
+                status = StringSeedBuilderFactory.builder().code("injection.no.method").arg(name).arg(type).build();
             }
             return this;
         }
@@ -86,17 +90,16 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                 if (initData.containsKey(name)){
                     datum = initData.get(name);
                 } else {
-                    success = false;
-                    continueIt = false;
-                    status = new BotRawMessageOld("injection.no.init-data").add(name).add(type);
+                    success = continueIt = false;
+                    status = StringSeedBuilderFactory.builder().code("injection.no.init-data").arg(name).arg(type).build();
                 }
             }
             return this;
         }
 
-        public InnerInjector<D, RT> create(ObjectFactory<D, RT, RawMessageOld<String>> factory) {
+        public InnerInjector<D, RT> create(ObjectFactory<D, RT, Seed<String>> factory) {
             if (continueIt){
-                Result<RT, RawMessageOld<String>> result = factory.create(datum);
+                Result<RT, Seed<String>> result = factory.create(datum);
                 continueIt = success = result.getSuccess();
                 value = result.getValue();
                 status = result.getStatus();
@@ -110,13 +113,13 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     method.invoke(object, value);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     success = false;
-                    status = new BotRawMessageOld("injection.invoking.fail").add(name).add(type);
+                    status = StringSeedBuilderFactory.builder().code("injection.invoking.fail").arg(name).arg(type).build();
                 }
             }
             return this;
         }
 
-        public Result<RT, RawMessageOld<String>> get(){
+        public Result<RT, Seed<String>> get(){
             return  new ValuedResult<>(success, value, status);
         }
     }

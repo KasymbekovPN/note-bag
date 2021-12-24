@@ -12,10 +12,8 @@ import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
-import ru.kpn.rawMessage.BotRawMessageOld;
-import ru.kpn.rawMessage.BotRawMessageFactoryOld;
-import ru.kpn.rawMessage.RawMessageOld;
-import ru.kpn.rawMessage.RawMessageFactoryOld;
+import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderFactory;
 
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -26,8 +24,7 @@ public class ExtractorFactoryTest {
 
     private final EnumMap<ExtractorDatumType.ALLOWED_TYPE, Integer> expectedValues
             = new EnumMap<>(ExtractorDatumType.ALLOWED_TYPE.class);
-    private final RawMessageFactoryOld<String> messageFactory = new BotRawMessageFactoryOld();
-    private ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>> factory;
+    private ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>> factory;
 
     @SneakyThrows
     @BeforeEach
@@ -43,8 +40,8 @@ public class ExtractorFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final BotRawMessageOld expectedStatus = new BotRawMessageOld("notCompletely.creators.extractor");
-        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, RawMessageOld<String>>, RawMessageOld<String>> result
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.extractor").build();
+        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> result
                 = ExtractorFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -55,7 +52,7 @@ public class ExtractorFactoryTest {
         for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
             ExtractorDatum datum = new ExtractorDatum();
             datum.setType(allowedType.name());
-            Result<Function<Update, String>, RawMessageOld<String>> result = factory.create(datum);
+            Result<Function<Update, String>, Seed<String>> result = factory.create(datum);
             assertThat(new TestExtractor(expectedValues.get(allowedType))).isEqualTo(result.getValue());
         }
     }
@@ -63,17 +60,17 @@ public class ExtractorFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        RawMessageOld<String> expectedStatus = messageFactory.create("extractorFactory.wrongType").add(wrong);
+        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("extractorFactory.wrongType").arg(wrong).build();
         ExtractorDatum datum = new ExtractorDatum();
         datum.setType(wrong);
-         Result<Function<Update, String>, RawMessageOld<String>> result = factory.create(datum);
+         Result<Function<Update, String>, Seed<String>> result = factory.create(datum);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
     }
 
     @AllArgsConstructor
     @Getter
-    private static class TestCreator implements TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, RawMessageOld<String>> {
+    private static class TestCreator implements TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>> {
         private final int value;
 
         @Override
@@ -82,7 +79,7 @@ public class ExtractorFactoryTest {
         }
 
         @Override
-        public Result<Function<Update, String>, RawMessageOld<String>> create(ExtractorDatum datum) {
+        public Result<Function<Update, String>, Seed<String>> create(ExtractorDatum datum) {
             return new ValuedResult<>(new TestExtractor(value));
         }
     }
