@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.seed.Seed;
 import ru.kpn.seed.SeedBuilder;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Arrays;
 
@@ -37,7 +37,7 @@ class NameCalculatorTest {
     @ParameterizedTest
     @MethodSource("getTestData")
     void shouldCheckNameCalcOfWrongObjectWithoutSuffix(Object object, String code, Object[] args) {
-        SeedBuilder<String> builder = StringSeedBuilderFactory.builder().code(code);
+        SeedBuilder<String> builder = StringSeedBuilderFactoryOld.builder().code(code);
         Arrays.stream(args).forEach(builder::arg);
 
         Result<String, Seed<String>> result = calculator.apply(object);

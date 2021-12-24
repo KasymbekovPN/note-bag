@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +50,7 @@ public class GetStateStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        final Seed<String> expected = StringSeedBuilderFactory.builder().code("strategy.message.getstate")
+        final Seed<String> expected = StringSeedBuilderFactoryOld.builder().code("strategy.message.getstate")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .arg(stateService.get(user))

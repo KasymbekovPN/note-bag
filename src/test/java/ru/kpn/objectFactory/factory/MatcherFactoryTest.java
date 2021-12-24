@@ -13,7 +13,7 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -40,7 +40,7 @@ public class MatcherFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.matcher").build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.matcher").build();
         Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> result
                 = MatcherFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
@@ -60,7 +60,7 @@ public class MatcherFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("matcherFactory.wrongType").arg(wrong).build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("matcherFactory.wrongType").arg(wrong).build();
         MatcherDatum datum = new MatcherDatum();
         datum.setType(wrong);
         final Result<Function<Update, Boolean>, Seed<String>> result = factory.create(datum);

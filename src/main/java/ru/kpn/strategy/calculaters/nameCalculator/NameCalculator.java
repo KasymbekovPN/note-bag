@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ public class NameCalculator implements Function<Object, ValuedResult<String>> {
                 return new ValuedResult<>(String.valueOf(chars));
             }
         }
-        Seed<String> seed = StringSeedBuilderFactory.builder().code("calculation.name.fail").arg(simpleName).arg(strategyBeanSuffix).build();
+        Seed<String> seed = StringSeedBuilderFactoryOld.builder().code("calculation.name.fail").arg(simpleName).arg(strategyBeanSuffix).build();
         return new ValuedResult<>(false, seed);
     }
 }

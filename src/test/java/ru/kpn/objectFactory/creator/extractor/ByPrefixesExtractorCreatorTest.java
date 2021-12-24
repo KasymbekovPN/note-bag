@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.datum.ExtractorDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -25,7 +25,7 @@ public class ByPrefixesExtractorCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
         Result<Function<Update, String>, Seed<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -33,7 +33,7 @@ public class ByPrefixesExtractorCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenPrefixesAreNull() {
-        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.prefixes.isNull").arg(NAME).build();
+        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.prefixes.isNull").arg(NAME).build();
         Result<Function<Update, String>, Seed<String>> result = creator.create(new ExtractorDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -41,7 +41,7 @@ public class ByPrefixesExtractorCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenPrefixesAreEmpty() {
-        Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.prefixes.empty").arg(NAME).build();
+        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.prefixes.empty").arg(NAME).build();
         ExtractorDatum datum = new ExtractorDatum();
         datum.setPrefixes(Set.of());
         Result<Function<Update, String>, Seed<String>> result = creator.create(datum);

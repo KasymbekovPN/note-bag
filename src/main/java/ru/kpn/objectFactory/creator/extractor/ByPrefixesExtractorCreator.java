@@ -12,7 +12,7 @@ import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -68,21 +68,21 @@ public class ByPrefixesExtractorCreator extends AbstractTypedCreator<ExtractorDa
         private void checkDatumOnNull() {
             if (success && datum == null){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+                status = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
             }
         }
 
         private void checkPrefixesAreNull() {
             if (success && datum.getPrefixes() == null){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("datum.prefixes.isNull").arg(NAME).build();
+                status = StringSeedBuilderFactoryOld.builder().code("datum.prefixes.isNull").arg(NAME).build();
             }
         }
 
         private void checkPrefixesAreEmpty() {
             if (success && datum.getPrefixes().isEmpty()){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("datum.prefixes.empty").arg(NAME).build();
+                status = StringSeedBuilderFactoryOld.builder().code("datum.prefixes.empty").arg(NAME).build();
             }
         }
     }

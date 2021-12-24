@@ -12,7 +12,7 @@ import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.function.Function;
 
@@ -64,14 +64,14 @@ public class RegexMatcherCreator extends AbstractTypedCreator<MatcherDatumType, 
         private void checkDatumOnNull() {
             if (success && datum == null){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+                status = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
             }
         }
 
         private void checkTemplateOnNull() {
             if (success && datum.getTemplate() == null){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("datum.template.isNull").arg(NAME).build();
+                status = StringSeedBuilderFactoryOld.builder().code("datum.template.isNull").arg(NAME).build();
             }
         }
     }

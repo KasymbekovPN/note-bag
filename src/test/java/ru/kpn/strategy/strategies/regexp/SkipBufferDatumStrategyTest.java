@@ -13,7 +13,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -44,11 +44,11 @@ public class SkipBufferDatumStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyRawMessageOld = StringSeedBuilderFactory.builder().code("strategy.message.skipBufferDatum.isEmpty")
+        ifEmptyRawMessageOld = StringSeedBuilderFactoryOld.builder().code("strategy.message.skipBufferDatum.isEmpty")
                 .arg(String.valueOf(ID))
                 .build();
 
-        ifNotEmptyRawMessageOld = StringSeedBuilderFactory.builder().code("strategy.message.skipBufferDatum.isNotEmpty")
+        ifNotEmptyRawMessageOld = StringSeedBuilderFactoryOld.builder().code("strategy.message.skipBufferDatum.isNotEmpty")
                 .arg(String.valueOf(ID))
                 .arg(1)
                 .build();

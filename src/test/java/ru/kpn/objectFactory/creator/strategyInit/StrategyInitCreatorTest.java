@@ -7,7 +7,7 @@ import ru.kpn.objectFactory.datum.StrategyInitDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +22,7 @@ public class StrategyInitCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        final Seed<String> expectedMessage = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+        final Seed<String> expectedMessage = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
         Result<Integer, Seed<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedMessage);
@@ -30,7 +30,7 @@ public class StrategyInitCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenPriorityIsNull() {
-        final Seed<String> expectedMessage = StringSeedBuilderFactory.builder().code("datum.priority.isNull").arg(NAME).build();
+        final Seed<String> expectedMessage = StringSeedBuilderFactoryOld.builder().code("datum.priority.isNull").arg(NAME).build();
         Result<Integer, Seed<String>> result = creator.create(new StrategyInitDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedMessage);

@@ -11,7 +11,7 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.EnumMap;
 
@@ -37,7 +37,7 @@ public class StrategyInitFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.strategyInit").build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.strategyInit").build();
         Result<ObjectFactory<StrategyInitDatum, Integer, Seed<String>>, Seed<String>> result
                 = StrategyInitFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
@@ -57,7 +57,7 @@ public class StrategyInitFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("strategyInitFactory.wrongType").arg(wrong).build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("strategyInitFactory.wrongType").arg(wrong).build();
         StrategyInitDatum datum = new StrategyInitDatum();
         datum.setType(wrong);
         Result<Integer, Seed<String>> result = factory.create(datum);

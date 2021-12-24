@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.function.Function;
 
@@ -24,7 +24,7 @@ public class ConstantMatcherCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.isNull").arg(NAME).build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
         Result<Function<Update, Boolean>, Seed<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
@@ -32,7 +32,7 @@ public class ConstantMatcherCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumConstantIsNull() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("datum.constant.isNull").arg(NAME).build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.constant.isNull").arg(NAME).build();
         Result<Function<Update, Boolean>, Seed<String>> result = creator.create(new MatcherDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());

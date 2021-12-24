@@ -13,7 +13,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -44,12 +44,12 @@ public class GetBufferStatusStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyAnswer = StringSeedBuilderFactory.builder().code("strategy.message.getBufferStatus.empty")
+        ifEmptyAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getBufferStatus.empty")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .build();
 
-        ifNotEmptyAnswer = StringSeedBuilderFactory.builder().code("strategy.message.getBufferStatus.contains")
+        ifNotEmptyAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getBufferStatus.contains")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .arg(1)

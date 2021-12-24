@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.seed.Seed;
 import ru.kpn.seed.SeedBuilder;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -46,6 +46,6 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     protected SeedBuilder<String> builder(){
-        return StringSeedBuilderFactory.builder();
+        return StringSeedBuilderFactoryOld.builder();
     }
 }

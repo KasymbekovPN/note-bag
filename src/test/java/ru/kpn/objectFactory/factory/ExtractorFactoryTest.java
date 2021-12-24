@@ -13,7 +13,7 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -40,7 +40,7 @@ public class ExtractorFactoryTest {
 
     @Test
     void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("notCompletely.creators.extractor").build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.extractor").build();
         Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> result
                 = ExtractorFactory.builder().check().calculateValue().buildResult();
         assertThat(result.getSuccess()).isFalse();
@@ -60,7 +60,7 @@ public class ExtractorFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactory.builder().code("extractorFactory.wrongType").arg(wrong).build();
+        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("extractorFactory.wrongType").arg(wrong).build();
         ExtractorDatum datum = new ExtractorDatum();
         datum.setType(wrong);
          Result<Function<Update, String>, Seed<String>> result = factory.create(datum);

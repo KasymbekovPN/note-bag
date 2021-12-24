@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -25,16 +25,17 @@ public class ExtractorFactory extends BaseObjectFactory<ExtractorDatumType, Extr
 
     @Override
     protected Result<Function<Update, String>, Seed<String>> getWrongResult(ExtractorDatum datum) {
-        Seed<String> seed = StringSeedBuilderFactory.builder().code("extractorFactory.wrongType").arg(datum.getType().asStr()).build();
+        Seed<String> seed = StringSeedBuilderFactoryOld.builder().code("extractorFactory.wrongType").arg(datum.getType().asStr()).build();
         return new ValuedResult<>(false, seed);
     }
 
+    // TODO: 24.12.2021 del
     public static class Builder extends AbstractBuilder<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>>{
         @Override
         public ResultBuilder<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> check() {
             if (success && ExtractorDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("notCompletely.creators.extractor").build();
+                status = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.extractor").build();
             }
             return this;
         }

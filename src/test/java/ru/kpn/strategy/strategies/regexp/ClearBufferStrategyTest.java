@@ -13,7 +13,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -44,7 +44,7 @@ public class ClearBufferStrategyTest {
                 .text(COMMAND);
 
 
-        expectedAnswer = StringSeedBuilderFactory.builder().code("strategy.message.clearBuffer.isCleaned").arg(String.valueOf(ID)).build();
+        expectedAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.clearBuffer.isCleaned").arg(String.valueOf(ID)).build();
     }
 
     @ParameterizedTest

@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.results.builder.ResultBuilder;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -25,16 +25,17 @@ public class MatcherFactory extends BaseObjectFactory<MatcherDatumType, MatcherD
 
     @Override
     protected Result<Function<Update, Boolean>, Seed<String>> getWrongResult(MatcherDatum datum) {
-        Seed<String> seed = StringSeedBuilderFactory.builder().code("matcherFactory.wrongType").arg(datum.getType().asStr()).build();
+        Seed<String> seed = StringSeedBuilderFactoryOld.builder().code("matcherFactory.wrongType").arg(datum.getType().asStr()).build();
         return new ValuedResult<>(false, seed);
     }
 
+    // TODO: 24.12.2021 del
     public static class Builder extends AbstractBuilder<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>>{
         @Override
         public ResultBuilder<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> check() {
             if (success && MatcherDatumType.ALLOWED_TYPE.values().length != creators.size()){
                 success = false;
-                status = StringSeedBuilderFactory.builder().code("notCompletely.creators.matcher").build();
+                status = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.matcher").build();
             }
             return this;
         }

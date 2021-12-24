@@ -13,7 +13,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactory;
+import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
 import utils.UpdateInstanceBuilder;
 
@@ -46,13 +46,13 @@ public class GetCurrentBufferDatumStrategyTest {
                 .text(COMMAND);
 
         String sid = String.valueOf(ID);
-        ifExistAnswer = StringSeedBuilderFactory.builder().code("strategy.message.getCurrentBufferDatum.exist")
+        ifExistAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getCurrentBufferDatum.exist")
                 .arg(sid)
                 .arg(sid)
                 .arg(TEXT)
                 .build();
 
-        ifNotExistAnswer = StringSeedBuilderFactory.builder().code("strategy.message.getCurrentBufferDatum.notExist")
+        ifNotExistAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getCurrentBufferDatum.notExist")
                 .arg(sid)
                 .arg(sid)
                 .build();
