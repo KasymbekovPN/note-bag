@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.SeedBuilderService;
 import ru.kpn.subscriber.Subscriber;
 
 import java.util.Optional;
@@ -21,6 +21,7 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
     private final Transmitter<BotApiMethod<?>> transmitter;
     private final Function<Seed<String>, BotApiMethod<?>> defaultAnswerCalculator;
     private final Set<Subscriber<Update, BotApiMethod<?>>> subscribers = new TreeSet<>();
+    private final SeedBuilderService<String> seedBuilderService;
 
     @Override
     public void subscribe(Subscriber<Update, BotApiMethod<?>> subscriber) {
@@ -43,7 +44,7 @@ public class BotSubscriptionManager implements SubscriptionManager<Update, BotAp
     private BotApiMethod<?> calculateDefaultAnswer(Update update) {
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
-        Seed<String> seed = StringSeedBuilderFactoryOld.builder()
+        Seed<String> seed = seedBuilderService.takeNew()
                 .code("noneSubscriberStrategy.unknownInput")
                 .arg(chatId)
                 .arg(text)

@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +31,8 @@ public class SkipBufferDatumStrategyTest {
     private SkipBufferDatumStrategy strategy;
 
     private UpdateInstanceBuilder builder;
-    private Seed<String> ifEmptyRawMessageOld;
-    private Seed<String> ifNotEmptyRawMessageOld;
+    private Seed<String> ifEmptyAnswer;
+    private Seed<String> ifNotEmptyAnswer;
 
     @BeforeEach
     void setUp() {
@@ -44,11 +44,11 @@ public class SkipBufferDatumStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyRawMessageOld = StringSeedBuilderFactoryOld.builder().code("strategy.message.skipBufferDatum.isEmpty")
+        ifEmptyAnswer = USeedBuilderService.takeNew().code("strategy.message.skipBufferDatum.isEmpty")
                 .arg(String.valueOf(ID))
                 .build();
 
-        ifNotEmptyRawMessageOld = StringSeedBuilderFactoryOld.builder().code("strategy.message.skipBufferDatum.isNotEmpty")
+        ifNotEmptyAnswer = USeedBuilderService.takeNew().code("strategy.message.skipBufferDatum.isNotEmpty")
                 .arg(String.valueOf(ID))
                 .arg(1)
                 .build();
@@ -64,7 +64,7 @@ public class SkipBufferDatumStrategyTest {
     @Test
     void shouldCheckAnswerIfBufferEmpty() {
         Seed<String> answer = strategy.runAndGetRawMessage(builder.build());
-        assertThat(ifEmptyRawMessageOld).isEqualTo(answer);
+        assertThat(ifEmptyAnswer).isEqualTo(answer);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class SkipBufferDatumStrategyTest {
         botBuffer.add(ID, new TestBufferDatum("1"));
         botBuffer.add(ID, new TestBufferDatum("2"));
         Seed<String> answer = strategy.runAndGetRawMessage(builder.build());
-        assertThat(ifNotEmptyRawMessageOld).isEqualTo(answer);
+        assertThat(ifNotEmptyAnswer).isEqualTo(answer);
     }
 
     @AfterEach

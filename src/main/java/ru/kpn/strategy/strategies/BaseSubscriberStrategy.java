@@ -5,17 +5,23 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.seed.Seed;
 import ru.kpn.seed.SeedBuilder;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.SeedBuilderService;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiMethod<?>> {
 
+    private SeedBuilderService<String> seedBuilderService;
     private Function<Seed<String>, BotApiMethod<?>> answerCalculator;
 
     protected Function<Update, Boolean> matcher;
     protected Integer priority;
+
+    @Autowired
+    public void setSeedBuilderService(SeedBuilderService<String> seedBuilderService) {
+        this.seedBuilderService = seedBuilderService;
+    }
 
     @Autowired
     public void setAnswerCalculator(Function<Seed<String>, BotApiMethod<?>> answerCalculator) {
@@ -46,6 +52,6 @@ abstract public class BaseSubscriberStrategy implements Strategy<Update, BotApiM
     }
 
     protected SeedBuilder<String> builder(){
-        return StringSeedBuilderFactoryOld.builder();
+        return seedBuilderService.takeNew();
     }
 }

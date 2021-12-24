@@ -9,8 +9,8 @@ import ru.kpn.injection.Inject;
 import ru.kpn.injection.InjectionType;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import ru.kpn.strategy.strategies.BaseSubscriberStrategy;
+import utils.USeedBuilderService;
 
 import java.util.function.Function;
 
@@ -25,7 +25,7 @@ class PriorityInjectorTest {
 
     @Test
     void shouldCheckNameCalculation() {
-        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("injection.name.wrong").arg(TYPE).arg(StrategyWithoutSuffix.class.getSimpleName()).build();
+        Seed<String> expectedStatus = USeedBuilderService.takeNew().code("injection.name.wrong").arg(TYPE).arg(StrategyWithoutSuffix.class.getSimpleName()).build();
         Result<Integer, Seed<String>> result = injector.inject(new StrategyWithoutSuffix());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -33,7 +33,7 @@ class PriorityInjectorTest {
 
     @Test
     void shouldCheckAttemptOfInjectionWithoutInjectMethod() {
-        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("injection.no.method").arg("testWithoutInjectMethod").arg(TYPE).build();
+        Seed<String> expectedStatus = USeedBuilderService.takeNew().code("injection.no.method").arg("testWithoutInjectMethod").arg(TYPE).build();
         Result<Integer, Seed<String>> result = injector.inject(new TestWithoutInjectMethodStrategy());
         assertThat(result.getSuccess()).isTrue();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);
@@ -41,7 +41,7 @@ class PriorityInjectorTest {
 
     @Test
     void shouldCheckAttemptOfInjectionWithoutInitData() {
-        Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("injection.no.init-data").arg("wrongNameTest").arg(TYPE).build();
+        Seed<String> expectedStatus = USeedBuilderService.takeNew().code("injection.no.init-data").arg("wrongNameTest").arg(TYPE).build();
         Result<Integer, Seed<String>> result = injector.inject(new WrongNameTestStrategy());
         assertThat(result.getSuccess()).isFalse();
         assertThat(result.getStatus()).isEqualTo(expectedStatus);

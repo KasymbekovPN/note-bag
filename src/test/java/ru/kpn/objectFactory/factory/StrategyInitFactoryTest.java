@@ -11,9 +11,12 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.StrategyInitDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.StringSeedBuilderService;
+import utils.USeedBuilderService;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,22 +29,13 @@ public class StrategyInitFactoryTest {
     @SneakyThrows
     @BeforeEach
     void setUp() {
-        StrategyInitFactory.Builder builder = StrategyInitFactory.builder();
+        Map<StrategyInitDatumType, TypedCreator<StrategyInitDatumType, StrategyInitDatum, Integer, Seed<String>>> creators = new HashMap<>();
         int value = 0;
         for (StrategyInitDatumType.ALLOWED_TYPE allowedType : StrategyInitDatumType.ALLOWED_TYPE.values()) {
-            builder.create(new TestCreator(value));
+            creators.put(new StrategyInitDatumType(allowedType.name()), new TestCreator(value));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.check().calculateValue().buildResult().getValue();
-    }
-
-    @Test
-    void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.strategyInit").build();
-        Result<ObjectFactory<StrategyInitDatum, Integer, Seed<String>>, Seed<String>> result
-                = StrategyInitFactory.builder().check().calculateValue().buildResult();
-        assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getStatus()).isEqualTo(expectedStatus);
+        factory = new StrategyInitFactory(creators, new StringSeedBuilderService());
     }
 
     @Test
@@ -57,7 +51,7 @@ public class StrategyInitFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("strategyInitFactory.wrongType").arg(wrong).build();
+        final Seed<String> expectedStatus = USeedBuilderService.takeNew().code("strategyInitFactory.wrongType").arg(wrong).build();
         StrategyInitDatum datum = new StrategyInitDatum();
         datum.setType(wrong);
         Result<Integer, Seed<String>> result = factory.create(datum);

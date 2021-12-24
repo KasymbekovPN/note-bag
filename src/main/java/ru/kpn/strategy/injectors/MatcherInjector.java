@@ -34,6 +34,6 @@ public class MatcherInjector extends BaseInjector<MatcherDatum, Function<Update,
 
     @Override
     protected InnerInjector<MatcherDatum, Function<Update, Boolean>> createInnerInjector(Object object) {
-        return new InnerInjector<>(object, InjectionType.MATCHER);
+        return new InnerInjector<MatcherDatum, Function<Update, Boolean>>(object, InjectionType.MATCHER);
     }
 }

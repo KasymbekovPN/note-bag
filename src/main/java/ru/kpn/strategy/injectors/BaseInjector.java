@@ -10,7 +10,7 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.DatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.SeedBuilderService;
 import ru.kpn.strategy.calculaters.nameCalculator.NameCalculator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,10 +22,13 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
     @Autowired
     private NameCalculator nameCalculator;
 
+    @Autowired
+    private SeedBuilderService<String> seedBuilderService;
+
     @Override
     public Result<RT, Seed<String>> inject(Object object) {
         return createInnerInjector(object)
-                .calculateName(nameCalculator)
+                .calculateName()
                 .findMethod()
                 .datum(getInitData())
                 .create(getFactory())
@@ -38,7 +41,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
     abstract protected InnerInjector<D, RT> createInnerInjector(Object object);
 
     @RequiredArgsConstructor
-    protected static class InnerInjector<D extends Datum<? extends DatumType>, RT>{
+    protected class InnerInjector<D extends Datum<? extends DatumType>, RT>{
         private final Object object;
         private final InjectionType type;
 
@@ -51,14 +54,14 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
         private RT value;
         private D datum;
 
-        public InnerInjector<D, RT> calculateName(NameCalculator nameCalculator){
+        public InnerInjector<D, RT> calculateName(){
             if (continueIt){
                 Result<String, Seed<String>> result = nameCalculator.apply(object);
                 if (result.getSuccess()){
                     name = result.getValue();
                 } else {
                     success = continueIt = false;
-                    status = StringSeedBuilderFactoryOld.builder()
+                    status = seedBuilderService.takeNew()
                             .code("injection.name.wrong")
                             .arg(type)
                             .arg(object.getClass().getSimpleName())
@@ -80,7 +83,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     }
                 }
                 continueIt = false;
-                status = StringSeedBuilderFactoryOld.builder().code("injection.no.method").arg(name).arg(type).build();
+                status = seedBuilderService.takeNew().code("injection.no.method").arg(name).arg(type).build();
             }
             return this;
         }
@@ -91,7 +94,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     datum = initData.get(name);
                 } else {
                     success = continueIt = false;
-                    status = StringSeedBuilderFactoryOld.builder().code("injection.no.init-data").arg(name).arg(type).build();
+                    status = seedBuilderService.takeNew().code("injection.no.init-data").arg(name).arg(type).build();
                 }
             }
             return this;
@@ -113,7 +116,7 @@ abstract public class BaseInjector<D extends Datum<? extends DatumType>, RT> imp
                     method.invoke(object, value);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     success = false;
-                    status = StringSeedBuilderFactoryOld.builder().code("injection.invoking.fail").arg(name).arg(type).build();
+                    status = seedBuilderService.takeNew().code("injection.invoking.fail").arg(name).arg(type).build();
                 }
             }
             return this;

@@ -13,9 +13,12 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.ExtractorDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.StringSeedBuilderService;
+import utils.USeedBuilderService;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,22 +32,14 @@ public class ExtractorFactoryTest {
     @SneakyThrows
     @BeforeEach
     void setUp() {
-        ExtractorFactory.Builder builder = ExtractorFactory.builder();
+        Map<ExtractorDatumType, TypedCreator<ExtractorDatumType, ExtractorDatum, Function<Update, String>, Seed<String>>> creators = new HashMap<>();
         int value = 0;
         for (ExtractorDatumType.ALLOWED_TYPE allowedType : ExtractorDatumType.ALLOWED_TYPE.values()) {
-            builder.create(new TestCreator(value));
+            creators.put(new ExtractorDatumType(allowedType.name()), new TestCreator(value));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.check().calculateValue().buildResult().getValue();
-    }
 
-    @Test
-    void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.extractor").build();
-        Result<ObjectFactory<ExtractorDatum, Function<Update, String>, Seed<String>>, Seed<String>> result
-                = ExtractorFactory.builder().check().calculateValue().buildResult();
-        assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getStatus()).isEqualTo(expectedStatus);
+        factory = new ExtractorFactory(creators, new StringSeedBuilderService());
     }
 
     @Test
@@ -60,7 +55,7 @@ public class ExtractorFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("extractorFactory.wrongType").arg(wrong).build();
+        Seed<String> expectedStatus = USeedBuilderService.takeNew().code("extractorFactory.wrongType").arg(wrong).build();
         ExtractorDatum datum = new ExtractorDatum();
         datum.setType(wrong);
          Result<Function<Update, String>, Seed<String>> result = factory.create(datum);

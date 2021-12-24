@@ -12,7 +12,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -41,7 +41,7 @@ public class SimpleNoteStrategyTest {
                 .chatId(ID)
                 .from(user);
 
-        expectedAnswer = StringSeedBuilderFactoryOld.builder()
+        expectedAnswer = USeedBuilderService.takeNew()
                 .code("strategy.message.simpleNode")
                 .arg(String.valueOf(ID))
                 .build();

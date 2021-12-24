@@ -8,7 +8,7 @@ import ru.kpn.objectFactory.datum.MatcherDatum;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import utils.USeedBuilderService;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -18,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class MultiRegexMatcherCreatorTest {
 
-    private static final String NAME = "MultiRegexMatcherCreator";
+    private static final String KEY = MultiRegexMatcherCreator.class.getSimpleName();
 
     @Autowired
     private MultiRegexMatcherCreator creator;
 
     @Test
     void shouldCheckCreationAttemptWhenDatumIsNull() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.isNull").arg(NAME).build();
+        final Seed<String> expectedStatus = USeedBuilderService.takeNew().code("datum.isNull").arg(KEY).build();
         Result<Function<Update, Boolean>, Seed<String>> result = creator.create(null);
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
@@ -33,7 +33,7 @@ public class MultiRegexMatcherCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumTemplatesIsNull() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.templates.isNull").arg(NAME).build();
+        final Seed<String> expectedStatus = USeedBuilderService.takeNew().code("datum.templates.isNull").arg(KEY).build();
         Result<Function<Update, Boolean>, Seed<String>> result = creator.create(new MatcherDatum());
         assertThat(result.getSuccess()).isFalse();
         assertThat(expectedStatus).isEqualTo(result.getStatus());
@@ -41,7 +41,7 @@ public class MultiRegexMatcherCreatorTest {
 
     @Test
     void shouldCheckCreationAttemptWhenDatumTemplatesIsEmpty() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("datum.templates.isEmpty").arg(NAME).build();
+        final Seed<String> expectedStatus = USeedBuilderService.takeNew().code("datum.templates.isEmpty").arg(KEY).build();
         MatcherDatum datum = new MatcherDatum();
         datum.setTemplates(Set.of());
         Result<Function<Update, Boolean>, Seed<String>> result = creator.create(datum);

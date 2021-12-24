@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,12 +44,12 @@ public class GetBufferStatusStrategyTest {
                 .from(user)
                 .text(COMMAND);
 
-        ifEmptyAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getBufferStatus.empty")
+        ifEmptyAnswer = USeedBuilderService.takeNew().code("strategy.message.getBufferStatus.empty")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .build();
 
-        ifNotEmptyAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getBufferStatus.contains")
+        ifNotEmptyAnswer = USeedBuilderService.takeNew().code("strategy.message.getBufferStatus.contains")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .arg(1)

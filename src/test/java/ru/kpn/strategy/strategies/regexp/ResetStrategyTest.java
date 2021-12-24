@@ -13,8 +13,8 @@ import ru.kpn.bot.state.BotStateService;
 import ru.kpn.bot.state.NPBotState;
 import ru.kpn.model.userProfile.UserProfileEntity;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import ru.kpn.service.userProfile.UserProfileService;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -56,7 +56,7 @@ public class ResetStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        final Seed<String> expectedAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.reset")
+        final Seed<String> expectedAnswer = USeedBuilderService.takeNew().code("strategy.message.reset")
                 .arg(String.valueOf(ID))
                 .arg(String.valueOf(ID))
                 .build();

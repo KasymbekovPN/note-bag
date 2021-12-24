@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +38,7 @@ public class HelpStrategyTest {
 
     @Test
     void shouldCheckAnswer() {
-        final Seed<String> expectedAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.help").arg(String.valueOf(ID)).build();
+        final Seed<String> expectedAnswer = USeedBuilderService.takeNew().code("strategy.message.help").arg(String.valueOf(ID)).build();
         Seed<String> answer = strategy.runAndGetRawMessage(builder.text(COMMAND).build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }

@@ -22,7 +22,7 @@ public class PriorityInjector extends BaseInjector<StrategyInitDatum, Integer> {
 
     @Override
     protected InnerInjector<StrategyInitDatum, Integer> createInnerInjector(Object object) {
-        return new InnerInjector<>(object, InjectionType.PRIORITY);
+        return new InnerInjector<StrategyInitDatum, Integer>(object, InjectionType.PRIORITY);
     }
 
     @Override

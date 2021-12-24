@@ -12,7 +12,7 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class LinkStrategyTest {
     @ParameterizedTest
     @CsvFileSource(resources = "shouldCheckAnswer_link.csv")
     void shouldCheckAnswer(String command) {
-        final Seed<String> expectedAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.link").arg(String.valueOf(ID)).arg(command).build();
+        final Seed<String> expectedAnswer = USeedBuilderService.takeNew().code("strategy.message.link").arg(String.valueOf(ID)).arg(command).build();
         Seed<String> answer = strategy.runAndGetRawMessage(builder.text(command).build());
         assertThat(expectedAnswer).isEqualTo(answer);
     }

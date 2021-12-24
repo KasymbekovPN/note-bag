@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kpn.bot.transmitter.Transmitter;
 import ru.kpn.seed.Seed;
+import ru.kpn.seed.StringSeedBuilderService;
 import ru.kpn.subscriber.Subscriber;
 import utils.UpdateInstanceBuilder;
 
@@ -31,7 +32,7 @@ public class BotSubscriptionManagerTest {
     @BeforeEach
     void setUp() {
         transmitter = new TestTransmitter();
-        subscriptionManager = new BotSubscriptionManager(transmitter, new TestStrategyCalculator());
+        subscriptionManager = new BotSubscriptionManager(transmitter, new TestStrategyCalculator(), new StringSeedBuilderService());
         subscriptionManager.subscribe(new TestSubscriber(PRIORITY, CHAT_ID, MESSAGE));
     }
 

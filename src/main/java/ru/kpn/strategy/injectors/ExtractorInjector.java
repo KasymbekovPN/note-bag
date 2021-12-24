@@ -34,6 +34,6 @@ public class ExtractorInjector extends BaseInjector<ExtractorDatum, Function<Upd
 
     @Override
     protected InnerInjector<ExtractorDatum, Function<Update, String>> createInnerInjector(Object object) {
-        return new InnerInjector<>(object, InjectionType.EXTRACTOR);
+        return new InnerInjector<ExtractorDatum, Function<Update, String>>(object, InjectionType.EXTRACTOR);
     }
 }

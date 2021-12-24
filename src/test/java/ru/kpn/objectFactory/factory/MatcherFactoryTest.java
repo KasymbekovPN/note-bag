@@ -13,9 +13,12 @@ import ru.kpn.objectFactory.result.ValuedResult;
 import ru.kpn.objectFactory.results.result.Result;
 import ru.kpn.objectFactory.type.MatcherDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
+import ru.kpn.seed.StringSeedBuilderService;
+import utils.USeedBuilderService;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,22 +32,13 @@ public class MatcherFactoryTest {
     @SneakyThrows
     @BeforeEach
     void setUp() {
-        MatcherFactory.Builder builder = MatcherFactory.builder();
+        Map<MatcherDatumType, TypedCreator<MatcherDatumType, MatcherDatum, Function<Update, Boolean>, Seed<String>>> creators = new HashMap<>();
         int value = 0;
         for (MatcherDatumType.ALLOWED_TYPE allowedType : MatcherDatumType.ALLOWED_TYPE.values()) {
-            builder.create(new TestCreator(value, allowedType));
+            creators.put(new MatcherDatumType(allowedType.name()), new TestCreator(value, allowedType));
             expectedValues.put(allowedType, value++);
         }
-        factory = builder.check().calculateValue().buildResult().getValue();
-    }
-
-    @Test
-    void shouldCheckAttemptOfNotCompletelyCreationOfFactory() {
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("notCompletely.creators.matcher").build();
-        Result<ObjectFactory<MatcherDatum, Function<Update, Boolean>, Seed<String>>, Seed<String>> result
-                = MatcherFactory.builder().check().calculateValue().buildResult();
-        assertThat(result.getSuccess()).isFalse();
-        assertThat(result.getStatus()).isEqualTo(expectedStatus);
+        factory = new MatcherFactory(creators, new StringSeedBuilderService());
     }
 
     @Test
@@ -60,7 +54,7 @@ public class MatcherFactoryTest {
     @Test
     void shouldCheckCreationAttemptWithWrongType() {
         String wrong = "WRONG";
-        final Seed<String> expectedStatus = StringSeedBuilderFactoryOld.builder().code("matcherFactory.wrongType").arg(wrong).build();
+        final Seed<String> expectedStatus = USeedBuilderService.takeNew().code("matcherFactory.wrongType").arg(wrong).build();
         MatcherDatum datum = new MatcherDatum();
         datum.setType(wrong);
         final Result<Function<Update, Boolean>, Seed<String>> result = factory.create(datum);

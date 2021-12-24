@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,13 +46,13 @@ public class GetCurrentBufferDatumStrategyTest {
                 .text(COMMAND);
 
         String sid = String.valueOf(ID);
-        ifExistAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getCurrentBufferDatum.exist")
+        ifExistAnswer = USeedBuilderService.takeNew().code("strategy.message.getCurrentBufferDatum.exist")
                 .arg(sid)
                 .arg(sid)
                 .arg(TEXT)
                 .build();
 
-        ifNotExistAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.getCurrentBufferDatum.notExist")
+        ifNotExistAnswer = USeedBuilderService.takeNew().code("strategy.message.getCurrentBufferDatum.notExist")
                 .arg(sid)
                 .arg(sid)
                 .build();

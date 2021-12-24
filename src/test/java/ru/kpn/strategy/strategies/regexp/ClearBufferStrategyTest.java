@@ -13,8 +13,8 @@ import ru.kpn.buffer.Buffer;
 import ru.kpn.buffer.BufferDatum;
 import ru.kpn.buffer.BufferDatumType;
 import ru.kpn.seed.Seed;
-import ru.kpn.seed.StringSeedBuilderFactoryOld;
 import utils.TestBufferDatum;
+import utils.USeedBuilderService;
 import utils.UpdateInstanceBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +44,7 @@ public class ClearBufferStrategyTest {
                 .text(COMMAND);
 
 
-        expectedAnswer = StringSeedBuilderFactoryOld.builder().code("strategy.message.clearBuffer.isCleaned").arg(String.valueOf(ID)).build();
+        expectedAnswer = USeedBuilderService.takeNew().code("strategy.message.clearBuffer.isCleaned").arg(String.valueOf(ID)).build();
     }
 
     @ParameterizedTest
